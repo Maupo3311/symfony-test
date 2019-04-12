@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Home{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/main/index.css') }}">
+{% endblock %}
+
+{% block body %}
+    <h2 class="center">Homepage</h2>
+    <div class="bestProducts">
+        <h3 class="center" id="productInput" data-status="open">Top 10 products</h3>
+        {% for product in best_products %}
+            <div class="product">
+                <div class="productHead">
+                    <p class="productTitle">{{ product.title }}</p>
+                </div>
+                <div class="productBody">
+                    <p class="productDescription">{{ product.description }}</p>
+                    <p class="productRating">Rating: {{ product.rating }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('/js/main/index.js') }}"></script>
+{% endblock %}

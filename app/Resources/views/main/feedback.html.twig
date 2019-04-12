@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Feedback{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/main/feedback.css') }}">
+{% endblock %}
+
+{% block body %}
+    <h2>Feedback page</h2>
+
+    {% for feedback in allFeedbacks %}
+        <div class="feedback">
+            <div class="feedbackHead">
+                <div class="feedbackCreated">{{ feedback.created.date|slice(0, -7) }}</div>
+                <p class="feedbackName">{{ feedback.name }}</p>
+                <p class="feedbackEmail">{{ feedback.email }}</p>
+            </div>
+            <div class="feedbackBody">
+                <p class="feedbackMessage">{{ feedback.message }}</p>
+            </div>
+        </div>
+    {% endfor %}
+
+    <div class="center-block center">
+        <a href="?page={% if page == 1 %}{{ 1 }}{% else %}{{ page - 1 }}{% endif %}">
+            <b> < </b>
+        </a>
+        <span>
+            {% for number in page-position[0]..page+position[1] if number <= numberOfPages %}
+                <a href="?page={{ number }}" class="{% if number == page %}{{ 'noneDecoration' }}{% endif %}">
+                    <span>{{ number }}</span>
+                </a>
+            {% endfor %}
+        </span>
+        <a href="?page={% if page == numberOfPages %}{{ page }}{% else %}{{ page + 1 }}{% endif %}">
+            <b> > </b>
+        </a>
+    </div>
+
+    {{ form(formView) }}
+{% endblock %}

@@ -1,0 +1,33 @@
+#productInput{
+    cursor: pointer;
+}
+.bestProducts{
+    background: #d6d6d6;
+    border: 2px solid black;
+    border-radius: 10px;
+    padding: 10px;
+}
+.product{
+    border: 1px solid black;
+    border-radius: 5px;
+    margin-bottom: 4px;
+    background:white;
+    overflow: hidden;
+}
+.productHead{
+    background: #343a40;
+    color: white;
+}
+.productTitle{
+    padding: 10px;
+    font-size: 20px;
+}
+.productDescription{
+    padding: 0 10px;
+}
+.productRating{
+    padding: 0 10px;
+    text-align: right;
+    color: #3a8e3a;
+    font-size: 10px;
+}

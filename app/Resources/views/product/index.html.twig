@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Product{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/product/index.css') }}">
+{% endblock %}
+
+{% block body %}
+    <b>Products:</b>
+
+    {% for product in products %}
+        <a href="{{ path('product_item', {'id': product.id }) }}" class="noneDecoration">
+            <div class="product">
+                <div class="productHead">
+                    <p class="productTitle">{{ product.title }}</p>
+                </div>
+                <div class="productBody">
+                    <p class="productDescription">{{ product.description }}</p>
+                    <p class="productCategory">
+                        This product is from the category
+                        "{{ product.category.name }}"
+                    </p>
+                </div>
+            </div>
+        </a>
+    {% endfor %}
+
+    <div class="center-block center">
+        <a href="?page={% if page == 1 %}{{ 1 }}{% else %}{{ page - 1 }}{% endif %}">
+            <b> < </b>
+        </a>
+        <span>
+            {% for number in page-position[0]..page+position[1] if number <= numberOfPages %}
+                <a href="?page={{ number }}" class="{% if number == page %}{{ 'noneDecoration' }}{% endif %}">
+                    <span>{{ number }}</span>
+                </a>
+            {% endfor %}
+        </span>
+        <a href="?page={% if page * theNumberOnThePage >= quantityOfAllProducts %}{{ page }}{% else %}{{ page + 1 }}{% endif %}">
+            <b> > </b>
+        </a>
+    </div>
+{% endblock %}

@@ -1,0 +1,18 @@
+.product{
+    background: whitesmoke;
+    border: 2px solid black;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-bottom: 5px;
+}
+.productHead{
+    background: #343a40;
+    color: white;
+}
+.productTitle{
+    padding: 10px;
+
+}
+.productBody{
+    padding: 0 10px;
+}

@@ -1,0 +1,26 @@
+.feedback{
+    border: 2px solid black;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+.feedbackHead{
+    color: white;
+    background: #343a40;
+    border: 1px solid black;
+}
+.feedbackName{
+    margin: 0 10px;
+    font-size: 20px;
+}
+.feedbackEmail{
+    margin: 0 10px;
+    font-size: 13px;
+    text-decoration: underline;
+}
+.feedbackBody{
+    margin: 10px;
+}
+.feedbackCreated{
+    font-size: 10px;
+    float: right;
+}

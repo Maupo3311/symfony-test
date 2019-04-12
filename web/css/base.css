@@ -1,0 +1,19 @@
+.center{
+    text-align: center;
+}
+.center-block{
+    margin: auto;
+}
+
+.noneDecoration:focus{
+    text-decoration: none;
+    color: black;
+}
+.noneDecoration:hover{
+    text-decoration: none;
+    color: black;
+}
+.noneDecoration{
+    text-decoration: none;
+    color: black;
+}
