@@ -7,39 +7,72 @@
 {% endblock %}
 
 {% block body %}
-    <b>Products:</b>
-
-    {% for product in products %}
-        <a href="{{ path('product_item', {'id': product.id }) }}" class="noneDecoration">
-            <div class="product">
-                <div class="productHead">
-                    <p class="productTitle">{{ product.title }}</p>
-                </div>
-                <div class="productBody">
-                    <p class="productDescription">{{ product.description }}</p>
-                    <p class="productCategory">
-                        This product is from the category
-                        "{{ product.category.name }}"
-                    </p>
-                <p class="productPrice">Price: {{ product.price }}</p>
-                </div>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="menu">
+                <p>Sort by: </p>
+                <a class="menu-noneDecoration" href="?page={{ page }}&sort=price&order={{ nextOrder }}"
+                    <p class="button">Price</p>
+                </a>
+                <a class="menu-noneDecoration" href="?page={{ page }}&sort=rating&order={{ nextOrder }}"
+                    <p class="button">Rating</p>
+                </a>
+                <a class="menu-noneDecoration" href="?page={{ page }}&sort=title&order={{ nextOrder }}"
+                    <p class="button">Title</p>
+                </a>
+                <a class="menu-noneDecoration" href="?page={{ page }}&sort=category&order={{ nextOrder }}"
+                    <p class="button">Category</p>
+                </a>
             </div>
-        </a>
-    {% endfor %}
+        </div>
 
-    <div class="center-block center">
-        <a href="?page={% if page == 1 %}{{ 1 }}{% else %}{{ page - 1 }}{% endif %}">
-            <b> < </b>
-        </a>
-        <span>
+        <div class="col-md-9">
+            <b>Products:</b>
+
+            {% for product in products %}
+                <a href="{{ path('product_item', {'id': product.id }) }}" class="noneDecoration">
+                    <div class="product">
+                        <div class="productHead">
+                            <p class="productTitle">{{ product.title }}</p>
+                        </div>
+                        <div class="productBody">
+                            <p class="productDescription">{{ product.description }}</p>
+                            <p class="productCategory">
+                                This product is from the category
+                                "{{ product.category.name }}"
+                            </p>
+                            <p class="productPrice">Price: {{ product.price }}</p>
+                        </div>
+                    </div>
+                </a>
+            {% endfor %}
+
+            <div class="center-block center">
+                <a href="?page=1">
+                    <b> << </b>
+                </a>
+
+                <a href="?page={% if page == 1 %}{{ 1 }}{% else %}{{ page - 1 }}{% endif %}">
+                    <b> < </b>
+                </a>
+
+                <span>
             {% for number in page-position[0]..page+position[1] if number <= numberOfPages %}
                 <a href="?page={{ number }}" class="{% if number == page %}{{ 'noneDecoration' }}{% endif %}">
                     <span>{{ number }}</span>
                 </a>
             {% endfor %}
         </span>
-        <a href="?page={% if page * theNumberOnThePage >= quantityOfAllProducts %}{{ page }}{% else %}{{ page + 1 }}{% endif %}">
-            <b> > </b>
-        </a>
+
+                <a href="?page={% if page >= numberOfPages %}{{ page }}{% else %}{{ page + 1 }}{% endif %}">
+                    <b> > </b>
+                </a>
+
+                <a href="?page= {{ numberOfPages }}">
+                    <b> >> </b>
+                </a>
+            </div>
+        </div>
     </div>
+
 {% endblock %}

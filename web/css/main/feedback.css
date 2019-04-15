@@ -28,6 +28,9 @@
     font-size: 10px;
     text-align: right;
 }
+.feedbackDelete:hover{
+    color: red;
+}
 .feedbackDelete{
     color: #d20101;
 }

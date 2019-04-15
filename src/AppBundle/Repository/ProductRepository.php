@@ -37,12 +37,17 @@ class ProductRepository extends EntityRepository
      * @param Category $category
      * @return mixed
      */
-    public function findByCategory(Category $category)
+    public function findByCategory(Category $category, $page = 1, $theNumberOnThePage = 10)
     {
+        $lastResult = $page * $theNumberOnThePage;
+        $firstResult = $lastResult - $theNumberOnThePage;
+
         return $this
             ->createQueryBuilder('p')
             ->where('p.category = :category')
             ->setParameter('category', $category)
+            ->setFirstResult($firstResult)
+            ->setMaxResults($theNumberOnThePage)
             ->getQuery()
             ->getResult();
     }
@@ -66,18 +71,34 @@ class ProductRepository extends EntityRepository
     }
 
     /**
+     * @param array $where
      * @return mixed
      * @throws NonUniqueResultException
      */
-    public function getTheQuantityOfAllProducts()
+    public function getTheQuantityOfAllProducts(array $where = null)
     {
-        return $this
-            ->createQueryBuilder('p')
-            ->select('count(p.id)')
-            ->getQuery()
-            ->getSingleScalarResult();
+        if($where == null){
+            return $this
+                ->createQueryBuilder('p')
+                ->select('count(p.id)')
+                ->getQuery()
+                ->getSingleScalarResult();
+        } else {
+            foreach ($where as $field => $item){
+                return $this
+                    ->createQueryBuilder('p')
+                    ->select('count(p.id)')
+                    ->where('p.'.$field.' = :item')
+                    ->setParameter('item', $item)
+                    ->getQuery()
+                    ->getSingleScalarResult();
+            }
+        }
     }
 
+    /**
+     * @return mixed
+     */
     public function findByRating(){
         return $this
             ->createQueryBuilder('p')
@@ -86,6 +107,9 @@ class ProductRepository extends EntityRepository
             ->getResult();
     }
 
+    /**
+     * @return mixed
+     */
     public function findBestProducts(){
         return $this
             ->createQueryBuilder('p')
@@ -94,5 +118,21 @@ class ProductRepository extends EntityRepository
             ->orderBy('p.rating', 'DESC')
             ->getQuery()
             ->getResult();
+    }
+
+    public function findBySortAndPage(array $sort, $page, $theNumberOnThePage)
+    {
+        $lastResult = $page * $theNumberOnThePage;
+        $firstResult = $lastResult - $theNumberOnThePage;
+
+        foreach($sort as $field => $order){
+            return $this
+                ->createQueryBuilder('p')
+                ->orderBy('p.'.lcfirst($field), $order)
+                ->setFirstResult($firstResult)
+                ->setMaxResults($theNumberOnThePage)
+                ->getQuery()
+                ->getResult();
+        }
     }
 }

@@ -35,14 +35,28 @@ class ProductController extends Controller
             ->getDoctrine()
             ->getRepository(Product::class);
 
-        $products              = $productsRepository->findByPage($page, $theNumberOnThePage);
+        $field = ($request->get('sort')) ? $request->get('sort') : 'id';
+        $order = ($request->get('order')) ? trim($request->get('order')) : 'ASC';
+        $nextOrder = ($order == 'ASC') ? 'DESC' : 'ASC';
+        $sort  = [$field => $order];
+        $products = $productsRepository->findBySortAndPage($sort, $page, $theNumberOnThePage);
+
         $quantityOfAllProducts = $productsRepository->getTheQuantityOfAllProducts();
         $numberOfPages         = ceil($quantityOfAllProducts / $theNumberOnThePage);
 
         $service  = $this->container->get('app.pagination');
         $position = $service->getHrefPosition($page, $numberOfPages);
 
-        return $this->render('product/index.html.twig', compact('products', 'page', 'theNumberOnThePage', 'quantityOfAllProducts', 'position', 'numberOfPages'));
+        return $this->render('product/index.html.twig', [
+            'products' => $products,
+            'page' => $page,
+            'theNumberOnThePage' => $theNumberOnThePage,
+            'quantityOfAllProducts' => $quantityOfAllProducts,
+            'position' => $position,
+            'numberOfPages' => $numberOfPages,
+            'nextOrder' => $nextOrder,
+            'sort' => $sort,
+        ]);
     }
 
     /**
@@ -73,8 +87,8 @@ class ProductController extends Controller
             ->getDoctrine()
             ->getRepository(Product::class);
 
-        $products = $productRepository->findByCategory($category);
-        $quantityOfAllProducts = $productRepository->getTheQuantityOfAllProducts();
+        $products = $productRepository->findByCategory($category, $page, $theNumberOnThePage);
+        $quantityOfAllProducts = $productRepository->getTheQuantityOfAllProducts(['category' => $category->getId()]);
         $numberOfPages         = ceil($quantityOfAllProducts / $theNumberOnThePage);
 
         $service = $this->container->get('app.pagination');

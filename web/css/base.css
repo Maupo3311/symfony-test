@@ -17,6 +17,31 @@
     text-decoration: none;
     color: black;
 }
+
 .label{
     margin-top: 7px;
+}
+
+.menu{
+    background: #343a40;
+    color: #9c9ea1;
+    border: 3px solid #f98282;
+    border-radius: 0 0 10px 10px;
+    text-align: center;
+}
+.menu .button{
+    margin: 10px 0;
+}
+
+.menu-noneDecoration:focus{
+    text-decoration: none;
+    color: #9c9ea1;
+}
+.menu-noneDecoration:hover{
+    text-decoration: none;
+    color: white;;
+}
+.menu-noneDecoration{
+    text-decoration: none;
+    color: #9c9ea1;
 }
