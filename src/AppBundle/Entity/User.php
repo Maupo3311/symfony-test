@@ -2,6 +2,8 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as BaseUser;
 
@@ -36,6 +38,17 @@ class User extends BaseUser
      */
     private $lastName;
 
+    /**
+     * @var Collection
+     * @ORM\OneToMany(targetEntity="Feedback", mappedBy="user")
+     */
+    private $feedbacks;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->feedbacks = new ArrayCollection();
+    }
 
     /**
      * Get id.

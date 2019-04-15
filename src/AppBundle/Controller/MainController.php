@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Feedback;
 use AppBundle\Entity\Product;
+use AppBundle\Entity\User;
 use AppBundle\Form\FeedbackType;
 use AppBundle\Repository\ProductRepository;
 use Doctrine\ORM\NonUniqueResultException;
@@ -67,16 +68,26 @@ class MainController extends Controller
         $form->add('submit', SubmitType::class);
         $form->handleRequest($request);
 
+        /**@var User $user*/
+        $user = $this->getUser();
+
         if ($form->isSubmitted() && $form->isValid()) {
-            try {
+
+            if( !empty($user) ){
+                /** @var Feedback $feedback */
                 $feedback = $form->getData();
                 $em       = $this->getDoctrine()->getManager();
+
+                $feedback->setUser($user);
+                $feedback->setName($user->getFirstName() . ' ' . $user->getLastName());
+                $feedback->setEmail($user->getEmail());
+
                 $em->persist($feedback);
                 $em->flush();
 
                 $this->addFlash('success', 'Saved!');
-            } catch (\Exception $exception) {
-                $this->addFlash('error', $exception->getMessage());
+            } else {
+                $this->addFlash('error', 'You can\'t send feedback to unauthorized people!');
             }
 
             return $this->redirectToRoute('feedback');
@@ -93,5 +104,33 @@ class MainController extends Controller
             'numberOfPages'          => $numberOfPages,
             'position'               => $position,
         ]);
+    }
+
+    /**
+     * @Route("feedback/delete/{id}", name="delete_feedback")
+     * @param Feedback $feedback
+     * @return RedirectResponse
+     */
+    public function deleteFeedback(Feedback $feedback)
+    {
+        /**@var User $user*/
+        $user = $this->getUser();
+
+        $em = $this
+            ->getDoctrine()
+            ->getManager();
+
+        if( $feedback->getUser()->getId() == $user->getId() ){
+            $em->remove($feedback);
+            $em->flush();
+
+            $this->addFlash('success', 'Your review was successfully removed!');
+
+            return $this->redirectToRoute('feedback');
+        } else {
+            $this->addFlash('error', 'You cannot delete this review!');
+
+            return $this->redirectToRoute('feedback');
+        }
     }
 }

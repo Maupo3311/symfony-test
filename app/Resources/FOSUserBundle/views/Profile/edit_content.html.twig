@@ -1,8 +1,27 @@
 {% trans_default_domain 'FOSUserBundle' %}
 
 {{ form_start(form, { 'action': path('fos_user_profile_edit'), 'attr': { 'class': 'fos_user_profile_edit' } }) }}
-    {{ form_widget(form) }}
+    <div class="form-group" id="fos_user_registration_form">
+
+        {{ form_label(form.username, 'Login', {'label_attr': {'class': 'label'}}) }}
+        {{ form_widget(form.username, { 'attr': {'class': 'form-control', 'placeholder': 'Think up a login...'|trans } }) }}
+
+        {{ form_label(form.email, 'E-mail', {'label_attr': {'class': 'label'}}) }}
+        {{ form_widget(form.email, { 'attr': {'class': 'form-control', 'placeholder': 'Enter you e-mail...'|trans } }) }}
+
+        {{ form_label(form.current_password, 'Current password', {'label_attr': {'class': 'label'}}) }}
+        {{ form_widget(form.current_password, { 'attr': {'class': 'form-control', 'placeholder': 'Change password...'|trans } }) }}
+
+        {{ form_label(form.firstName, 'First Name', {'label_attr': {'class': 'label'}}) }}
+        {{ form_widget(form.firstName, { 'attr': {'class': 'form-control', 'placeholder': 'Change password...'|trans } }) }}
+
+        {{ form_label(form.lastName, 'Last Name', {'label_attr': {'class': 'label'}}) }}
+        {{ form_widget(form.lastName, { 'attr': {'class': 'form-control', 'placeholder': 'Change password...'|trans } }) }}
+
+        {{ form_rest(form) }}
+
+    </div>
     <div>
-        <input type="submit" value="{{ 'profile.edit.submit'|trans }}" />
+        <input class="btn btn-primary" type="submit" value="{{ 'Edit profile'|trans }}">
     </div>
 {{ form_end(form) }}

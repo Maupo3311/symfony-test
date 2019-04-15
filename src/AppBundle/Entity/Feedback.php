@@ -25,6 +25,14 @@ class Feedback
     private $id;
 
     /**
+     * @var User
+     *
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="feedbacks")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     */
+    private $user;
+
+    /**
      * @var string
      ** @Assert\Length(
      *      min = 4,
@@ -64,6 +72,27 @@ class Feedback
     public function __construct()
     {
         $this->created = new DateTime();
+    }
+
+    /**
+     * @return User
+     */
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+
+
+    /**
+     * @param User $user
+     * @return Feedback
+     */
+    public function setUser(User $user): Feedback
+    {
+        $this->user = $user;
+
+        return $this;
     }
 
     /**

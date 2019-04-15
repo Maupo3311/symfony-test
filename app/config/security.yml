@@ -31,5 +31,4 @@ security:
             - { path: ^/user/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
             - { path: ^/admin/, role: ROLE_ADMIN }
             - { path: ^/product, role: ROLE_USER }
-            - { path: ^/feedback, role: ROLE_ADMIN }
             - { path: ^/category, role: ROLE_USER }

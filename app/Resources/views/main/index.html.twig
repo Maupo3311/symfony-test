@@ -11,15 +11,18 @@
     <div class="bestProducts">
         <h3 class="center" id="productInput" data-status="open">Top 10 products</h3>
         {% for product in best_products %}
-            <div class="product">
-                <div class="productHead">
-                    <p class="productTitle">{{ product.title }}</p>
+            <a href="{{ path('product_item', {'id': product.id}) }}" class="noneDecoration">
+                <div class="product">
+                    <div class="productHead">
+                        <p class="productTitle">{{ product.title }}</p>
+                    </div>
+                    <div class="productBody">
+                        <p class="productDescription">{{ product.description }}</p>
+                        <p class="productPrice">Price: {{ product.price }}</p>
+                        <p class="productRating">Rating: {{ product.rating }}</p>
+                    </div>
                 </div>
-                <div class="productBody">
-                    <p class="productDescription">{{ product.description }}</p>
-                    <p class="productRating">Rating: {{ product.rating }}</p>
-                </div>
-            </div>
+            </a>
         {% endfor %}
     </div>
 {% endblock %}

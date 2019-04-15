@@ -18,6 +18,13 @@
             </div>
             <div class="feedbackBody">
                 <p class="feedbackMessage">{{ feedback.message }}</p>
+                {% if is_granted("IS_AUTHENTICATED_REMEMBERED") and feedback.user.id == app.user.id %}
+                    <div class="feedbackOptions">
+                        <a href="{{ path('delete_feedback', {'id': feedback.id}) }}" class="noneDecoration">
+                            <span class="feedbackDelete">Delete feedback</span>
+                        </a>
+                    </div>
+                {% endif %}
             </div>
         </div>
     {% endfor %}
@@ -38,5 +45,7 @@
         </a>
     </div>
 
-    {{ form(formView) }}
+    {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+        {{ form(formView) }}
+    {% endif %}
 {% endblock %}
