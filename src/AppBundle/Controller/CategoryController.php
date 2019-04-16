@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Category;
+use AppBundle\Services\PaginationService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -36,6 +37,7 @@ class CategoryController extends Controller
         $numberOfPages      = ceil($countCategories / $theNumberOnThePage);
         $categories         = $categoryRepository->findByPage($page, $theNumberOnThePage);
 
+        /** @var PaginationService $service */
         $service  = $this->container->get('app.pagination');
         $position = $service->getHrefPosition($page, $numberOfPages);
 
