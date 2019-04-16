@@ -10,7 +10,7 @@ security:
 
         providers:
             fos_userbundle:
-                id: fos_user.user_provider.username
+                id: fos_user.user_provider.username_email
 
         firewalls:
             main:
@@ -30,5 +30,6 @@ security:
             - { path: ^/user/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
             - { path: ^/user/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
             - { path: ^/admin/, role: ROLE_ADMIN }
-            - { path: ^/product, role: ROLE_USER }
-            - { path: ^/category, role: ROLE_USER }
+            - { path: ^/product, role: IS_AUTHENTICATED_ANONYMOUSLY }
+            - { path: ^/category, role: IS_AUTHENTICATED_ANONYMOUSLY }
+            - { path: ^/user/profile/, role: ROLE_USER }

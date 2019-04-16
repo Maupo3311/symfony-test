@@ -35,21 +35,28 @@ class ProductRepository extends EntityRepository
      * Find product by category
      *
      * @param Category $category
+     * @param int $page
+     * @param int $theNumberOnThePage
+     * @param array $sort
      * @return mixed
      */
-    public function findByCategory(Category $category, $page = 1, $theNumberOnThePage = 10)
+    public function findByCategory(Category $category, $page = 1, $theNumberOnThePage = 10, $sort = ['id' => 'ASC'])
     {
         $lastResult = $page * $theNumberOnThePage;
         $firstResult = $lastResult - $theNumberOnThePage;
 
-        return $this
-            ->createQueryBuilder('p')
-            ->where('p.category = :category')
-            ->setParameter('category', $category)
-            ->setFirstResult($firstResult)
-            ->setMaxResults($theNumberOnThePage)
-            ->getQuery()
-            ->getResult();
+        foreach ($sort as $field => $order){
+            return $this
+                ->createQueryBuilder('p')
+                ->where('p.category = :category')
+                ->setParameter('category', $category)
+                ->orderBy('p.'.$field, $order)
+//                ->setParameter('order', $order)
+                ->setFirstResult($firstResult)
+                ->setMaxResults($theNumberOnThePage)
+                ->getQuery()
+                ->getResult();
+        }
     }
 
     /**

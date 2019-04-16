@@ -28,18 +28,17 @@ class ProductController extends Controller
     {
         $page = ($request->get('page')) ? $request->get('page') : 1;
 
-        $theNumberOnThePage = 10;
-
         /** @var ProductRepository $productsRepository */
         $productsRepository = $this
             ->getDoctrine()
             ->getRepository(Product::class);
 
-        $field = ($request->get('sort')) ? $request->get('sort') : 'id';
-        $order = ($request->get('order')) ? trim($request->get('order')) : 'ASC';
+        $theNumberOnThePage = 10;
+        $field     = ($request->get('sort')) ? $request->get('sort') : 'id';
+        $order     = ($request->get('order')) ? trim($request->get('order')) : 'ASC';
         $nextOrder = ($order == 'ASC') ? 'DESC' : 'ASC';
-        $sort  = [$field => $order];
-        $products = $productsRepository->findBySortAndPage($sort, $page, $theNumberOnThePage);
+        $sort      = [$field => $order];
+        $products  = $productsRepository->findBySortAndPage($sort, $page, $theNumberOnThePage);
 
         $quantityOfAllProducts = $productsRepository->getTheQuantityOfAllProducts();
         $numberOfPages         = ceil($quantityOfAllProducts / $theNumberOnThePage);
@@ -87,7 +86,11 @@ class ProductController extends Controller
             ->getDoctrine()
             ->getRepository(Product::class);
 
-        $products = $productRepository->findByCategory($category, $page, $theNumberOnThePage);
+        $field     = ($request->get('sort')) ? $request->get('sort') : 'id';
+        $order     = ($request->get('order')) ? trim($request->get('order')) : 'ASC';
+        $nextOrder = ($order == 'ASC') ? 'DESC' : 'ASC';
+        $sort      = [$field => $order];
+        $products  = $productRepository->findByCategory($category, $page, $theNumberOnThePage, $sort);
         $quantityOfAllProducts = $productRepository->getTheQuantityOfAllProducts(['category' => $category->getId()]);
         $numberOfPages         = ceil($quantityOfAllProducts / $theNumberOnThePage);
 
@@ -95,12 +98,14 @@ class ProductController extends Controller
         $position  = $service->getHrefPosition($page, $numberOfPages);
 
         return $this->render('product/index.html.twig', [
+            'products' => $products,
             'page' => $page,
             'theNumberOnThePage' => $theNumberOnThePage,
-            'products' => $products,
-            'numberOfPages' => $numberOfPages,
-            'position' => $position,
             'quantityOfAllProducts' => $quantityOfAllProducts,
+            'position' => $position,
+            'numberOfPages' => $numberOfPages,
+            'nextOrder' => $nextOrder,
+            'sort' => $sort,
         ]);
     }
 }
