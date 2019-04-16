@@ -7,25 +7,28 @@ use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\Form\Type\BooleanType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 
-final class CategoryAdmin extends AbstractAdmin
+final class UserAdmin extends AbstractAdmin
 {
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('id', IntegerType::class)
-            ->add('name', TextType::class)
-            ->add('active', BooleanType::class);
+            ->add('username')
+            ->add('password')
+            ->add('email')
+            ->add('firstName')
+            ->add('lastName');
     }
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $datagridMapper->add('name');
+//        $datagridMapper
+//            ->add('username');
     }
     protected function configureListFields(ListMapper $listMapper)
     {
-        $listMapper->addIdentifier('name');
+        $listMapper
+            ->addIdentifier('username')
+            ->addIdentifier('firstName')
+            ->addIdentifier('lastName');
     }
 }

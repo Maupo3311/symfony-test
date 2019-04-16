@@ -34,6 +34,16 @@ services:
         arguments: [~, AppBundle\Entity\Product, ~]
         tags:
             - { name: sonata.admin, manager_type: orm, label: Product }
+    admin.user:
+        class: AdminBundle\Admin\UserAdmin
+        arguments: [~, AppBundle\Entity\User, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: User }
+    admin.feedback:
+        class: AdminBundle\Admin\FeedbackAdmin
+        arguments: [~, AppBundle\Entity\Feedback, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: Feedback }
     # makes classes in src/AppBundle available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
     AppBundle\:
