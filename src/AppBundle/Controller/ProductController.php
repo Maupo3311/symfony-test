@@ -75,7 +75,7 @@ class ProductController extends Controller
      * @return Response
      * @throws NonUniqueResultException
      */
-    public function showByCategory(Category $category, Request $request)
+    public function showByCategoryAction(Category $category, Request $request)
     {
         $page = ($request->get('page')) ? $request->get('page') : 1;
 
