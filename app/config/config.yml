@@ -87,7 +87,7 @@ fos_user:
             enabled: true
     profile:
         form:
-            type: ap_edit_profile
+            type: AppBundle\Form\ProfileFormType
 sonata_block:
     blocks:
         # enable the SonataAdminBundle block

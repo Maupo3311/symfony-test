@@ -21,9 +21,9 @@ services:
         tags:
             - { name: form.type, alias: app_user_registration }
     ap_user.edit.form.type:
-        class: AppBundle\Form\FOSUserBundle\ProfileFormType
+        class: AppBundle\Form\ProfileFormType
         tags:
-            - { name: form.type, alias: ap_edit_profile }
+            - { name: form.type, alias: app_user_profile }
     admin.category:
         class: AppBundle\Admin\CategoryAdmin
         arguments: [~, AppBundle\Entity\Category, ~]
