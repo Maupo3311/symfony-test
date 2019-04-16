@@ -8,35 +8,41 @@
 
 {% block body %}
     <b>Categories:</b>
-    {% for category in categories %}
-        <a href="{{ path('show_by_category', {id: category.id}) }}" class="noneDecoration">
-            <div class="category"> {{ category.name }} </div>
-        </a>
-    {% endfor %}
+    {% if categories != null %}
+        {% for category in categories %}
+            <a href="{{ path('show_by_category', {id: category.id}) }}" class="noneDecoration">
+                <div class="category"> {{ category.name }} </div>
+            </a>
+        {% endfor %}
+    {% else %}
+        <p>No categories found</p>
+    {% endif %}
 
-    <div class="center-block center">
-        <a href="?page=1">
-            <b> << </b>
-        </a>
+    {% if numberOfPages > 1 %}
+        <div class="center-block center">
+            <a href="?page=1">
+                <b> << </b>
+            </a>
 
-        <a href="?page={% if page == 1 %}{{ 1 }}{% else %}{{ page - 1 }}{% endif %}">
-            <b> < </b>
-        </a>
+            <a href="?page={% if page == 1 %}{{ 1 }}{% else %}{{ page - 1 }}{% endif %}">
+                <b> < </b>
+            </a>
 
-        <span>
-            {% for number in page-position[0]..page+position[1] if number <= numberOfPages %}
-                <a href="?page={{ number }}" class="{% if number == page %}{{ 'noneDecoration' }}{% endif %}">
-                    <span>{{ number }}</span>
-                </a>
-            {% endfor %}
-        </span>
+            <span>
+                {% for number in page-position[0]..page+position[1] if number <= numberOfPages %}
+                    <a href="?page={{ number }}" class="{% if number == page %}{{ 'noneDecoration' }}{% endif %}">
+                        <span>{{ number }}</span>
+                    </a>
+                {% endfor %}
+            </span>
 
-        <a href="?page={% if page >= numberOfPages %}{{ page }}{% else %}{{ page + 1 }}{% endif %}">
-            <b> > </b>
-        </a>
+            <a href="?page={% if page >= numberOfPages %}{{ page }}{% else %}{{ page + 1 }}{% endif %}">
+                <b> > </b>
+            </a>
 
-        <a href="?page= {{ numberOfPages }}">
-            <b> >> </b>
-        </a>
-    </div>
+            <a href="?page= {{ numberOfPages }}">
+                <b> >> </b>
+            </a>
+        </div>
+    {% endif %}
 {% endblock %}

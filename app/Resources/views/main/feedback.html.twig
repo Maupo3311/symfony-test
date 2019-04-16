@@ -9,51 +9,57 @@
 {% block body %}
     <h2>Feedback page</h2>
 
-    {% for feedback in allFeedbacks %}
-        <div class="feedback">
-            <div class="feedbackHead">
-                <div class="feedbackCreated">{{ feedback.created.date|slice(0, -7) }}</div>
-                <p class="feedbackName">{{ feedback.name }}</p>
-                <p class="feedbackEmail">{{ feedback.email }}</p>
+    {% if allFeedbacks != null %}
+        {% for feedback in allFeedbacks %}
+            <div class="feedback">
+                <div class="feedbackHead">
+                    <div class="feedbackCreated">{{ feedback.created.date|slice(0, -7) }}</div>
+                    <p class="feedbackName">{{ feedback.name }}</p>
+                    <p class="feedbackEmail">{{ feedback.email }}</p>
+                </div>
+                <div class="feedbackBody">
+                    <p class="feedbackMessage">{{ feedback.message }}</p>
+                    {% if is_granted("IS_AUTHENTICATED_REMEMBERED") and feedback.user.id == app.user.id %}
+                        <div class="feedbackOptions">
+                            <a href="{{ path('delete_feedback', {'id': feedback.id}) }}" class="noneDecoration">
+                                <span class="feedbackDelete">Delete feedback</span>
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
             </div>
-            <div class="feedbackBody">
-                <p class="feedbackMessage">{{ feedback.message }}</p>
-                {% if is_granted("IS_AUTHENTICATED_REMEMBERED") and feedback.user.id == app.user.id %}
-                    <div class="feedbackOptions">
-                        <a href="{{ path('delete_feedback', {'id': feedback.id}) }}" class="noneDecoration">
-                            <span class="feedbackDelete">Delete feedback</span>
-                        </a>
-                    </div>
-                {% endif %}
-            </div>
+        {% endfor %}
+    {% else %}
+        <p>No feedbacks found</p>
+    {% endif %}
+
+    {% if numberOfPages > 1 %}
+        <div class="center-block center">
+            <a href="?page=1">
+                <b> << </b>
+            </a>
+
+            <a href="?page={% if page == 1 %}{{ 1 }}{% else %}{{ page - 1 }}{% endif %}">
+                <b> < </b>
+            </a>
+
+            <span>
+                {% for number in page-position[0]..page+position[1] if number <= numberOfPages %}
+                    <a href="?page={{ number }}" class="{% if number == page %}{{ 'noneDecoration' }}{% endif %}">
+                        <span>{{ number }}</span>
+                    </a>
+                {% endfor %}
+            </span>
+
+            <a href="?page={% if page >= numberOfPages %}{{ page }}{% else %}{{ page + 1 }}{% endif %}">
+                <b> > </b>
+            </a>
+
+            <a href="?page= {{ numberOfPages }}">
+                <b> >> </b>
+            </a>
         </div>
-    {% endfor %}
-
-    <div class="center-block center">
-        <a href="?page=1">
-            <b> << </b>
-        </a>
-
-        <a href="?page={% if page == 1 %}{{ 1 }}{% else %}{{ page - 1 }}{% endif %}">
-            <b> < </b>
-        </a>
-
-        <span>
-            {% for number in page-position[0]..page+position[1] if number <= numberOfPages %}
-                <a href="?page={{ number }}" class="{% if number == page %}{{ 'noneDecoration' }}{% endif %}">
-                    <span>{{ number }}</span>
-                </a>
-            {% endfor %}
-        </span>
-
-        <a href="?page={% if page >= numberOfPages %}{{ page }}{% else %}{{ page + 1 }}{% endif %}">
-            <b> > </b>
-        </a>
-
-        <a href="?page= {{ numberOfPages }}">
-            <b> >> </b>
-        </a>
-    </div>
+    {% endif %}
 
     {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
         {{ form(formView) }}

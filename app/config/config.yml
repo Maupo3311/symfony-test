@@ -32,6 +32,7 @@ framework:
     assets: ~
     php_errors:
         log: true
+    translator: { fallbacks: ['%locale%'] }
 
 # Twig Configuration
 twig:
@@ -65,11 +66,11 @@ doctrine:
 # Swiftmailer Configuration
 swiftmailer:
     transport: "%mailer_transport%"
-    encryption: "%mailer_encryption%"
+#    encryption: "%mailer_encryption%"
     host:      "%mailer_host%"
     username:  "%mailer_user%"
     password:  "%mailer_password%"
-    auth_mode: "%mailer_auth_mode%"
+#    auth_mode: "%mailer_auth_mode%"
     spool:     { type: memory }
 
 fos_user:
@@ -84,3 +85,11 @@ fos_user:
             type: AppBundle\Form\RegistrationType
         confirmation:
             enabled: true
+    profile:
+        form:
+            type: ap_edit_profile
+sonata_block:
+    blocks:
+        # enable the SonataAdminBundle block
+        sonata.admin.block.admin_list:
+            contexts: [admin]

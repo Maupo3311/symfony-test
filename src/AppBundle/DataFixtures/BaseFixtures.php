@@ -7,6 +7,7 @@ namespace AppBundle\DataFixtures;
 use AppBundle\Entity\Category;
 use AppBundle\Entity\Product;
 use AppBundle\Entity\Feedback;
+use AppBundle\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
@@ -17,12 +18,39 @@ class BaseFixtures extends Fixture
      */
     public function load(ObjectManager $manager)
     {
-        for($i = 0; $i < 38; $i++){
-            $feedback = new Feedback();
-            $feedback->setName('name' . mt_rand(1, 500));
-            $feedback->setEmail('email' . mt_rand(1, 500) . '@mail.ru');
-            $feedback->setMessage(md5($i));
-            $manager->persist($feedback);
+        $user = new User();
+        $user->setFirstName('Admin');
+        $user->setLastName('Admin');
+        $user->setUsername('Admin');
+        $user->addRole('ROLE_ADMIN');
+        $user->setEmail('maupo3311@mail.ru');
+        $user->setPassword(password_hash("password1234", PASSWORD_DEFAULT));
+        $user->setEnabled(true);
+        $manager->persist($user);
+
+        $users = [];
+        for($i = 0; $i < 20; $i++){
+            $user = new User();
+            $user->setFirstName('name' . mt_rand(1, 99));
+            $user->setLastName('surname' . mt_rand(1, 99));
+            $user->setUsername(rand(1, 1000));
+            $user->addRole('ROLE_USER');
+            $user->setEmail(rand(10000, 600000) . '@mail.ru');
+            $user->setPassword(md5($i));
+            $user->setEnabled(true);
+            $users[] = $user;
+            $manager->persist($user);
+        }
+
+        foreach($users as $user){
+            for($i = 0; $i < 2; $i++){
+                $feedback = new Feedback();
+                $feedback->setName('name' . mt_rand(1, 500));
+                $feedback->setEmail('email' . mt_rand(1, 500) . '@mail.ru');
+                $feedback->setMessage(md5($i));
+                $feedback->setUser($user);
+                $manager->persist($feedback);
+            }
         }
 
         $categories = [];
