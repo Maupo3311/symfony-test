@@ -19,6 +19,11 @@
                 </div>
                 <div class="feedbackBody">
                     <p class="feedbackMessage">{{ feedback.message }}</p>
+                    {% if feedback.brochure != null %}
+                        <div class="feedbackFile">
+                            <img class="feedbackFileImages" src="{{ asset( 'uploads/brochures/' ~ feedback.brochure ) }}">
+                        </div>
+                    {% endif %}
                     {% if is_granted("IS_AUTHENTICATED_REMEMBERED") and feedback.user.id == app.user.id %}
                         <div class="feedbackOptions">
                             <a href="{{ path('delete_feedback', {'id': feedback.id}) }}" class="noneDecoration">

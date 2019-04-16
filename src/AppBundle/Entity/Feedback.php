@@ -66,6 +66,29 @@ class Feedback
     private $created;
 
     /**
+     * @ORM\Column(type="string")
+     *
+     * @Assert\File(mimeTypes={ "image/jpeg" })
+     */
+    private $brochure;
+
+    /**
+     * @return mixed
+     */
+    public function getBrochure()
+    {
+        return $this->brochure;
+    }
+
+    /**
+     * @param mixed $brochure
+     */
+    public function setBrochure($brochure)
+    {
+        $this->brochure = $brochure;
+    }
+
+    /**
      * Feedback constructor.
      * @throws Exception
      */

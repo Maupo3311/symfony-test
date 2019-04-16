@@ -7,6 +7,7 @@ use AppBundle\Entity\Product;
 use AppBundle\Entity\User;
 use AppBundle\Form\FeedbackType;
 use AppBundle\Repository\ProductRepository;
+use AppBundle\Services\FileUploader;
 use Doctrine\ORM\NonUniqueResultException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -15,6 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use AppBundle\Repository\FeedbackRepository;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Class MainController
@@ -41,25 +43,27 @@ class MainController extends Controller
     }
 
     /**
-     * Feedback page for bla....
+     * Shows the feedbacks of our site and allows you to leave your
      *
      * @Route("/feedback", name="feedback")
      * @param Request $request
+     * @param FileUploader $fileUploader
      * @return RedirectResponse|Response
      * @throws NonUniqueResultException
      */
-    public function feedbackAction(Request $request)
+    public function feedbackAction(Request $request, FileUploader $fileUploader)
     {
         /** @var FeedbackRepository $feedbackRepository */
         $feedbackRepository = $this
             ->getDoctrine()
             ->getRepository(Feedback::class);
 
-        $page = ($request->get('page')) ? $request->get('page') : 1;
-        $theNumberOnThePage = 5;
-        $allFeedbacks = $feedbackRepository->findByPage($page, $theNumberOnThePage);
+        $page                   = ($request->get('page')) ? $request->get('page') : 1;
+        $theNumberOnThePage     = 5;
+        $allFeedbacks           = $feedbackRepository->findByPage($page, $theNumberOnThePage);
         $quantityOfAllFeedbacks = $feedbackRepository->getTheQuantityOfAllFeedbacks();
-        $numberOfPages = ceil($quantityOfAllFeedbacks / $theNumberOnThePage);
+        $numberOfPages          = ceil($quantityOfAllFeedbacks / $theNumberOnThePage);
+        $pathForFiles           = $this->container->getParameter('brochures_directory');
 
         $service  = $this->container->get('app.pagination');
         $position = $service->getHrefPosition($page, $numberOfPages);
@@ -77,6 +81,11 @@ class MainController extends Controller
                 /** @var Feedback $feedback */
                 $feedback = $form->getData();
                 $em       = $this->getDoctrine()->getManager();
+
+                $file = $feedback->getBrochure();
+                $fileName = $fileUploader->upload($file);
+
+                $feedback->setBrochure($fileName);
 
                 $feedback->setUser($user);
                 $feedback->setName($user->getFirstName() . ' ' . $user->getLastName());
@@ -103,6 +112,7 @@ class MainController extends Controller
             'quantityOfAllFeedbacks' => $quantityOfAllFeedbacks,
             'numberOfPages'          => $numberOfPages,
             'position'               => $position,
+            'path_for_files'         => $pathForFiles,
         ]);
     }
 
@@ -121,6 +131,13 @@ class MainController extends Controller
             ->getManager();
 
         if( $feedback->getUser()->getId() == $user->getId() ){
+            $brochure    = $feedback->getBrochure();
+            $pathForFile = $this->getParameter('brochures_directory') . '/' . $brochure;
+
+            if( $brochure != null && file_exists($pathForFile)){
+                unlink($pathForFile);
+            }
+
             $em->remove($feedback);
             $em->flush();
 

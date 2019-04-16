@@ -13,9 +13,12 @@ class FeedbackType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('message');
-//            ->add('sender', 'hidden');
-    }/**
+        $builder
+            ->add('message')
+            ->add('brochure');
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)

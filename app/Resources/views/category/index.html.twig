@@ -13,10 +13,6 @@
             <a href="{{ path('show_by_category', {id: category.id}) }}" class="noneDecoration">
                 <div class="category">
                     <p>{{ category.name }}</p>
-                    <div class="categoryDescription">
-                        <p class="categoryID">id category: {{ category.id }}</p>
-                        <p class="categoryActive">Category {% if category.active %}{{ 'active' }}{% else %}{{ 'inactive' }}{% endif %}</p>
-                    </div>
                 </div>
             </a>
         {% endfor %}

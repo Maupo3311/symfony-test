@@ -49,6 +49,7 @@ class BaseFixtures extends Fixture
                 $feedback->setEmail('email' . mt_rand(1, 500) . '@mail.ru');
                 $feedback->setMessage(md5($i));
                 $feedback->setUser($user);
+                $feedback->setBrochure('');
                 $manager->persist($feedback);
             }
         }

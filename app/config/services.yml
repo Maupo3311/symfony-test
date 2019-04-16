@@ -64,3 +64,7 @@ services:
     #     arguments:
     #         $someArgument: 'some_value'
 
+    AppBundle\Services\FileUploader:
+        arguments:
+            $targetDirectory: '%brochures_directory%'
+

@@ -34,3 +34,10 @@
 .feedbackDelete{
     color: #d20101;
 }
+.feedbackFile{
+    margin: 0 auto;
+    width: 400px;
+}
+.feedbackFileImages{
+    width: 400px;
+}
