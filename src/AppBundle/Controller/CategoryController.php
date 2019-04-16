@@ -30,8 +30,8 @@ class CategoryController extends Controller
             ->getDoctrine()
             ->getRepository(Category::class);
 
-        $page               = $request->get('page') ?: 1;
         $theNumberOnThePage = 10;
+        $page               = $request->get('page') ?: 1;
         $countCategories    = $categoryRepository->count([]);
         $numberOfPages      = ceil($countCategories / $theNumberOnThePage);
         $categories         = $categoryRepository->findByPage($page, $theNumberOnThePage);
