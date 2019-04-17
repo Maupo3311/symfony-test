@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Entity\Image\FeedbackImage;
 use Exception;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
@@ -66,31 +67,33 @@ class Feedback
     private $created;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
-     *
-     * @Assert\File(mimeTypes={ "image/jpeg" })
+     * @ORM\OneToMany(
+     *     targetEntity="AppBundle\Entity\Image\FeedbackImage",
+     *      cascade={"persist","remove"},
+     *      orphanRemoval=true,
+     *      mappedBy="feedback"
+     * )
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="images_id", referencedColumnName="id", nullable=false)
+     * })
      */
-    private $image;
+    public $images;
 
     /**
      * @return mixed
      */
-    public function getImage()
+    public function getImages()
     {
-        return $this->image;
+        return $this->images;
     }
 
     /**
-     * @param mixed $image
-     * @return Feedback
+     * @param FeedbackImage $image
      */
-    public function setImage($image)
+    public function addImages(FeedbackImage $image)
     {
-        $this->image = $image;
-
-        return $this;
+        $this->images[] = $image;
     }
-
 
     /**
      * Feedback constructor.
@@ -104,7 +107,7 @@ class Feedback
     /**
      * @return User
      */
-    public function getUser(): User
+    public function getUser()
     {
         return $this->user;
     }
@@ -125,20 +128,17 @@ class Feedback
     /**
      * @return string
      */
-    public function getMessage(): string
+    public function getMessage()
     {
         return $this->message;
     }
 
     /**
      * @param string $message
-     * @return Feedback
      */
-    public function setMessage(string $message): Feedback
+    public function setMessage(string $message)
     {
         $this->message = $message;
-
-        return $this;
     }
 
     /**

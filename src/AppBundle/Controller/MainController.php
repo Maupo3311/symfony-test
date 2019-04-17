@@ -81,7 +81,7 @@ class MainController extends Controller
                 $feedback = $form->getData();
                 $em       = $this->getDoctrine()->getManager();
                 $file     = $feedback->getImage();
-                $fileName = $fileUploader->upload($file);
+                $fileName = $file ? $fileUploader->upload($file) : '';
 
                 $feedback
                     ->setImage($fileName)

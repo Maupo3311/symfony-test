@@ -42,17 +42,17 @@ class BaseFixtures extends Fixture
             $manager->persist($user);
         }
 
-        foreach($users as $user){
-            for($i = 0; $i < 2; $i++){
-                $feedback = new Feedback();
-                $feedback->setName('name' . mt_rand(1, 500));
-                $feedback->setEmail('email' . mt_rand(1, 500) . '@mail.ru');
-                $feedback->setMessage(md5($i));
-                $feedback->setUser($user);
-                $feedback->setBrochure('');
-                $manager->persist($feedback);
-            }
-        }
+//        foreach($users as $user){
+//            for($i = 0; $i < 2; $i++){
+//                $feedback = new Feedback();
+//                $feedback->setName('name' . mt_rand(1, 500));
+//                $feedback->setEmail('email' . mt_rand(1, 500) . '@mail.ru');
+//                $feedback->setMessage(md5($i));
+//                $feedback->setUser($user);
+//                $feedback->setBrochure('');
+//                $manager->persist($feedback);
+//            }
+//        }
 
         $categories = [];
 

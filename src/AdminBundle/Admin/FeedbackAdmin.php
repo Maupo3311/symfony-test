@@ -1,13 +1,17 @@
 <?php
 
-
 namespace AdminBundle\Admin;
 
+use AdminBundle\Entity\Image;
+use AppBundle\Entity\Feedback;
+use AppBundle\Entity\Image\FeedbackImage;
+use AppBundle\Entity\User;
+use AppBundle\Enum\ImageType;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\AdminBundle\Form\Type\AdminType;
+use Sonata\Form\Type\CollectionType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
@@ -16,17 +20,20 @@ final class FeedbackAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('id')
+//            ->add('id')
             ->add('user', EntityType::class, [
-                'class' => 'AppBundle\Entity\User',
+                'class'        => User::class,
                 'choice_label' => 'username',
             ])
             ->add('name')
             ->add('email')
             ->add('message', TextareaType::class)
             ->add('created')
-            ->add('image');
+            ->add('images', CollectionType::class, [
+                'required' => false,
+            ]);
     }
+
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
@@ -40,40 +47,17 @@ final class FeedbackAdmin extends AbstractAdmin
             ->addIdentifier('created');
     }
 
-    public function prePersist($page)
+    /**
+     * {@inheritdoc}
+     */
+    public function preUpdate($object)
     {
-        $this->manageEmbeddedImageAdmins($page);
-    }
+        /** @var Feedback $object */
 
-    public function preUpdate($page)
-    {
-        $this->manageEmbeddedImageAdmins($page);
-    }
-
-    private function manageEmbeddedImageAdmins($page)
-    {
-        // Cycle through each field
-        foreach ($this->getFormFieldDescriptions() as $fieldName => $fieldDescription) {
-            // detect embedded Admins that manage Images
-            if ($fieldDescription->getType() === 'sonata_type_admin' &&
-                ($associationMapping = $fieldDescription->getAssociationMapping()) &&
-                $associationMapping['targetEntity'] === 'App\Entity\Image'
-            ) {
-                $getter = 'get' . $fieldName;
-                $setter = 'set' . $fieldName;
-
-                /** @var Image $image */
-                $image = $page->$getter();
-
-                if ($image) {
-                    if ($image->getFile()) {
-                        // update the Image to trigger file management
-                        $image->refreshUpdated();
-                    } elseif (!$image->getFile() && !$image->getFilename()) {
-                        // prevent Sf/Sonata trying to create and persist an empty Image
-                        $page->$setter(null);
-                    }
-                }
+        if ($object->getImages()) {
+            /** @var FeedbackImage $attachedFile */
+            foreach ($object->getImages() as $attachedFile) {
+                $attachedFile->setCreatedAt(new \DateTime());
             }
         }
     }

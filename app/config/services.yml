@@ -44,11 +44,11 @@ services:
         arguments: [~, AppBundle\Entity\Feedback, ~]
         tags:
             - { name: sonata.admin, manager_type: orm, label: Feedback }
-    admin.image:
-        class: AdminBundle\Admin\ImageAdmin
-        arguments: [~, AdminBundle\Entity\Image, ~]
+    admin.feedbackImage:
+        class: AdminBundle\Admin\Image\FeedbackImageAdmin
+        arguments: [~, AppBundle\Entity\Image\FeedbackImage, ~]
         tags:
-            - { name: sonata.admin, manager_type: orm, label: Image }
+            - { name: sonata.admin, manager_type: orm, label: Images }
     # makes classes in src/AppBundle available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
     AppBundle\:
@@ -72,27 +72,4 @@ services:
     AppBundle\Services\FileUploader:
         arguments:
             $targetDirectory: '%upload_directory%'
-
-    AdminBundle\Entity\Image:
-        type: entity
-        repositoryClass: AdminBundle\Repository\ImageRepository
-        table: images
-        id:
-            id:
-                type:      integer
-                generator: { strategy: AUTO }
-        fields:
-            filename:
-                type:      string
-                length:    100
-
-            # changed when files are uploaded, to force preUpdate and postUpdate to fire
-            updated:
-                type:      datetime
-                nullable:  true
-
-            # ...
-        lifecycleCallbacks:
-            prePersist: ['lifecycleFileUpload']
-            preUpdate:  ['lifecycleFileUpload']
 
