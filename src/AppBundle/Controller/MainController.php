@@ -63,7 +63,7 @@ class MainController extends Controller
         $allFeedbacks           = $feedbackRepository->findByPage($page, $theNumberOnThePage);
         $quantityOfAllFeedbacks = $feedbackRepository->getTheQuantityOfAllFeedbacks();
         $numberOfPages          = ceil($quantityOfAllFeedbacks / $theNumberOnThePage);
-        $pathForFiles           = $this->container->getParameter('brochures_directory');
+        $pathForFiles           = $fileUploader->getTargetDirectory();
 
         $service  = $this->container->get('app.pagination');
         $position = $service->getHrefPosition($page, $numberOfPages);
@@ -76,20 +76,18 @@ class MainController extends Controller
         $user = $this->getUser();
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             if( !empty($user) ){
                 /** @var Feedback $feedback */
                 $feedback = $form->getData();
                 $em       = $this->getDoctrine()->getManager();
-
-                $file = $feedback->getBrochure();
+                $file     = $feedback->getImage();
                 $fileName = $fileUploader->upload($file);
 
-                $feedback->setBrochure($fileName);
-
-                $feedback->setUser($user);
-                $feedback->setName($user->getFirstName() . ' ' . $user->getLastName());
-                $feedback->setEmail($user->getEmail());
+                $feedback
+                    ->setImage($fileName)
+                    ->setUser($user)
+                    ->setName($user->getFirstName() . ' ' . $user->getLastName())
+                    ->setEmail($user->getEmail());
 
                 $em->persist($feedback);
                 $em->flush();
@@ -121,7 +119,7 @@ class MainController extends Controller
      * @param Feedback $feedback
      * @return RedirectResponse
      */
-    public function deleteFeedback(Feedback $feedback)
+    public function deleteFeedbackAction(Feedback $feedback)
     {
         /**@var User $user*/
         $user = $this->getUser();
@@ -131,10 +129,10 @@ class MainController extends Controller
             ->getManager();
 
         if( $feedback->getUser()->getId() == $user->getId() ){
-            $brochure    = $feedback->getBrochure();
-            $pathForFile = $this->getParameter('brochures_directory') . '/' . $brochure;
+            $image    = $feedback->getImage();
+            $pathForFile = $this->getParameter('upload_directory') . '/' . $image;
 
-            if( $brochure != null && file_exists($pathForFile)){
+            if( $image != null && file_exists($pathForFile)){
                 unlink($pathForFile);
             }
 

@@ -66,27 +66,31 @@ class Feedback
     private $created;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      *
      * @Assert\File(mimeTypes={ "image/jpeg" })
      */
-    private $brochure;
+    private $image;
 
     /**
      * @return mixed
      */
-    public function getBrochure()
+    public function getImage()
     {
-        return $this->brochure;
+        return $this->image;
     }
 
     /**
-     * @param mixed $brochure
+     * @param mixed $image
+     * @return Feedback
      */
-    public function setBrochure($brochure)
+    public function setImage($image)
     {
-        $this->brochure = $brochure;
+        $this->image = $image;
+
+        return $this;
     }
+
 
     /**
      * Feedback constructor.
@@ -121,19 +125,21 @@ class Feedback
     /**
      * @return string
      */
-    public function getMessage()
+    public function getMessage(): string
     {
         return $this->message;
     }
 
     /**
      * @param string $message
+     * @return Feedback
      */
-    public function setMessage($message)
+    public function setMessage(string $message): Feedback
     {
         $this->message = $message;
-    }
 
+        return $this;
+    }
 
     /**
      * Get id.

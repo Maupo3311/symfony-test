@@ -15,13 +15,13 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 class FeedbackRepository extends EntityRepository
 {
     /**
-     * @param $page
-     * @param $theNumberOnThePage
+     * @param int $page
+     * @param int $theNumberOnThePage
      * @return mixed
      */
-    public function findByPage($page, $theNumberOnThePage)
+    public function findByPage(int $page, int $theNumberOnThePage)
     {
-        $lastResult = $page * $theNumberOnThePage;
+        $lastResult  = $page * $theNumberOnThePage;
         $firstResult = $lastResult - $theNumberOnThePage;
 
         return $this

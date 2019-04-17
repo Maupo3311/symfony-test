@@ -34,9 +34,9 @@ class ProductController extends Controller
             ->getRepository(Product::class);
 
         $theNumberOnThePage = 10;
-        $field     = ($request->get('sort')) ? $request->get('sort') : 'id';
-        $order     = ($request->get('order')) ? trim($request->get('order')) : 'ASC';
-        $nextOrder = ($order == 'ASC') ? 'DESC' : 'ASC';
+        $field     = $request->get('sort') ?: 'id';
+        $order     = $request->get('order') ? trim($request->get('order')) : 'ASC';
+        $nextOrder = $order == 'ASC' ? 'DESC' : 'ASC';
         $sort      = [$field => $order];
         $products  = $productsRepository->findBySortAndPage($sort, $page, $theNumberOnThePage);
 

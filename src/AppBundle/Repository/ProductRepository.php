@@ -35,23 +35,23 @@ class ProductRepository extends EntityRepository
      * Find product by category
      *
      * @param Category $category
-     * @param int $page
-     * @param int $theNumberOnThePage
-     * @param array $sort
+     * @param int      $page
+     * @param int      $theNumberOnThePage
+     * @param array    $sort
      * @return mixed
      */
-    public function findByCategory(Category $category, $page = 1, $theNumberOnThePage = 10, $sort = ['id' => 'ASC'])
+    public function findByCategory(Category $category, int $page = 1, int $theNumberOnThePage = 10, array $sort = ['id' => 'ASC'])
     {
-        $lastResult = $page * $theNumberOnThePage;
+        $lastResult  = $page * $theNumberOnThePage;
         $firstResult = $lastResult - $theNumberOnThePage;
 
-        foreach ($sort as $field => $order){
+        foreach ($sort as $field => $order) {
             return $this
                 ->createQueryBuilder('p')
                 ->where('p.category = :category')
                 ->setParameter('category', $category)
-                ->orderBy('p.'.$field, $order)
-//                ->setParameter('order', $order)
+                ->setParameters(['category' => $category,])
+                ->orderBy("p.{$field}", $order)
                 ->setFirstResult($firstResult)
                 ->setMaxResults($theNumberOnThePage)
                 ->getQuery()
@@ -60,13 +60,13 @@ class ProductRepository extends EntityRepository
     }
 
     /**
-     * @param $page
-     * @param $theNumberOnThePage
+     * @param int $page
+     * @param int $theNumberOnThePage
      * @return mixed
      */
-    public function findByPage($page, $theNumberOnThePage)
+    public function findByPage(int $page, int $theNumberOnThePage)
     {
-        $lastResult = $page * $theNumberOnThePage;
+        $lastResult  = $page * $theNumberOnThePage;
         $firstResult = $lastResult - $theNumberOnThePage;
 
         return $this
@@ -84,29 +84,32 @@ class ProductRepository extends EntityRepository
      */
     public function getTheQuantityOfAllProducts(array $where = null)
     {
-        if($where == null){
+        if ($where == null) {
             return $this
                 ->createQueryBuilder('p')
                 ->select('count(p.id)')
                 ->getQuery()
                 ->getSingleScalarResult();
         } else {
-            foreach ($where as $field => $item){
+            foreach ($where as $field => $item) {
                 return $this
                     ->createQueryBuilder('p')
                     ->select('count(p.id)')
-                    ->where('p.'.$field.' = :item')
+                    ->where('p.' . $field . ' = :item')
                     ->setParameter('item', $item)
                     ->getQuery()
                     ->getSingleScalarResult();
             }
         }
+
+        return null;
     }
 
     /**
      * @return mixed
      */
-    public function findByRating(){
+    public function findByRating()
+    {
         return $this
             ->createQueryBuilder('p')
             ->orderBy('p.rating', 'DESC')
@@ -117,7 +120,8 @@ class ProductRepository extends EntityRepository
     /**
      * @return mixed
      */
-    public function findBestProducts(){
+    public function findBestProducts()
+    {
         return $this
             ->createQueryBuilder('p')
             ->setFirstResult(0)
@@ -127,15 +131,21 @@ class ProductRepository extends EntityRepository
             ->getResult();
     }
 
-    public function findBySortAndPage(array $sort, $page, $theNumberOnThePage)
+    /**
+     * @param array $sort
+     * @param int   $page
+     * @param int   $theNumberOnThePage
+     * @return mixed
+     */
+    public function findBySortAndPage(array $sort, int $page, int $theNumberOnThePage)
     {
-        $lastResult = $page * $theNumberOnThePage;
+        $lastResult  = $page * $theNumberOnThePage;
         $firstResult = $lastResult - $theNumberOnThePage;
 
-        foreach($sort as $field => $order){
+        foreach ($sort as $field => $order) {
             return $this
                 ->createQueryBuilder('p')
-                ->orderBy('p.'.lcfirst($field), $order)
+                ->orderBy('p.' . lcfirst($field), $order)
                 ->setFirstResult($firstResult)
                 ->setMaxResults($theNumberOnThePage)
                 ->getQuery()

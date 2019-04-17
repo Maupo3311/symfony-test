@@ -19,9 +19,9 @@
                 </div>
                 <div class="feedbackBody">
                     <p class="feedbackMessage">{{ feedback.message }}</p>
-                    {% if feedback.brochure != null %}
+                    {% if feedback.image != null %}
                         <div class="feedbackFile">
-                            <img class="feedbackFileImages" src="{{ asset( 'uploads/brochures/' ~ feedback.brochure ) }}">
+                            <img class="feedbackFileImages" src="{{  asset('uploads/' ~ feedback.image)  }}">
                         </div>
                     {% endif %}
                     {% if is_granted("IS_AUTHENTICATED_REMEMBERED") and feedback.user.id == app.user.id %}

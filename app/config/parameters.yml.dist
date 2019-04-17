@@ -17,5 +17,7 @@ parameters:
     mailer_user: ~
     mailer_password: ~
 
+    upload_directory: '%kernel.project_dir%/web/uploads'
+
     # A secret key that's used to generate certain security-related tokens
     secret: ThisTokenIsNotSoSecretChangeIt

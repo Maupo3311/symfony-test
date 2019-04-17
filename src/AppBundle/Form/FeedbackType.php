@@ -15,7 +15,7 @@ class FeedbackType extends AbstractType
     {
         $builder
             ->add('message')
-            ->add('brochure');
+            ->add('image');
     }
 
     /**

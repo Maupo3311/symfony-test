@@ -3,6 +3,7 @@
 
 namespace AppBundle\Services;
 
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class FileUploader
@@ -18,7 +19,11 @@ class FileUploader
     {
         $fileName = md5(uniqid()).'.'.$file->guessExtension();
 
-        $file->move($this->getTargetDirectory(), $fileName);
+        try {
+            $file->move($this->getTargetDirectory(), $fileName);
+        } catch (FileException $e) {
+            throw new FileException('Error loading file');
+        }
 
         return $fileName;
     }
