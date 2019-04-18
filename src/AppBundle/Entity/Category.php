@@ -115,4 +115,12 @@ class Category
     {
         return $this->products;
     }
+
+    /**
+     * @param Product $product
+     */
+    public function deleteProduct(Product $product)
+    {
+        $this->products->removeElement($product);
+    }
 }
