@@ -3,9 +3,14 @@
 namespace AppBundle\Entity;
 
 use AppBundle\Entity\Image\FeedbackImage;
+use AppBundle\Repository\FeedbackRepository;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Exception;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -13,6 +18,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Table(name="feedback")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\FeedbackRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Feedback
 {
@@ -89,10 +95,13 @@ class Feedback
 
     /**
      * @param FeedbackImage $image
+     * @return $this
      */
     public function addImages(FeedbackImage $image)
     {
         $this->images[] = $image;
+
+        return $this;
     }
 
     /**
@@ -135,10 +144,13 @@ class Feedback
 
     /**
      * @param string $message
+     * @return $this
      */
     public function setMessage(string $message)
     {
         $this->message = $message;
+
+        return $this;
     }
 
     /**

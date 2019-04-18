@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Entity\image;
+namespace AppBundle\Entity\Image;
 
 use AppBundle\Enum\ImageType;
 use Doctrine\ORM\Mapping as ORM;
@@ -110,7 +110,7 @@ abstract class AbstractImage
     {
         // the absolute directory path where uploaded
         // documents should be saved
-        return __DIR__ . '/../../../web/' . $this->getImageUploadDir();
+        return __DIR__ . '/../../../../web/' . $this->getImageUploadDir();
     }
 
     /**

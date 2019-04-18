@@ -80,11 +80,11 @@ class MainController extends Controller
                 /** @var Feedback $feedback */
                 $feedback = $form->getData();
                 $em       = $this->getDoctrine()->getManager();
-                $file     = $feedback->getImage();
+                $file     = $feedback->getImages();
                 $fileName = $file ? $fileUploader->upload($file) : '';
 
                 $feedback
-                    ->setImage($fileName)
+//                    ->addImages($fileName)
                     ->setUser($user)
                     ->setName($user->getFirstName() . ' ' . $user->getLastName())
                     ->setEmail($user->getEmail());
