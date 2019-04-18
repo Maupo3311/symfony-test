@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use AppBundle\Entity\Image\FeedbackImage;
 use AppBundle\Repository\FeedbackRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
@@ -72,6 +73,8 @@ class Feedback
     private $created;
 
     /**
+     * @var ArrayCollection $images
+     *
      * @ORM\OneToMany(
      *     targetEntity="AppBundle\Entity\Image\FeedbackImage",
      *      cascade={"persist","remove"},
@@ -85,7 +88,7 @@ class Feedback
     public $images;
 
     /**
-     * @return mixed
+     * @return ArrayCollection
      */
     public function getImages()
     {
@@ -104,12 +107,24 @@ class Feedback
     }
 
     /**
+     * @param array $images
+     * @return $this
+     */
+    public function setImages(array $images)
+    {
+        $this->images = $images;
+
+        return $this;
+    }
+
+    /**
      * Feedback constructor.
      * @throws Exception
      */
     public function __construct()
     {
         $this->created = new DateTime();
+        $this->images = [];
     }
 
     /**

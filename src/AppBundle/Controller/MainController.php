@@ -3,9 +3,11 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Feedback;
+use AppBundle\Entity\Image\FeedbackImage;
 use AppBundle\Entity\Product;
 use AppBundle\Entity\User;
 use AppBundle\Form\FeedbackType;
+use AppBundle\Repository\FeedbackImageRepository;
 use AppBundle\Repository\ProductRepository;
 use AppBundle\Services\FileUploader;
 use Doctrine\ORM\NonUniqueResultException;
@@ -79,11 +81,24 @@ class MainController extends Controller
                 /** @var Feedback $feedback */
                 $feedback = $form->getData();
                 $em       = $this->getDoctrine()->getManager();
-                $file     = $feedback->getImages();
-                $fileName = $file ? $fileUploader->upload($file) : '';
+
+                $images         = $feedback->getImages();
+                $feedbackImages = [];
+                if ($images) {
+                    foreach ($images as $image) {
+                        /** @var FeedbackImage $feedbackImage */
+                        $feedbackImage = new FeedbackImage();
+                        $feedbackImage
+                            ->setFile($image)
+                            ->uploadImage()
+                            ->setFeedback($feedback);
+                        $feedbackImages[] = $feedbackImage;
+                        $em->persist($feedbackImage);
+                    }
+                }
 
                 $feedback
-//                    ->addImages($fileName)
+                    ->setImages($feedbackImages)
                     ->setUser($user)
                     ->setName($user->getFirstName() . ' ' . $user->getLastName())
                     ->setEmail($user->getEmail());
@@ -123,11 +138,18 @@ class MainController extends Controller
         /**@var User $user */
         $user = $this->getUser();
 
-        $em = $this
-            ->getDoctrine()
-            ->getManager();
+        /** @var FeedbackImageRepository $feedbackImageRepository */
+        $em = $this->getDoctrine()->getManager();
 
         if ($feedback->getUser()->getId() == $user->getId()) {
+
+            $images = $feedback->getImages()->getValues();
+            /** @var FeedbackImage $image */
+            foreach ($images as $image) {
+                if (file_exists($image->getImageAbsolutePath())) {
+                    unlink($image->getImageAbsolutePath());
+                }
+            }
 
             $em->remove($feedback);
             $em->flush();

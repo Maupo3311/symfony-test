@@ -125,6 +125,7 @@ abstract class AbstractImage
 
     /**
      * @param UploadedFile|null $image
+     * @return $this
      * @throws \Exception
      */
     public function setFile(UploadedFile $image = null)
@@ -138,6 +139,8 @@ abstract class AbstractImage
         }
 
         $this->preUploadImage();
+
+        return $this;
     }
 
     /**
@@ -178,6 +181,7 @@ abstract class AbstractImage
      * @ORM\PostPersist
      * @ORM\PostUpdate
      *
+     * @return $this|void
      * @throws \Exception
      */
     public function uploadImage()
@@ -186,23 +190,25 @@ abstract class AbstractImage
             return;
         }
 
-        // check if we have an old image
+        /** check if we have an old image */
         if (isset($this->imageTemp)) {
-            // delete the old image
+            /** delete the old image */
             unlink($this->imageTemp);
-            // clear the temp image path
+            /** clear the temp image path */
             $this->imageTemp = null;
         }
 
-        // you must throw an exception here if the image cannot be moved
-        // so that the entity is not persisted to the database
-        // which the UploadedFile move() method does
+        /** you must throw an exception here if the image cannot be moved
+           so that the entity is not persisted to the database
+           which the UploadedFile move() method does */
         $this->getFile()->move(
             $this->getImageUploadRootDir(),
             $this->imagePath
         );
 
         $this->setFile(null);
+
+        return $this;
     }
 
     /**

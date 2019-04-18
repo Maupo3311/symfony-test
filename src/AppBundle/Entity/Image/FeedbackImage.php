@@ -8,8 +8,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity
  * @ORM\Table(name="feedback_image")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\FeedbackImageRepository")
  */
 class FeedbackImage extends AbstractImage
 {
@@ -58,9 +58,12 @@ class FeedbackImage extends AbstractImage
 
     /**
      * @param Feedback $feedback
+     * @return $this
      */
     public function setFeedback(Feedback $feedback)
     {
         $this->feedback = $feedback;
+
+        return $this;
     }
 }

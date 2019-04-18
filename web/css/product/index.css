@@ -20,3 +20,12 @@
     padding: 0 10px;
     color: #bb3447;
 }
+.buttonSort:hover{
+    background: #f38181;
+}
+.buttonSort{
+    width: 48%;
+    display: inline-block;
+    border: 1px solid black;
+    font-size: 10px;
+}
