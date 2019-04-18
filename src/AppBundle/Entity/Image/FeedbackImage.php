@@ -43,7 +43,8 @@ class FeedbackImage extends AbstractImage
     /**
      * {@inheritdoc}
      */
-    public function getType(){
+    public function getType()
+    {
         return ImageType::FEEDBACK;
     }
 

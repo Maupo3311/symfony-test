@@ -1,6 +1,5 @@
 <?php
 
-
 namespace AdminBundle\Admin;
 
 use Sonata\AdminBundle\Admin\AbstractAdmin;
@@ -19,11 +18,13 @@ final class UserAdmin extends AbstractAdmin
             ->add('firstName')
             ->add('lastName');
     }
+
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
 //        $datagridMapper
 //            ->add('username');
     }
+
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper

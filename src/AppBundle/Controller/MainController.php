@@ -16,7 +16,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use AppBundle\Repository\FeedbackRepository;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Class MainController
@@ -30,7 +29,7 @@ class MainController extends Controller
      */
     public function indexAction()
     {
-        /**@var ProductRepository $productRepository*/
+        /**@var ProductRepository $productRepository */
         $productRepository = $this
             ->getDoctrine()
             ->getRepository(Product::class);
@@ -46,7 +45,7 @@ class MainController extends Controller
      * Shows the feedbacks of our site and allows you to leave your
      *
      * @Route("/feedback", name="feedback")
-     * @param Request $request
+     * @param Request      $request
      * @param FileUploader $fileUploader
      * @return RedirectResponse|Response
      * @throws NonUniqueResultException
@@ -72,11 +71,11 @@ class MainController extends Controller
         $form->add('submit', SubmitType::class);
         $form->handleRequest($request);
 
-        /**@var User $user*/
+        /**@var User $user */
         $user = $this->getUser();
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if( !empty($user) ){
+            if (!empty($user)) {
                 /** @var Feedback $feedback */
                 $feedback = $form->getData();
                 $em       = $this->getDoctrine()->getManager();
@@ -121,20 +120,14 @@ class MainController extends Controller
      */
     public function deleteFeedbackAction(Feedback $feedback)
     {
-        /**@var User $user*/
+        /**@var User $user */
         $user = $this->getUser();
 
         $em = $this
             ->getDoctrine()
             ->getManager();
 
-        if( $feedback->getUser()->getId() == $user->getId() ){
-            $image    = $feedback->getImage();
-            $pathForFile = $this->getParameter('upload_directory') . '/' . $image;
-
-            if( $image != null && file_exists($pathForFile)){
-                unlink($pathForFile);
-            }
+        if ($feedback->getUser()->getId() == $user->getId()) {
 
             $em->remove($feedback);
             $em->flush();

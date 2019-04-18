@@ -37,7 +37,8 @@ class FeedbackRepository extends EntityRepository
      * @return mixed
      * @throws NonUniqueResultException
      */
-    public function getTheQuantityOfAllFeedbacks(){
+    public function getTheQuantityOfAllFeedbacks()
+    {
         return $this
             ->createQueryBuilder('f')
             ->select('count(f.id)')
@@ -51,12 +52,13 @@ class FeedbackRepository extends EntityRepository
     public function findUploadFeedback()
     {
         $specialValues = '71afcc102de47d1d70e45d6179cd496424d8498c';
+
         return $this
             ->createQueryBuilder('f')
             ->where('f.name=:name')
             ->andWhere('f.email=:email')
             ->andWhere('f.message=:message')
-            ->setParameters(['name' => $specialValues, 'email' => $specialValues.'@mail.ru', 'message' => $specialValues])
+            ->setParameters(['name' => $specialValues, 'email' => $specialValues . '@mail.ru', 'message' => $specialValues])
             ->getQuery()
             ->getResult();
     }

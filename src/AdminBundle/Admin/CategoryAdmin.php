@@ -1,6 +1,5 @@
 <?php
 
-
 namespace AdminBundle\Admin;
 
 use AppBundle\Entity\Product;
@@ -33,18 +32,18 @@ final class CategoryAdmin extends AbstractAdmin
             ->add('active', BooleanType::class)
             ->add('products', CollectionType::class, [
                 'type_options' => [
-                    'delete' => false,
+                    'delete'         => false,
                     'delete_options' => [
                         'type'         => HiddenType::class,
                         'type_options' => [
                             'mapped'   => false,
                             'required' => false,
-                        ]
-                    ]
-                ]
+                        ],
+                    ],
+                ],
             ], [
-                'edit' => 'inline',
-                'inline' => 'table',
+                'edit'     => 'inline',
+                'inline'   => 'table',
                 'sortable' => 'position',
             ]);
     }

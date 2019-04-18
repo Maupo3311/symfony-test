@@ -45,6 +45,9 @@ final class FeedbackAdmin extends AbstractAdmin
             ->add('created')
             ->add('images', CollectionType::class, [
                 'required' => false,
+            ], [
+                'edit' => 'inline',
+                'sortable' => 'position',
             ]);
     }
 
@@ -99,11 +102,11 @@ final class FeedbackAdmin extends AbstractAdmin
 
         $uploadFeedbacks = $FeedbackRepository->findUploadFeedback();
         /** @var Feedback $uploadFeedback */
-        foreach ( $uploadFeedbacks as $uploadFeedback ){
+        foreach ($uploadFeedbacks as $uploadFeedback) {
             /** @var FeedbackImage $image */
             $image = $FeedbackImageRepository->findOneBy(['feedback' => $uploadFeedback]);
 
-            if($image){
+            if ($image) {
                 $image->setFeedback($object);
                 $object->addImages($image);
                 $feedbackManager->persist($object);

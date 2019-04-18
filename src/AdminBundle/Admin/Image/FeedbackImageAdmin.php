@@ -33,7 +33,6 @@ class FeedbackImageAdmin extends AbstractAdmin
             $refererUrl = $this->getRequest()->headers->get('referer');
             $feedbackId = basename(str_replace('/edit', '', $refererUrl));
 
-
             if ($feedbackId) {
                 /** @var ModelManager $modelManager */
                 $modelManager = $this->modelManager;
@@ -47,17 +46,17 @@ class FeedbackImageAdmin extends AbstractAdmin
                     ->getEntityManager(Feedback::class);
 
                 /** If the url id has no feedback he will give 'create' */
-                if($feedbackId == 'create'){
+                if ($feedbackId == 'create') {
                     /**
                      * Create a one-time feedback to save the image.
                      * Fill it with special values, which then will find him
                      */
-                    $feedback = new Feedback();
+                    $feedback      = new Feedback();
                     $specialValues = '71afcc102de47d1d70e45d6179cd496424d8498c';
                     $feedback
                         ->setName($specialValues)
                         ->setMessage($specialValues)
-                        ->setEmail($specialValues.'@mail.ru');
+                        ->setEmail($specialValues . '@mail.ru');
                     $em->persist($feedback);
                     $em->flush();
                 } else {
@@ -82,16 +81,16 @@ class FeedbackImageAdmin extends AbstractAdmin
         $fileFieldOptions = ['required' => false];
 
         if ($subject && $webPath = $subject->getImageWebPath()) {
-            $fullPath  =  '/../../../../'.$webPath;
+            $fullPath = '/../../../../' . $webPath;
 
             $fileFieldOptions['attr'] = ['hidden' => true];
 
             $fileFieldOptions['help'] = '
-            <a href="'.$fullPath.'" target="_blank">
+            <a href="' . $fullPath . '" target="_blank">
                 <img 
                     alt="' . $subject->getFilePath() . '" 
                     title="' . $subject->getFilePath() . '"
-                    src="'.$fullPath.'" 
+                    src="' . $fullPath . '" 
                     class="admin-preview" style="width:400px" 
                 /> 
             </a>';

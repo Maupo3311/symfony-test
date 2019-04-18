@@ -17,7 +17,8 @@ class CategoryRepository extends EntityRepository
      * @return mixed
      * @throws NonUniqueResultException
      */
-    public function getTheQuantityOfAllCategories(){
+    public function getTheQuantityOfAllCategories()
+    {
         return $this
             ->createQueryBuilder('c')
             ->select('count(c.id)')
@@ -32,7 +33,7 @@ class CategoryRepository extends EntityRepository
      */
     public function findByPage(int $page, int $theNumberOnThePage)
     {
-        $lastResult = $page * $theNumberOnThePage;
+        $lastResult  = $page * $theNumberOnThePage;
         $firstResult = $lastResult - $theNumberOnThePage;
 
         return $this

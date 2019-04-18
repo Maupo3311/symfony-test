@@ -10,7 +10,6 @@ use Doctrine\ORM\ORMException;
 use Exception;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -120,8 +119,6 @@ class Feedback
     {
         return $this->user;
     }
-
-
 
     /**
      * @param User $user

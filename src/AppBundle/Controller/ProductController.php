@@ -34,11 +34,11 @@ class ProductController extends Controller
             ->getRepository(Product::class);
 
         $theNumberOnThePage = 10;
-        $field     = $request->get('sort') ?: 'id';
-        $order     = $request->get('order') ? trim($request->get('order')) : 'ASC';
-        $nextOrder = $order == 'ASC' ? 'DESC' : 'ASC';
-        $sort      = [$field => $order];
-        $products  = $productsRepository->findBySortAndPage($sort, $page, $theNumberOnThePage);
+        $field              = $request->get('sort') ?: 'id';
+        $order              = $request->get('order') ? trim($request->get('order')) : 'ASC';
+        $nextOrder          = $order == 'ASC' ? 'DESC' : 'ASC';
+        $sort               = [$field => $order];
+        $products           = $productsRepository->findBySortAndPage($sort, $page, $theNumberOnThePage);
 
         $quantityOfAllProducts = $productsRepository->getTheQuantityOfAllProducts();
         $numberOfPages         = ceil($quantityOfAllProducts / $theNumberOnThePage);
@@ -47,14 +47,14 @@ class ProductController extends Controller
         $position = $service->getHrefPosition($page, $numberOfPages);
 
         return $this->render('product/index.html.twig', [
-            'products' => $products,
-            'page' => $page,
-            'theNumberOnThePage' => $theNumberOnThePage,
+            'products'              => $products,
+            'page'                  => $page,
+            'theNumberOnThePage'    => $theNumberOnThePage,
             'quantityOfAllProducts' => $quantityOfAllProducts,
-            'position' => $position,
-            'numberOfPages' => $numberOfPages,
-            'nextOrder' => $nextOrder,
-            'sort' => $sort,
+            'position'              => $position,
+            'numberOfPages'         => $numberOfPages,
+            'nextOrder'             => $nextOrder,
+            'sort'                  => $sort,
         ]);
     }
 
@@ -86,26 +86,26 @@ class ProductController extends Controller
             ->getDoctrine()
             ->getRepository(Product::class);
 
-        $field     = ($request->get('sort')) ? $request->get('sort') : 'id';
-        $order     = ($request->get('order')) ? trim($request->get('order')) : 'ASC';
-        $nextOrder = ($order == 'ASC') ? 'DESC' : 'ASC';
-        $sort      = [$field => $order];
-        $products  = $productRepository->findByCategory($category, $page, $theNumberOnThePage, $sort);
+        $field                 = ($request->get('sort')) ? $request->get('sort') : 'id';
+        $order                 = ($request->get('order')) ? trim($request->get('order')) : 'ASC';
+        $nextOrder             = ($order == 'ASC') ? 'DESC' : 'ASC';
+        $sort                  = [$field => $order];
+        $products              = $productRepository->findByCategory($category, $page, $theNumberOnThePage, $sort);
         $quantityOfAllProducts = $productRepository->getTheQuantityOfAllProducts(['category' => $category->getId()]);
         $numberOfPages         = ceil($quantityOfAllProducts / $theNumberOnThePage);
 
-        $service = $this->container->get('app.pagination');
-        $position  = $service->getHrefPosition($page, $numberOfPages);
+        $service  = $this->container->get('app.pagination');
+        $position = $service->getHrefPosition($page, $numberOfPages);
 
         return $this->render('product/index.html.twig', [
-            'products' => $products,
-            'page' => $page,
-            'theNumberOnThePage' => $theNumberOnThePage,
+            'products'              => $products,
+            'page'                  => $page,
+            'theNumberOnThePage'    => $theNumberOnThePage,
             'quantityOfAllProducts' => $quantityOfAllProducts,
-            'position' => $position,
-            'numberOfPages' => $numberOfPages,
-            'nextOrder' => $nextOrder,
-            'sort' => $sort,
+            'position'              => $position,
+            'numberOfPages'         => $numberOfPages,
+            'nextOrder'             => $nextOrder,
+            'sort'                  => $sort,
         ]);
     }
 }

@@ -24,7 +24,7 @@ class CategoryController extends Controller
      * @param Request $request
      * @return Response
      */
-    public function indexAction(Request $request) :Response
+    public function indexAction(Request $request): Response
     {
         /** @var CategoryRepository $categoryRepository */
         $categoryRepository = $this
