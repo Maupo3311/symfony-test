@@ -1,4 +1,40 @@
-services:
 #    admin.example:
 #        class: AdminBundle\Example
-#        arguments: ["@service_id", "plain_value", "%parameter%"]
+#        arguments: ["@service_id", "plain_value", "%parameters%"]
+services:
+    admin.category:
+      class: AdminBundle\Admin\CategoryAdmin
+      arguments: [~, AppBundle\Entity\Category, ~]
+      tags:
+        - { name: sonata.admin, manager_type: orm, group: 'Product', label: Category }
+
+    admin.product:
+      class: AdminBundle\Admin\ProductAdmin
+      arguments: [~, AppBundle\Entity\Product, ~]
+      tags:
+        - { name: sonata.admin, manager_type: orm, group: 'Product', label: Product }
+
+    admin.user:
+      class: AdminBundle\Admin\UserAdmin
+      arguments: [~, AppBundle\Entity\User, ~]
+      tags:
+        - { name: sonata.admin, manager_type: orm, group: 'User', label: User }
+
+    admin.feedback:
+      class: AdminBundle\Admin\FeedbackAdmin
+      arguments: [~, AppBundle\Entity\Feedback, ~]
+      tags:
+        - { name: sonata.admin, manager_type: orm, group: 'User', label: Feedback }
+
+    admin.feedback_image:
+      class: AdminBundle\Admin\Image\FeedbackImageAdmin
+      arguments: [~, AppBundle\Entity\Image\FeedbackImage, ~]
+      tags:
+        - { name: sonata.admin, manager_type: orm, group: 'User', label: 123 }
+
+    admin.product_image:
+      class: AdminBundle\Admin\Image\ProductImageAdmin
+      arguments: [~, AppBundle\Entity\Image\ProductImage, ~]
+      tags:
+        - { name: sonata.admin, manager_type: orm, group: 'User', label: 321 }
+

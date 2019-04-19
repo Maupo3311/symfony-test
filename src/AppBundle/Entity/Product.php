@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -10,6 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Table(name="product")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\ProductRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Product
 {
@@ -57,6 +59,20 @@ class Product
      */
     private $active = true;
 
+    /**
+     * @var ArrayCollection $images
+     *
+     * @ORM\OneToMany(
+     *     targetEntity="AppBundle\Entity\Image\ProductImage",
+     *      cascade={"persist","remove"},
+     *      orphanRemoval=true,
+     *      mappedBy="product"
+     * )
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="images_id", referencedColumnName="id", nullable=false)
+     * })
+     */
+    public $images;
 
     /**
      * @var string
@@ -64,6 +80,11 @@ class Product
      * @ORM\Column(name="rating", type="decimal", precision=4, scale=2)
      */
     private $rating;
+
+    public function __construct()
+    {
+        $this->images = [];
+    }
 
     /**
      * @return mixed
@@ -202,6 +223,36 @@ class Product
     public function getCategory()
     {
         return $this->category;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getImages()
+    {
+        return $this->images;
+    }
+
+    /**
+     * @param ArrayCollection $images
+     * @return $this
+     */
+    public function setImages(ArrayCollection $images)
+    {
+        $this->images = $images;
+
+        return $this;
+    }
+
+    /**
+     * @param ArrayCollection $images
+     * @return $this
+     */
+    public function addImages($images)
+    {
+        $this->images[] = $images;
+
+        return $this;
     }
 }
 

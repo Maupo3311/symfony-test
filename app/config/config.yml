@@ -67,11 +67,12 @@ doctrine:
 # Swiftmailer Configuration
 swiftmailer:
     transport: "%mailer_transport%"
-#    encryption: "%mailer_encryption%"
+    encryption: "%mailer_encryption%"
     host:      "%mailer_host%"
     username:  "%mailer_user%"
     password:  "%mailer_password%"
-#    auth_mode: "%mailer_auth_mode%"
+    auth_mode: "%mailer_auth_mode%"
+    port:       "%mailer_port%"
     spool:     { type: memory }
 
 fos_user:
@@ -94,3 +95,7 @@ sonata_block:
         # enable the SonataAdminBundle block
         sonata.admin.block.admin_list:
             contexts: [admin]
+
+sonata_admin:
+    templates:
+        layout: '%kernel.project_dir%/app/Resources/SonataAdmin/standard_layout.html.twig'

@@ -19,6 +19,8 @@ use AppBundle\Entity\Product;
 class ProductController extends Controller
 {
     /**
+     * All products sheet
+     *
      * @Route("/", name="product_show")
      * @param Request $request
      * @return Response
@@ -55,10 +57,14 @@ class ProductController extends Controller
             'numberOfPages'         => $numberOfPages,
             'nextOrder'             => $nextOrder,
             'sort'                  => $sort,
+            'current_field'         => $field,
+            'current_order'         => $order
         ]);
     }
 
     /**
+     * Single product information
+     *
      * @Route("/show/{id}", name="product_item", requirements={"id": "[0-9]+"})
      * @param Product $product
      * @return Response
@@ -69,6 +75,8 @@ class ProductController extends Controller
     }
 
     /**
+     * Show products by category
+     *
      * @Route("/category/{id}", name="show_by_category")
      * @param Category $category
      * @param Request  $request
@@ -106,6 +114,8 @@ class ProductController extends Controller
             'numberOfPages'         => $numberOfPages,
             'nextOrder'             => $nextOrder,
             'sort'                  => $sort,
+            'current_field'         => $field,
+            'current_order'         => $order
         ]);
     }
 }

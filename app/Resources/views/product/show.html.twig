@@ -2,6 +2,10 @@
 
 {% block title %}{{ product.title }}{% endblock %}
 
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/product/index.css') }}">
+{% endblock %}
+
 {% block body %}
     <b>product {{ product.id }}</b>
     <ul>
@@ -11,4 +15,9 @@
         <li>description: {{ product.description }}</li>
     </ul>
 
+    {% for image in product.images %}
+        <div class="productImage_one">
+            <img class="image_one" alt="productImage" src="{{ asset(image.getImageWebPath()) }}">
+        </div>
+    {% endfor %}
 {% endblock %}

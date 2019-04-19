@@ -29,3 +29,26 @@
     border: 1px solid black;
     font-size: 10px;
 }
+.arrowSort{
+    color: white;
+}
+.productImage{
+    width: 49%;
+    margin: auto;
+    display: inline-block;
+}
+.productImage .Image{
+    width: 100%;
+    border: 1px solid black;
+    margin-bottom: 3px;
+    border-radius: 3px;
+}
+.productImage_one{
+    width: 500px;
+    margin: auto;
+}
+.productImage_one .image_one{
+    width: 500px;
+    border: 2px solid black;
+    margin-bottom: 3px;
+}

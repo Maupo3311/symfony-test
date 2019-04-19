@@ -38,7 +38,12 @@ class Category
 
     /**
      * @var Collection
-     * @ORM\OneToMany(targetEntity="Product", mappedBy="category")
+     * @ORM\OneToMany(
+     *     targetEntity="Product",
+     *     mappedBy="category",
+     *     cascade={"persist","remove"},
+     *     orphanRemoval=true
+     *     )
      */
     private $products;
 

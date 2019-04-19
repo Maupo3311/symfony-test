@@ -2,11 +2,9 @@
 
 namespace AdminBundle\Admin;
 
-use AdminBundle\Entity\Image;
 use AppBundle\Entity\Feedback;
 use AppBundle\Entity\Image\FeedbackImage;
 use AppBundle\Entity\User;
-use AppBundle\Enum\ImageType;
 use AppBundle\Repository\FeedbackRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\OptimisticLockException;
@@ -34,7 +32,6 @@ final class FeedbackAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-//            ->add('id')
             ->add('user', EntityType::class, [
                 'class'        => User::class,
                 'choice_label' => 'username',
@@ -51,12 +48,18 @@ final class FeedbackAdmin extends AbstractAdmin
             ]);
     }
 
+    /**
+     * @param DatagridMapper $datagridMapper
+     */
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
             ->add('name');
     }
 
+    /**
+     * @param ListMapper $listMapper
+     */
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper

@@ -9,14 +9,11 @@
         {{ form_label(form.email, 'E-mail', {'label_attr': {'class': 'label'}}) }}
         {{ form_widget(form.email, { 'attr': {'class': 'form-control', 'placeholder': 'Enter you e-mail...'|trans } }) }}
 
-        {{ form_label(form.current_password, 'Current password', {'label_attr': {'class': 'label'}}) }}
-        {{ form_widget(form.current_password, { 'attr': {'class': 'form-control', 'placeholder': 'Change password...'|trans } }) }}
-
         {{ form_label(form.firstName, 'First Name', {'label_attr': {'class': 'label'}}) }}
-        {{ form_widget(form.firstName, { 'attr': {'class': 'form-control', 'placeholder': 'Change password...'|trans } }) }}
+        {{ form_widget(form.firstName, { 'attr': {'class': 'form-control', 'placeholder': 'Enter your name...'|trans } }) }}
 
         {{ form_label(form.lastName, 'Last Name', {'label_attr': {'class': 'label'}}) }}
-        {{ form_widget(form.lastName, { 'attr': {'class': 'form-control', 'placeholder': 'Change password...'|trans } }) }}
+        {{ form_widget(form.lastName, { 'attr': {'class': 'form-control', 'placeholder': 'Enter your surname...'|trans } }) }}
 
         {{ form_rest(form) }}
 

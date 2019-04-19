@@ -1,7 +1,11 @@
+
 # Learn more about services, parameters and containers at
 # https://symfony.com/doc/current/service_container.html
 parameters:
     #parameter_name: value
+
+imports:
+    - { resource: '@AdminBundle/Resources/config/services.yml' }
 
 services:
     # main configuration for services in *this* file
@@ -24,31 +28,9 @@ services:
         class: AppBundle\Form\ProfileFormType
         tags:
             - { name: form.type, alias: app_user_profile }
-    admin.category:
-        class: AdminBundle\Admin\CategoryAdmin
-        arguments: [~, AppBundle\Entity\Category, ~]
-        tags:
-            - { name: sonata.admin, manager_type: orm, label: Category }
-    admin.product:
-        class: AdminBundle\Admin\ProductAdmin
-        arguments: [~, AppBundle\Entity\Product, ~]
-        tags:
-            - { name: sonata.admin, manager_type: orm, label: Product }
-    admin.user:
-        class: AdminBundle\Admin\UserAdmin
-        arguments: [~, AppBundle\Entity\User, ~]
-        tags:
-            - { name: sonata.admin, manager_type: orm, label: User }
-    admin.feedback:
-        class: AdminBundle\Admin\FeedbackAdmin
-        arguments: [~, AppBundle\Entity\Feedback, ~]
-        tags:
-            - { name: sonata.admin, manager_type: orm, label: Feedback }
-    admin.feedbackImage:
-        class: AdminBundle\Admin\Image\FeedbackImageAdmin
-        arguments: [~, AppBundle\Entity\Image\FeedbackImage, ~]
-        tags:
-            - { name: sonata.admin, manager_type: orm, label: Images }
+    #   AdminBundle\Example
+    #        arguments: ["@service_id", "plain_value", "%parameter%"]
+
     # makes classes in src/AppBundle available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
     AppBundle\:
@@ -72,3 +54,7 @@ services:
     AppBundle\Services\FileUploader:
         arguments:
             $targetDirectory: '%upload_directory%'
+
+#    AdminBundle\Example:
+#        arguments:
+#            ["@service_id", "plain_value", "%parameter%"]

@@ -1,7 +1,7 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
     "content-hash": "9d4ae27a6bd51f275072545d7f284d9e",
@@ -2796,16 +2796,16 @@
         },
         {
             "name": "sonata-project/doctrine-orm-admin-bundle",
-            "version": "3.8.3",
+            "version": "3.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataDoctrineORMAdminBundle.git",
-                "reference": "49da00385f402c712fd155c3872a72030bd520b5"
+                "reference": "df5c97b9bd3793e7baf0a1ba19d92eab2e90242d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataDoctrineORMAdminBundle/zipball/49da00385f402c712fd155c3872a72030bd520b5",
-                "reference": "49da00385f402c712fd155c3872a72030bd520b5",
+                "url": "https://api.github.com/repos/sonata-project/SonataDoctrineORMAdminBundle/zipball/df5c97b9bd3793e7baf0a1ba19d92eab2e90242d",
+                "reference": "df5c97b9bd3793e7baf0a1ba19d92eab2e90242d",
                 "shasum": ""
             },
             "require": {
@@ -2876,7 +2876,7 @@
                 "generator",
                 "sonata"
             ],
-            "time": "2019-02-28T19:22:10+00:00"
+            "time": "2019-04-17T21:07:57+00:00"
         },
         {
             "name": "sonata-project/exporter",
@@ -3585,16 +3585,16 @@
         },
         {
             "name": "symfony/symfony",
-            "version": "v3.4.25",
+            "version": "v3.4.26",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/symfony.git",
-                "reference": "24454234816e061b4b9c5787eaa2bb6326ead1da"
+                "reference": "1b89e7baec9891c323bbf1ec81af77d901fc60c9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/symfony/zipball/24454234816e061b4b9c5787eaa2bb6326ead1da",
-                "reference": "24454234816e061b4b9c5787eaa2bb6326ead1da",
+                "url": "https://api.github.com/repos/symfony/symfony/zipball/1b89e7baec9891c323bbf1ec81af77d901fc60c9",
+                "reference": "1b89e7baec9891c323bbf1ec81af77d901fc60c9",
                 "shasum": ""
             },
             "require": {
@@ -3736,7 +3736,7 @@
             "keywords": [
                 "framework"
             ],
-            "time": "2019-04-16T06:02:31+00:00"
+            "time": "2019-04-17T15:57:27+00:00"
         },
         {
             "name": "twig/extensions",
@@ -4252,16 +4252,16 @@
         },
         {
             "name": "symfony/phpunit-bridge",
-            "version": "v3.4.25",
+            "version": "v3.4.26",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/phpunit-bridge.git",
-                "reference": "71fb02e83f0bdf9e83f4a557eec64abaf236284c"
+                "reference": "a43a2f6c465a2d99635fea0addbebddc3864ad97"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/phpunit-bridge/zipball/71fb02e83f0bdf9e83f4a557eec64abaf236284c",
-                "reference": "71fb02e83f0bdf9e83f4a557eec64abaf236284c",
+                "url": "https://api.github.com/repos/symfony/phpunit-bridge/zipball/a43a2f6c465a2d99635fea0addbebddc3864ad97",
+                "reference": "a43a2f6c465a2d99635fea0addbebddc3864ad97",
                 "shasum": ""
             },
             "require": {
@@ -4313,7 +4313,7 @@
             ],
             "description": "Symfony PHPUnit Bridge",
             "homepage": "https://symfony.com",
-            "time": "2019-04-08T07:56:31+00:00"
+            "time": "2019-04-16T09:03:16+00:00"
         }
     ],
     "aliases": [],

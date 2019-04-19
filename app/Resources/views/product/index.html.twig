@@ -12,16 +12,52 @@
             <div class="menu">
                 <p>Sort by: </p>
                 <a class="menu-noneDecoration" href="?page={{ page }}&sort=price&order={{ nextOrder }}">
-                    <div class="buttonSort">Price</div>
+                    <div class="buttonSort">
+                        Price
+                        {% if current_field == 'price' %}
+                            {% if current_order == 'ASC' %}
+                                <span class="arrowSort">↧</span>
+                            {% else %}
+                                <span class="arrowSort">↥</span>
+                            {% endif %}
+                        {% endif %}
+                    </div>
                 </a>
                 <a class="menu-noneDecoration" href="?page={{ page }}&sort=rating&order={{ nextOrder }}">
-                    <div class="buttonSort">Rating</div>
+                    <div class="buttonSort">
+                        Rating
+                        {% if current_field == 'rating' %}
+                            {% if current_order == 'ASC' %}
+                                <span class="arrowSort">↧</span>
+                            {% else %}
+                                <span class="arrowSort">↥</span>
+                            {% endif %}
+                        {% endif %}
+                    </div>
                 </a>
                 <a class="menu-noneDecoration" href="?page={{ page }}&sort=title&order={{ nextOrder }}">
-                    <div class="buttonSort">Title</div>
+                    <div class="buttonSort">
+                        Title
+                        {% if current_field == 'title' %}
+                            {% if current_order == 'ASC' %}
+                                <span class="arrowSort">↧</span>
+                            {% else %}
+                                <span class="arrowSort">↥</span>
+                            {% endif %}
+                        {% endif %}
+                    </div>
                 </a>
                 <a class="menu-noneDecoration" href="?page={{ page }}&sort=category&order={{ nextOrder }}">
-                    <div class="buttonSort">Category</div>
+                    <div class="buttonSort">
+                        Category
+                        {% if current_field == 'category' %}
+                            {% if current_order == 'ASC' %}
+                                <span class="arrowSort">↧</span>
+                            {% else %}
+                                <span class="arrowSort">↥</span>
+                            {% endif %}
+                        {% endif %}
+                    </div>
                 </a>
             </div>
         </div>
@@ -31,21 +67,26 @@
 
             {% if products != null %}
                 {% for product in products %}
-                    <a href="{{ path('product_item', {'id': product.id }) }}" class="noneDecoration">
-                        <div class="product">
+                    <div class="product">
+                        <a href="{{ path('product_item', {'id': product.id }) }}" class="noneDecoration">
                             <div class="productHead">
                                 <p class="productTitle">{{ product.title }}</p>
                             </div>
-                            <div class="productBody">
-                                <p class="productDescription">{{ product.description }}</p>
-                                <p class="productCategory">
-                                    This product is from the category
-                                    "{{ product.category.name }}"
-                                </p>
-                                <p class="productPrice">Price: {{ product.price }}</p>
-                            </div>
+                        </a>
+                        <div class="productBody">
+                            <p class="productDescription">{{ product.description }}</p>
+                            <p class="productCategory">
+                                This product is from the category
+                                "{{ product.category.name }}"
+                            </p>
+                            {% for image in product.images %}
+                                <div class="productImage">
+                                    <img class="Image" src="{{ asset( image.getImageWebPath() ) }}" alt="Image">
+                                </div>
+                            {% endfor %}
+                            <p class="productPrice">Price: {{ product.price }}</p>
                         </div>
-                    </a>
+                    </div>
                 {% endfor %}
             {% else %}
                 <p>No active products</p>

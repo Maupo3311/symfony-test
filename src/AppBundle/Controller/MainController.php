@@ -26,6 +26,8 @@ use AppBundle\Repository\FeedbackRepository;
 class MainController extends Controller
 {
     /**
+     * Shows the home page of the site
+     *
      * @Route("/", name="homepage")
      * @return Response
      */
@@ -50,7 +52,7 @@ class MainController extends Controller
      * @param Request      $request
      * @param FileUploader $fileUploader
      * @return RedirectResponse|Response
-     * @throws NonUniqueResultException
+     * @throws \Exception
      */
     public function feedbackAction(Request $request, FileUploader $fileUploader)
     {
@@ -129,6 +131,8 @@ class MainController extends Controller
     }
 
     /**
+     * Remove feedback and all related files
+     *
      * @Route("feedback/delete/{id}", name="delete_feedback")
      * @param Feedback $feedback
      * @return RedirectResponse
@@ -146,9 +150,9 @@ class MainController extends Controller
             $images = $feedback->getImages()->getValues();
             /** @var FeedbackImage $image */
             foreach ($images as $image) {
-                if (file_exists($image->getImageAbsolutePath())) {
-                    unlink($image->getImageAbsolutePath());
-                }
+                $image
+                    ->storeImageFilenameForRemove()
+                    ->removeImageUpload();
             }
 
             $em->remove($feedback);

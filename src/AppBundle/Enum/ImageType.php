@@ -9,4 +9,5 @@ namespace AppBundle\Enum;
 final class ImageType extends BaseEnum
 {
     const FEEDBACK = 1;
+    const PRODUCT = 2;
 }

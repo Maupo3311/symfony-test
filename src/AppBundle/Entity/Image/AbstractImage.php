@@ -16,6 +16,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\DiscriminatorColumn(name="type", type="integer")
  * @ORM\DiscriminatorMap({
  *      ImageType::FEEDBACK = "AppBundle\Entity\Image\FeedbackImage",
+ *      ImageType::PRODUCT  = "AppBundle\Entity\Image\ProductImage"
  * })
  */
 abstract class AbstractImage
@@ -213,20 +214,26 @@ abstract class AbstractImage
 
     /**
      * @ORM\PreRemove
+     * @return $this
      */
     public function storeImageFilenameForRemove()
     {
         $this->imageTemp = $this->getImageAbsolutePath();
+
+        return $this;
     }
 
     /**
      * @ORM\PostRemove
+     * @return $this
      */
     public function removeImageUpload()
     {
         if (isset($this->imageTemp) && file_exists($this->imageTemp)) {
             unlink($this->imageTemp);
         }
+
+        return $this;
     }
 
     /**
