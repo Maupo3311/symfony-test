@@ -14,8 +14,8 @@
             <div class="feedback">
                 <div class="feedbackHead">
                     <div class="feedbackCreated">{{ feedback.created.date|slice(0, -7) }}</div>
-                    <p class="feedbackName">{{ feedback.name }}</p>
-                    <p class="feedbackEmail">{{ feedback.email }}</p>
+                    <p class="feedbackName">{{ feedback.user.firstName ~ ' ' ~ feedback.user.lastName}}</p>
+                    <p class="feedbackEmail">{{ feedback.user.email }}</p>
                 </div>
                 <div class="feedbackBody">
                     <p class="feedbackMessage">{{ feedback.message }}</p>

@@ -41,25 +41,6 @@ class Feedback
 
     /**
      * @var string
-     ** @Assert\Length(
-     *      min = 4,
-     *      max = 26,
-     *      minMessage = "Your first name must be at least {{ limit }} characters long",
-     *      maxMessage = "Your first name cannot be longer than {{ limit }} characters"
-     * )
-     * @ORM\Column(name="name", type="string", length=128)
-     */
-    private $name;
-
-    /**
-     * @var string
-     * @Assert\Email()
-     * @ORM\Column(name="email", type="string", length=128)
-     */
-    private $email;
-
-    /**
-     * @var string
      * @Assert\NotBlank
      * @ORM\Column(name="message", type="text", nullable=true)
      */

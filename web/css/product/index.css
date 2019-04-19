@@ -28,6 +28,8 @@
     display: inline-block;
     border: 1px solid black;
     font-size: 10px;
+    background: #f3818169;
+    color: white
 }
 .arrowSort{
     color: white;

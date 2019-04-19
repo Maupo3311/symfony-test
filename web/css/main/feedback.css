@@ -35,11 +35,13 @@
     color: #d20101;
 }
 .feedbackFile{
-    margin: 0 auto;
-    width: 400px;
+    width: 32%;
+    margin: auto;
+    display: inline-block;
 }
-.feedbackFileImages{
-    width: 400px;
-    border: 2px solid black;
-    border-radius: 5px;
+.feedbackFile .feedbackFileImages{
+    width: 100%;
+    border: 1px solid black;
+    margin-bottom: 3px;
+    border-radius: 3px;
 }

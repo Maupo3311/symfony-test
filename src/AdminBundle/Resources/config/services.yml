@@ -30,11 +30,11 @@ services:
       class: AdminBundle\Admin\Image\FeedbackImageAdmin
       arguments: [~, AppBundle\Entity\Image\FeedbackImage, ~]
       tags:
-        - { name: sonata.admin, manager_type: orm, group: 'User', label: 123 }
+        - { name: sonata.admin, manager_type: orm, show_in_dashboard: false }
 
     admin.product_image:
       class: AdminBundle\Admin\Image\ProductImageAdmin
       arguments: [~, AppBundle\Entity\Image\ProductImage, ~]
       tags:
-        - { name: sonata.admin, manager_type: orm, group: 'User', label: 321 }
+        - { name: sonata.admin, manager_type: orm, show_in_dashboard: false }
 

@@ -36,8 +36,6 @@ final class FeedbackAdmin extends AbstractAdmin
                 'class'        => User::class,
                 'choice_label' => 'username',
             ])
-            ->add('name')
-            ->add('email')
             ->add('message', TextareaType::class)
             ->add('created')
             ->add('images', CollectionType::class, [
@@ -53,8 +51,6 @@ final class FeedbackAdmin extends AbstractAdmin
      */
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $datagridMapper
-            ->add('name');
     }
 
     /**
@@ -64,7 +60,7 @@ final class FeedbackAdmin extends AbstractAdmin
     {
         $listMapper
             ->addIdentifier('message')
-            ->addIdentifier('created');
+            ->add('created');
     }
 
     /**
