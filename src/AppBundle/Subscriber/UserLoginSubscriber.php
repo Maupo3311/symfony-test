@@ -8,6 +8,7 @@ use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Swift_Message;
+use Exception;
 
 /**
  * Class UserLoginSubscriber
@@ -40,17 +41,19 @@ class UserLoginSubscriber implements EventSubscriberInterface
 
     /**
      * @param UserLoginEvent $event
+     * @throws Exception
      */
     public function sendMessage(UserLoginEvent $event)
     {
         /** @var User $user */
         $user = $event->getUser();
         $mailer = $event->getMailer();
+        $date = date('d-m-Y H:i');
         $message = Swift_Message::newInstance()
             ->setSubject('Authorization')
             ->setFrom( 'Maupo3311@mail.ru' )
             ->setTo($user->getEmail())
-            ->setBody('test');
+            ->setBody('User with username '.$user->getUsername().' logged in at '.$date.' with ip: '.$_SERVER['REMOTE_ADDR']);
 
         $mailer->send($message);
     }

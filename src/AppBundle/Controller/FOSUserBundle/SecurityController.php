@@ -14,9 +14,6 @@ namespace AppBundle\Controller\FOSUserBundle;
 use AppBundle\Entity\User;
 use AppBundle\Event\UserLoginEvent;
 use Symfony\Component\Routing\Annotation\Route;
-use FOS\UserBundle\Mailer\Mailer;
-use FOS\UserBundle\Mailer\MailerInterface;
-use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -60,7 +57,7 @@ class SecurityController extends BaseController
         $authErrorKey = Security::AUTHENTICATION_ERROR;
         $lastUsernameKey = Security::LAST_USERNAME;
 
-        // get the error if any (works with forward and redirect -- see below)
+        /** get the error if any (works with forward and redirect -- see below) */
         if ($request->attributes->has($authErrorKey)) {
             $error = $request->attributes->get($authErrorKey);
         } elseif (null !== $session && $session->has($authErrorKey)) {
@@ -71,10 +68,10 @@ class SecurityController extends BaseController
         }
 
         if (!$error instanceof AuthenticationException) {
-            $error = null; // The value does not come from the security component.
+            $error = null; /** The value does not come from the security component. */
         }
 
-        // last username entered by the user
+        /** last username entered by the user */
         $lastUsername = (null === $session) ? '' : $session->get($lastUsernameKey);
 
         $csrfToken = $this->tokenManager
@@ -89,6 +86,8 @@ class SecurityController extends BaseController
     }
 
     /**
+     * Send message by mail user after login
+     *
      * @Route("/send_message")
      * @return RedirectResponse
      */
