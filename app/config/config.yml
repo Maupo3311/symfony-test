@@ -81,12 +81,13 @@ fos_user:
     user_class: AppBundle\Entity\User
     from_email:
         address: maupo3311@mail.ru
-        sender_name: test
+        sender_name: New_project
     registration:
         form:
             type: AppBundle\Form\RegistrationType
         confirmation:
             enabled: true
+
     profile:
         form:
             type: AppBundle\Form\ProfileFormType

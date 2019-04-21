@@ -28,6 +28,14 @@ services:
         class: AppBundle\Form\ProfileFormType
         tags:
             - { name: form.type, alias: app_user_profile }
+
+    ap_message_login.subscriber.user_login:
+        class: AppBundle\Subscriber\UserLoginSubscriber
+        arguments:
+            - "@logger"
+        tags:
+            - { name: kernel.event_subscriber }
+
     #   AdminBundle\Example
     #        arguments: ["@service_id", "plain_value", "%parameter%"]
 
@@ -54,6 +62,19 @@ services:
     AppBundle\Services\FileUploader:
         arguments:
             $targetDirectory: '%upload_directory%'
+
+    AppBundle\Controller\FOSUserBundle\RegistrationController:
+        decorates: fos_user.registration.controller
+        arguments:
+            $eventDispatcher:  '@event_dispatcher'
+            $formFactory: '@fos_user.registration.form.factory'
+            $userManager:  '@fos_user.user_manager'
+            $tokenStorage:  '@security.token_storage'
+
+    AppBundle\Controller\FOSUserBundle\SecurityController:
+        decorates: fos_user.security.controller
+        arguments:
+            $tokenManager:  '@security.csrf.token_manager'
 
 #    AdminBundle\Example:
 #        arguments:
