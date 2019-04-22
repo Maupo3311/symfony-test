@@ -285,18 +285,24 @@ abstract class AbstractImage
     }
 
     /**
-     * @param mixed $imagePath
+     * @param $imagePath
+     * @return $this
      */
     public function setFilePath($imagePath)
     {
         $this->imagePath = $imagePath;
+
+        return $this;
     }
 
     /**
      * @param \DateTime $createdAt
+     * @return $this
      */
     public function setCreatedAt(\DateTime $createdAt)
     {
         $this->createdAt = $createdAt;
+
+        return $this;
     }
 }

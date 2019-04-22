@@ -11,10 +11,6 @@
 
 namespace AppBundle\Controller\FOSUserBundle;
 
-use AppBundle\Entity\User;
-use AppBundle\Event\UserLoginEvent;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -22,7 +18,7 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use FOS\UserBundle\Controller\SecurityController as BaseController;
-use Swift_Mailer;
+use RuntimeException;
 
 /**
  * Controller managing security.
@@ -54,7 +50,7 @@ class SecurityController extends BaseController
         /** @var $session Session */
         $session = $request->getSession();
 
-        $authErrorKey = Security::AUTHENTICATION_ERROR;
+        $authErrorKey    = Security::AUTHENTICATION_ERROR;
         $lastUsernameKey = Security::LAST_USERNAME;
 
         /** get the error if any (works with forward and redirect -- see below) */
@@ -68,7 +64,8 @@ class SecurityController extends BaseController
         }
 
         if (!$error instanceof AuthenticationException) {
-            $error = null; /** The value does not come from the security component. */
+            $error = null;
+            /** The value does not come from the security component. */
         }
 
         /** last username entered by the user */
@@ -78,31 +75,10 @@ class SecurityController extends BaseController
             ? $this->tokenManager->getToken('authenticate')->getValue()
             : null;
 
-        return $this->renderLogin(array(
+        return $this->renderLogin([
             'last_username' => $lastUsername,
-            'error' => $error,
-            'csrf_token' => $csrfToken,
-        ));
-    }
-
-    /**
-     * Send message by mail user after login
-     *
-     * @Route("/send_message")
-     * @return RedirectResponse
-     */
-    public function afterLoginAction()
-    {
-        /** @var User $user */
-        $user = $this->getUser();
-        /** @var Swift_Mailer $mailer */
-        $mailer     = $this->get('mailer');
-        $loginEvent = new UserLoginEvent($user, $mailer);
-
-        $this
-            ->get('event_dispatcher')
-            ->dispatch('message.login', $loginEvent);
-
-        return $this->redirectToRoute('homepage');
+            'error'         => $error,
+            'csrf_token'    => $csrfToken,
+        ]);
     }
 }

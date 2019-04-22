@@ -45,10 +45,33 @@ class User extends BaseUser
      */
     private $feedbacks;
 
+    /**
+     * @var Basket
+     *
+     * @ORM\OneToOne(targetEntity="Basket", mappedBy="user")
+     */
+    private $basket;
+
     public function __construct()
     {
         parent::__construct();
         $this->feedbacks = new ArrayCollection();
+    }
+
+    /**
+     * @return Basket
+     */
+    public function getBasket(): Basket
+    {
+        return $this->basket;
+    }
+
+    /**
+     * @param Basket $basket
+     */
+    public function setBasket(Basket $basket)
+    {
+        $this->basket = $basket;
     }
 
     /**

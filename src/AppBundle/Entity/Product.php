@@ -75,11 +75,36 @@ class Product
     public $images;
 
     /**
+     * @var Basket
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Basket", inversedBy="product")
+     */
+    private $basket;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="rating", type="decimal", precision=4, scale=2)
      */
     private $rating;
+
+    /**
+     * @return Basket
+     */
+    public function getBasket(): Basket
+    {
+        return $this->basket;
+    }
+
+    /**
+     * @param Basket $basket
+     */
+    public function setBasket(Basket $basket)
+    {
+        $this->basket = $basket;
+    }
+
+
 
     public function __construct()
     {

@@ -32,7 +32,7 @@ class Category
 
     /**
      * @var bool
-     * @ORM\Column(type="boolean", options={"default": true})1
+     * @ORM\Column(type="boolean", options={"default": true})
      */
     private $active = true;
 

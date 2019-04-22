@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    Products:
+    {% for product in products %}
+        {{ product.title }}
+    {% endfor %}
+    Baskets:
+    {% for basket in baskets %}
+
+    {% endfor %}
+{% endblock %}

@@ -12,6 +12,7 @@
 namespace AppBundle\Controller\FOSUserBundle;
 
 use AppBundle\Entity\User;
+use AppBundle\Event\UserRegisteredEvent;
 use FOS\UserBundle\Event\FilterUserResponseEvent;
 use FOS\UserBundle\Event\FormEvent;
 use FOS\UserBundle\Event\GetResponseUserEvent;
@@ -24,6 +25,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use FOS\UserBundle\Controller\RegistrationController as BaseController;
+use Swift_Mailer;
 
 /**
  * Controller managing the registration.
@@ -33,9 +35,16 @@ use FOS\UserBundle\Controller\RegistrationController as BaseController;
  */
 class RegistrationController extends BaseController
 {
+    /** @var EventDispatcherInterface */
     private $eventDispatcher;
+
+    /** @var FactoryInterface */
     private $formFactory;
+
+    /** @var UserManagerInterface */
     private $userManager;
+
+    /** @var TokenStorageInterface */
     private $tokenStorage;
 
     /**
@@ -49,9 +58,9 @@ class RegistrationController extends BaseController
     {
         parent::__construct($eventDispatcher, $formFactory, $userManager, $tokenStorage);
         $this->eventDispatcher = $eventDispatcher;
-        $this->formFactory = $formFactory;
-        $this->userManager = $userManager;
-        $this->tokenStorage = $tokenStorage;
+        $this->formFactory     = $formFactory;
+        $this->userManager     = $userManager;
+        $this->tokenStorage    = $tokenStorage;
     }
 
     /**
@@ -85,7 +94,7 @@ class RegistrationController extends BaseController
                 $this->userManager->updateUser($user);
 
                 if (null === $response = $event->getResponse()) {
-                    $url = $this->generateUrl('fos_user_registration_confirmed');
+                    $url      = $this->generateUrl('fos_user_registration_confirmed');
                     $response = new RedirectResponse($url);
                 }
 
@@ -102,8 +111,47 @@ class RegistrationController extends BaseController
             }
         }
 
-        return $this->render('@FOSUser/Registration/register.html.twig', array(
+        return $this->render('@FOSUser/Registration/register.html.twig', [
             'form' => $form->createView(),
-        ));
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param string  $token
+     * @return RedirectResponse|Response|null
+     */
+    public function confirmAction(Request $request, $token)
+    {
+        $userManager = $this->userManager;
+
+        /** @var User $user */
+        $user = $userManager->findUserByConfirmationToken($token);
+
+        if (null === $user) {
+            return new RedirectResponse($this->container->get('router')->generate('fos_user_security_login'));
+        }
+
+        $user->setConfirmationToken(null);
+        $user->setEnabled(true);
+
+        $event = new GetResponseUserEvent($user, $request);
+        $this->eventDispatcher->dispatch(FOSUserEvents::REGISTRATION_CONFIRM, $event);
+
+        $userManager->updateUser($user);
+
+        if (null === $response = $event->getResponse()) {
+            $url      = $this->generateUrl('fos_user_registration_confirmed');
+            $response = new RedirectResponse($url);
+        }
+
+        /** @var Swift_Mailer $mailer */
+        $mailer = $this->get('mailer');
+
+        $registrationEvent = new UserRegisteredEvent($user, $mailer, $this->getParameter('mailer_user'));
+
+        $this->eventDispatcher->dispatch(UserRegisteredEvent::EVENT_NAME, $registrationEvent);
+
+        return $response;
     }
 }
