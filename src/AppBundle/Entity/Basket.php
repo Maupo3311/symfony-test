@@ -25,7 +25,7 @@ class Basket
     /**
      * @var User
      *
-     * @ORM\OneToOne(targetEntity="User", inversedBy="basket")
+     * @ORM\ManyToMany(targetEntity="User", inversedBy="basket")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     private $user;
@@ -33,7 +33,7 @@ class Basket
     /**
      * @var Product
      *
-     *  @ORM\OneToMany(targetEntity="Product", mappedBy="basket")
+     *  @ORM\ManyToMany(targetEntity="Product", inversedBy="basket")
      *  @ORM\JoinColumn(name="product_id", referencedColumnName="id")
      */
     private $product;
@@ -41,7 +41,7 @@ class Basket
     /**
      * @return int
      */
-    public function getId(): int
+    public function getId()
     {
         return $this->id;
     }
@@ -49,7 +49,7 @@ class Basket
     /**
      * @return Product
      */
-    public function getProduct(): Product
+    public function getProduct()
     {
         return $this->product;
     }
@@ -65,7 +65,7 @@ class Basket
     /**
      * @return User
      */
-    public function getUser(): User
+    public function getUser()
     {
         return $this->user;
     }
@@ -76,14 +76,5 @@ class Basket
     public function setUser(User $user)
     {
         $this->user = $user;
-    }
-
-    /**
-     * @param $product
-     * @return mixed
-     */
-    public function addProduct($product)
-    {
-        return $this->products[] = $product;
     }
 }

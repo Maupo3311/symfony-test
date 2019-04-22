@@ -48,7 +48,7 @@ class User extends BaseUser
     /**
      * @var Basket
      *
-     * @ORM\OneToOne(targetEntity="Basket", mappedBy="user")
+     * @ORM\ManyToMany(targetEntity="Basket", mappedBy="user")
      */
     private $basket;
 
@@ -61,7 +61,7 @@ class User extends BaseUser
     /**
      * @return Basket
      */
-    public function getBasket(): Basket
+    public function getBasket()
     {
         return $this->basket;
     }

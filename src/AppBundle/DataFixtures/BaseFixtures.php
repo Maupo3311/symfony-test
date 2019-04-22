@@ -34,7 +34,7 @@ class BaseFixtures extends Fixture
         $user->setEmail('maupo3311@mail.ru');
         $user->setPassword(password_hash("password1234", PASSWORD_DEFAULT));
         $user->setEnabled(true);
-        $users['admin'] = $user;
+        $users[] = $user;
         $manager->persist($user);
 
         for ($i = 0; $i < 20; $i++) {
@@ -105,10 +105,12 @@ class BaseFixtures extends Fixture
         }
 
         foreach ($products as $product){
-            $basket = new Basket();
-            $basket->setUser($users['admin']);
-            $basket->setProduct($product);
-            $manager->persist($basket);
+            foreach ($users as $user){
+                $basket = new Basket();
+                $basket->setUser($user);
+                $basket->setProduct($product);
+                $manager->persist($basket);
+            }
         }
 
         $manager->flush();

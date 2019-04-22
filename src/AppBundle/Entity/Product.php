@@ -77,7 +77,7 @@ class Product
     /**
      * @var Basket
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Basket", inversedBy="product")
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Basket", mappedBy="product")
      */
     private $basket;
 
