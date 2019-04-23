@@ -1,12 +1,50 @@
 {% extends 'base.html.twig' %}
 
-{% block body %}
-    Products:
-    {% for product in products %}
-        {{ product.title }}
-    {% endfor %}
-    Baskets:
-    {% for basket in baskets %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('/css/basket/index.css') }}">
+{% endblock %}
 
-    {% endfor %}
+{% block body %}
+    <h2 class="center">Basket</h2>
+
+    {% if basket_items.count > 0 %}
+        <a class="noneDecoration" href="{{ path('delete_basket_items') }}">
+            <p class="basket_remove">✖ remove all from recycle bin</p>
+        </a>
+        <table class="table table-striped">
+            <caption>Products</caption>
+            <tr>
+                <th scope="col" class="center">Product</th>
+                <th scope="col" class="center">Price</th>
+                <th scope="col" class="center">Description</th>
+                <th scope="col" class="center">Action</th>
+            </tr>
+            {% for basket_item in basket_items %}
+                <tr class="basket_tr">
+                    <td class="basket_td">
+                        <a href="{{ path('product_item', {'id': basket_item.basketProduct.id }) }}">
+                            <span>{{ basket_item.basketProduct.title }}</span>
+                        </a>
+                    </td>
+                    <td class="basket_td">
+                        {{ basket_item.basketProduct.price }}
+                    </td>
+                    <td class="basket_td">
+                        {{ basket_item.basketProduct.description }}
+                    </td>
+                    <td class="basket_td basket_action">
+                        <a class="noneDecoration" href="{{ path('delete_basket_item', {'id': basket_item.id}) }}">
+                            ✖
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        <p class="total_price">
+            Total price: {{ app.user.getTotalPriceBasketProducts() }}
+        </p>
+    {% else %}
+        <p class="center">Empty recycle bin...</p>
+    {% endif %}
 {% endblock %}

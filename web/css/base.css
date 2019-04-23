@@ -45,3 +45,12 @@
     text-decoration: none;
     color: #9c9ea1;
 }
+
+.add_in_basket:hover{
+    color: #046200;
+}
+.add_in_basket{
+    color: #111111;
+    text-align: right;
+    float: right;
+}

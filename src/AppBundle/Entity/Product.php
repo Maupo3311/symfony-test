@@ -75,11 +75,24 @@ class Product
     public $images;
 
     /**
-     * @var Basket
+     * @var ArrayCollection
      *
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Basket", mappedBy="product")
+     * @ORM\OneToMany(
+     *     targetEntity="Basket",
+     *     mappedBy="basketProduct",
+     *     )
      */
-    private $basket;
+    private $basketItems;
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(
+     *     targetEntity="Comment",
+     *     mappedBy="product"
+     * )
+     */
+    private $comments;
 
     /**
      * @var string
@@ -89,26 +102,51 @@ class Product
     private $rating;
 
     /**
-     * @return Basket
+     * Product constructor.
      */
-    public function getBasket(): Basket
+    public function __construct()
     {
-        return $this->basket;
+        $this->images      = new ArrayCollection();
+        $this->basketItems = new ArrayCollection();
+        $this->comments    = new ArrayCollection();
     }
 
     /**
-     * @param Basket $basket
+     * @return ArrayCollection
      */
-    public function setBasket(Basket $basket)
+    public function getComments()
     {
-        $this->basket = $basket;
+        return $this->comments;
     }
 
-
-
-    public function __construct()
+    /**
+     * @param ArrayCollection $comments
+     * @return $this
+     */
+    public function setComments(ArrayCollection $comments)
     {
-        $this->images = [];
+        $this->comments = $comments;
+
+        return $this;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getBasketItems()
+    {
+        return $this->basketItems;
+    }
+
+    /**
+     * @param ArrayCollection $basketItems
+     * @return Product
+     */
+    public function setBasketItems(ArrayCollection $basketItems): Product
+    {
+        $this->basketItems = $basketItems;
+
+        return $this;
     }
 
     /**
@@ -195,7 +233,7 @@ class Product
     /**
      * Get price
      *
-     * @return string
+     * @return integer
      */
     public function getPrice()
     {

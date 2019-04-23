@@ -3,6 +3,7 @@
 {% block title %}Feedback{% endblock %}
 
 {% block stylesheets %}
+    {{ parent() }}
     <link rel="stylesheet" href="{{ asset('css/main/feedback.css') }}">
 {% endblock %}
 
@@ -27,7 +28,7 @@
                     {% if is_granted("IS_AUTHENTICATED_REMEMBERED") and feedback.user.id == app.user.id %}
                         <div class="feedbackOptions">
                             <a href="{{ path('delete_feedback', {'id': feedback.id}) }}" class="noneDecoration">
-                                <span class="feedbackDelete">Delete feedback</span>
+                                <span class="feedbackDelete"><i class="fas fa-trash-alt"></i></span>
                             </a>
                         </div>
                     {% endif %}

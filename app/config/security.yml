@@ -36,3 +36,5 @@ security:
             - { path: ^/product, role: IS_AUTHENTICATED_ANONYMOUSLY }
             - { path: ^/category, role: IS_AUTHENTICATED_ANONYMOUSLY }
             - { path: ^/user/profile/, role: ROLE_USER }
+            - { path: ^/basket/, role: ROLE_USER }
+            - { path: ^/product/add-to-basket/, role: ROLE_USER }

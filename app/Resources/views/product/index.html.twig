@@ -3,10 +3,15 @@
 {% block title %}Product{% endblock %}
 
 {% block stylesheets %}
+    {{ parent() }}
     <link rel="stylesheet" href="{{ asset('css/product/index.css') }}">
 {% endblock %}
 
 {% block body %}
+    {% for flash in app.session.flashbag.get('addProductSuccess') %}
+        <div class="alert alert-success">Product added to <a href="{{ path('basket') }}">basket</a></div>
+    {% endfor %}
+
     <div class="row">
         <div class="col-md-3">
             <div class="menu">
@@ -97,6 +102,30 @@
                                 </div>
                             {% endfor %}
                             <p class="productPrice">Price: {{ product.price }}</p>
+                            {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                                {% set basket_items = app.user.basketItems %}
+                                {% set coincidences = false %}
+
+                                {% for basket_item in basket_items %}
+                                    {% if basket_item.basketProduct == product %}
+                                        {% set coincidences = true %}
+                                    {% endif %}
+                                {% endfor %}
+
+                                {% if coincidences == false %}
+                                    <a class="noneDecoration" href="{{ path('add_product_to_basket', {'id': product.id}) }}">
+                                        <span class="add_in_basket">
+                                            <i class="fas fa-cart-plus"></i>
+                                        </span>
+                                    </a>
+                                {% else %}
+                                    <a class="noneDecoration" href="{{ path('basket') }}">
+                                        <span class="add_in_basket">
+                                            <i class="fas fa-shopping-cart"></i>
+                                        </span>
+                                    </a>
+                                {% endif %}
+                            {% endif %}
                         </div>
                     </div>
                 {% endfor %}

@@ -25,18 +25,18 @@ class Basket
     /**
      * @var User
      *
-     * @ORM\ManyToMany(targetEntity="User", inversedBy="basket")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="basketItems")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      */
     private $user;
 
     /**
      * @var Product
      *
-     *  @ORM\ManyToMany(targetEntity="Product", inversedBy="basket")
-     *  @ORM\JoinColumn(name="product_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="Product", inversedBy="basketItems")
+     * @ORM\JoinColumn(name="product_id", referencedColumnName="id", nullable=false)
      */
-    private $product;
+    private $basketProduct;
 
     /**
      * @return int
@@ -47,34 +47,41 @@ class Basket
     }
 
     /**
-     * @return Product
-     */
-    public function getProduct()
-    {
-        return $this->product;
-    }
-
-    /**
-     * @param Product $product
-     */
-    public function setProduct(Product $product)
-    {
-        $this->product = $product;
-    }
-
-    /**
      * @return User
      */
-    public function getUser()
+    public function getUser(): User
     {
         return $this->user;
     }
 
     /**
      * @param User $user
+     * @return Basket
      */
-    public function setUser(User $user)
+    public function setUser(User $user): Basket
     {
         $this->user = $user;
+
+        return $this;
     }
+
+    /**
+     * @return Product
+     */
+    public function getBasketProduct(): Product
+    {
+        return $this->basketProduct;
+    }
+
+    /**
+     * @param Product $basketProduct
+     * @return Basket
+     */
+    public function setBasketProduct(Product $basketProduct): Basket
+    {
+        $this->basketProduct = $basketProduct;
+
+        return $this;
+    }
+
 }

@@ -3,21 +3,79 @@
 {% block title %}{{ product.title }}{% endblock %}
 
 {% block stylesheets %}
+    {{ parent() }}
     <link rel="stylesheet" href="{{ asset('css/product/index.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/product/show.css') }}">
 {% endblock %}
 
 {% block body %}
-    <b>product {{ product.id }}</b>
-    <ul>
-        <li>title: {{ product.title }}</li>
-        <li>price: {{ product.price }}</li>
-        <li>category: {{ product.category.name }}</li>
-        <li>description: {{ product.description }}</li>
-    </ul>
+    <table class="table table-hover">
+        <tbody>
+        <tr>
+            <th scope="row">Title</th>
+            <td>{{ product.title }}</td>
+        </tr>
+        <tr>
+            <th scope="row">Price</th>
+            <td>{{ product.price }}</td>
+        </tr>
+        <tr>
+            <th scope="row">Category</th>
+            <td>{{ product.category.name }}</td>
+        </tr>
+        <tr>
+            <th scope="row">Description</th>
+            <td>{{ product.description }}</td>
+            <td>
+                {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                    {% set basket_items = app.user.basketItems %}
+                    {% set coincidences = false %}
+
+                    {% for basket_item in basket_items %}
+                        {% if basket_item.basketProduct == product %}
+                            {% set coincidences = true %}
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if coincidences == false %}
+                        <a class="noneDecoration" href="{{ path('add_product_to_basket', {'id': product.id}) }}">
+                            <span class="add_in_basket">
+                                <i class="fas fa-cart-plus"></i>
+                            </span>
+                        </a>
+                    {% else %}
+                        <a class="noneDecoration" href="{{ path('basket') }}">
+                            <span class="add_in_basket">
+                                <i class="fas fa-shopping-cart"></i>
+                            </span>
+                        </a>
+                    {% endif %}
+                {% endif %}
+            </td>
+        </tr>
+        </tbody>
+    </table>
 
     {% for image in product.images %}
         <div class="productImage_one">
             <img class="image_one" alt="productImage" src="{{ asset(image.getImageWebPath()) }}">
         </div>
     {% endfor %}
+
+    <div class="comments">
+        {% for comment in product.comments %}
+            <div class="comment">
+                <div class="comment_head">
+                    <p class="comment_user">{{ comment.user.firstName }} {{ comment.user.lastName }}</p>
+                </div>
+                <div class="comment_body">
+                    <p class="comment_message">{{ comment.message }}</p>
+                    <p class="comment_created">{{ comment.createdAt.date|slice(0, -7)}}</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    {{ form(comment_form) }}
+
 {% endblock %}

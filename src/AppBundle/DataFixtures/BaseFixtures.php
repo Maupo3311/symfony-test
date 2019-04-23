@@ -104,13 +104,11 @@ class BaseFixtures extends Fixture
             }
         }
 
-        foreach ($products as $product){
-            foreach ($users as $user){
-                $basket = new Basket();
-                $basket->setUser($user);
-                $basket->setProduct($product);
-                $manager->persist($basket);
-            }
+        foreach ($products as $product) {
+            $basket = new Basket();
+            $basket->setUser($users[rand(0, count($users) - 1)]);
+            $basket->setBasketProduct($product);
+            $manager->persist($basket);
         }
 
         $manager->flush();

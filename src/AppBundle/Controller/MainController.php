@@ -10,6 +10,7 @@ use AppBundle\Form\FeedbackType;
 use AppBundle\Repository\FeedbackImageRepository;
 use AppBundle\Repository\ProductRepository;
 use AppBundle\Services\FileUploader;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\NonUniqueResultException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -82,9 +83,11 @@ class MainController extends Controller
             if (!empty($user)) {
                 /** @var Feedback $feedback */
                 $feedback = $form->getData();
-                $em       = $this->getDoctrine()->getManager();
+                /** @var EntityManager $em */
+                $em = $this->getDoctrine()->getManager();
 
-                $images         = $feedback->getImages();
+                $images = $feedback->getImages();
+
                 $feedbackImages = [];
                 if ($images) {
                     foreach ($images as $image) {

@@ -6,7 +6,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as BaseUser;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * User
@@ -46,32 +45,122 @@ class User extends BaseUser
     private $feedbacks;
 
     /**
-     * @var Basket
+     * @var ArrayCollection
      *
-     * @ORM\ManyToMany(targetEntity="Basket", mappedBy="user")
+     * @ORM\OneToMany(
+     *     targetEntity="Basket",
+     *     mappedBy="user",
+     *     )
      */
-    private $basket;
+    private $basketItems;
 
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(
+     *     targetEntity="Comment",
+     *     mappedBy="user"
+     *     )
+     */
+    private $comments;
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getComments()
+    {
+        return $this->comments;
+    }
+
+    /**
+     * @param ArrayCollection $comments
+     * @return User
+     */
+    public function setComments(ArrayCollection $comments)
+    {
+        $this->comments = $comments;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getFeedbacks(): Collection
+    {
+        return $this->feedbacks;
+    }
+
+    /**
+     * @param Collection $feedbacks
+     * @return User
+     */
+    public function setFeedbacks(Collection $feedbacks): User
+    {
+        $this->feedbacks = $feedbacks;
+
+        return $this;
+    }
+
+    /**
+     * User constructor.
+     */
     public function __construct()
     {
         parent::__construct();
-        $this->feedbacks = new ArrayCollection();
+
+        $this->feedbacks   = new ArrayCollection();
+        $this->basketItems = new ArrayCollection();
+        $this->comments    = new ArrayCollection();
     }
 
     /**
-     * @return Basket
+     * @return ArrayCollection
      */
-    public function getBasket()
+    public function getBasketItems()
     {
-        return $this->basket;
+        return $this->basketItems;
     }
 
     /**
-     * @param Basket $basket
+     * @param ArrayCollection $basketItems
+     * @return User
      */
-    public function setBasket(Basket $basket)
+    public function setBasketItems(ArrayCollection $basketItems): User
     {
-        $this->basket = $basket;
+        $this->basketItems = $basketItems;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getBasketProducts()
+    {
+        $basketProducts = [];
+
+        /** @var Basket $basketItem */
+        foreach ($this->getBasketItems() as $basketItem) {
+            $basketProducts[] = $basketItem->getBasketProduct();
+        }
+
+        return $basketProducts;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTotalPriceBasketProducts()
+    {
+        $totalPrice = 0;
+
+        /** @var Basket $basketProduct */
+        foreach ($this->getBasketProducts() as $basketProduct) {
+            $totalPrice += $basketProduct->getPrice();
+        }
+
+        return $totalPrice;
     }
 
     /**
@@ -91,7 +180,6 @@ class User extends BaseUser
      *
      * @return User
      */
-
 
     /**
      * Set firstName.

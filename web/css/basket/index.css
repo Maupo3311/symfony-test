@@ -1,0 +1,22 @@
+.basket_td{
+    padding: 15px;;
+    width: 25%;
+    text-align: center;
+}
+.basket_table{
+    width: 100%;
+}
+.basket_remove:hover{
+    color: red;
+}
+.basket_remove{
+    color: #750000;
+}
+.basket_action{
+    text-align: right;
+}
+.total_price{
+    color: green;
+    font-size: 20px;
+    text-align: right;
+}
