@@ -51,8 +51,8 @@ class BaseFixtures extends Fixture
         }
 
         $feedbacks = [];
-        foreach($users as $user){
-            for($i = 0; $i < 2; $i++){
+        foreach ($users as $user) {
+            for ($i = 0; $i < 2; $i++) {
                 $feedback = new Feedback();
                 $feedback->setName('name' . mt_rand(1, 50000))
                     ->setEmail('email' . mt_rand(1, 50000) . '@mail.ru')
@@ -63,17 +63,17 @@ class BaseFixtures extends Fixture
             }
         }
 
-        $path = __DIR__.'/../../../web/test';
-        $files = (file_exists($path)) ? array_slice(scandir($path), 2) : [];
+        $path           = __DIR__ . '/../../../web/test';
+        $files          = (file_exists($path)) ? array_slice(scandir($path), 2) : [];
         $feedbackImages = [];
 
-        for($i = 0; $i < count($files); $i++){
-            $file = $files[$i];
-            $object = new UploadedFile($path.'/'.$file, rand(0, 50000).'.jpeg', 'image/jpeg', null, null, true);
+        for ($i = 0; $i < count($files); $i++) {
+            $file          = $files[$i];
+            $object        = new UploadedFile($path . '/' . $file, rand(0, 50000) . '.jpeg', 'image/jpeg', null, null, true);
             $feedbackImage = new FeedbackImage();
             $feedbackImage
                 ->setFile($object)
-                ->setFilePath($path.'/'.$file)
+                ->setFilePath($path . '/' . $file)
                 ->setCreatedAt(new DateTime())
                 ->setFeedback($feedbacks[0]);
             $manager->persist($feedbackImage);

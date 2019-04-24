@@ -86,7 +86,7 @@ class User extends BaseUser
     /**
      * @return Collection
      */
-    public function getFeedbacks(): Collection
+    public function getFeedbacks()
     {
         return $this->feedbacks;
     }
@@ -95,7 +95,7 @@ class User extends BaseUser
      * @param Collection $feedbacks
      * @return User
      */
-    public function setFeedbacks(Collection $feedbacks): User
+    public function setFeedbacks(Collection $feedbacks)
     {
         $this->feedbacks = $feedbacks;
 
@@ -126,7 +126,7 @@ class User extends BaseUser
      * @param ArrayCollection $basketItems
      * @return User
      */
-    public function setBasketItems(ArrayCollection $basketItems): User
+    public function setBasketItems(ArrayCollection $basketItems)
     {
         $this->basketItems = $basketItems;
 

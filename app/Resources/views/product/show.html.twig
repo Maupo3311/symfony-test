@@ -6,6 +6,7 @@
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('css/product/index.css') }}">
     <link rel="stylesheet" href="{{ asset('css/product/show.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/comment.css') }}">
 {% endblock %}
 
 {% block body %}
@@ -62,20 +63,56 @@
         </div>
     {% endfor %}
 
-    <div class="comments">
-        {% for comment in product.comments %}
-            <div class="comment">
-                <div class="comment_head">
-                    <p class="comment_user">{{ comment.user.firstName }} {{ comment.user.lastName }}</p>
-                </div>
-                <div class="comment_body">
-                    <p class="comment_message">{{ comment.message }}</p>
-                    <p class="comment_created">{{ comment.createdAt.date|slice(0, -7)}}</p>
+    <div class="row bootstrap snippets">
+        <div class="col-md-6 col-md-offset-2 col-sm-12">
+            <div class="comment-wrapper">
+                <div class="panel panel-info">
+                    <div class="panel-body">
+                        {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                            {{ form(comment_form) }}
+                        {% endif %}
+                        <div class="clearfix">Comments</div>
+                        <hr>
+                        <ul class="media-list">
+                            {% for comment in product.comments|reverse %}
+                                <li class="media">
+                                    <a href="#" class="pull-left">
+                                        <img src="https://bootdey.com/img/Content/user_1.jpg" alt="" class="img-circle">
+                                    </a>
+                                    <div class="media-body">
+                                        <span class="text-muted pull-right">
+                                            <small class="text-muted"> {{ comment.createdAt.date|slice(0, -7)}} </small>
+                                        </span>
+                                        <strong class="text-success">@{{ comment.user.firstName }} {{ comment.user.lastName }}</strong>
+                                        <p>
+                                            {{ comment.message }}
+                                            {% if comment.images != null %}
+                                                {% for image in comment.images %}
+                                                    <div class="comment-image-window">
+                                                        <img alt="" class="comment-image" src="{{ asset(image.getImageWebPath()) }}">
+                                                    </div>
+                                                {% endfor %}
+                                            {% endif %}
+                                            {% if comment.user == app.user %}
+                                                <p class="comment_options">
+                                                    <a class="noneDecoration" href="
+                                                    {{ path('comment_delete', {'id': comment.id, 'productId': product.id}) }}">
+                                                        <span class="comment_delete"><i class="fas fa-trash-alt"></i></span>
+                                                    </a>
+                                                </p>
+                                            {% endif %}
+                                        </p>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
                 </div>
             </div>
-        {% endfor %}
+
+        </div>
     </div>
 
-    {{ form(comment_form) }}
+{#    {{ form(comment_form) }}#}
 
 {% endblock %}

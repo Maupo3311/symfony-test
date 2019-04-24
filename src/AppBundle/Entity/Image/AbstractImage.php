@@ -16,7 +16,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\DiscriminatorColumn(name="type", type="integer")
  * @ORM\DiscriminatorMap({
  *      ImageType::FEEDBACK = "AppBundle\Entity\Image\FeedbackImage",
- *      ImageType::PRODUCT  = "AppBundle\Entity\Image\ProductImage"
+ *      ImageType::PRODUCT  = "AppBundle\Entity\Image\ProductImage",
+ *      ImageType::COMMENT  = "AppBundle\Entity\Image\CommentImage"
  * })
  */
 abstract class AbstractImage

@@ -2,6 +2,8 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Entity\Image\CommentImage;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use DateTime;
 use Exception;
@@ -54,12 +56,58 @@ class Comment
     private $createdAt;
 
     /**
+     * @var ArrayCollection $images
+     *
+     * @ORM\OneToMany(
+     *     targetEntity="AppBundle\Entity\Image\CommentImage",
+     *      cascade={"persist","remove"},
+     *      orphanRemoval=true,
+     *      mappedBy="comment"
+     * )
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="images_id", referencedColumnName="id", nullable=false)
+     * })
+     */
+    public $images;
+
+    /**
      * Comment constructor.
      * @throws Exception
      */
     public function __construct()
     {
         $this->createdAt = new DateTime();
+        $this->images    = new ArrayCollection();
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getImages()
+    {
+        return $this->images;
+    }
+
+    /**
+     * @param array $images
+     * @return $this
+     */
+    public function setImages(array $images)
+    {
+        $this->images = $images;
+
+        return $this;
+    }
+
+    /**
+     * @param CommentImage $image
+     * @return $this
+     */
+    public function addImage(CommentImage $image)
+    {
+        $this->images[] = $image;
+
+        return $this;
     }
 
     /**
@@ -81,7 +129,7 @@ class Comment
     /**
      * @return User
      */
-    public function getUser(): User
+    public function getUser()
     {
         return $this->user;
     }
@@ -100,7 +148,7 @@ class Comment
     /**
      * @return Product
      */
-    public function getProduct(): Product
+    public function getProduct()
     {
         return $this->product;
     }

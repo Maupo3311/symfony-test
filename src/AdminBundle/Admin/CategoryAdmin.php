@@ -42,6 +42,14 @@ final class CategoryAdmin extends AbstractAdmin
     }
 
     /**
+     * @param RouteCollection $collection
+     */
+    protected function configureRoutes(RouteCollection $collection)
+    {
+        $collection->remove('create');
+    }
+
+    /**
      * {@inheritDoc}
      */
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)

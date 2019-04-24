@@ -3,7 +3,6 @@
 namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -37,7 +36,7 @@ class Category
     private $active = true;
 
     /**
-     * @var Collection
+     * @var ArrayCollection
      * @ORM\OneToMany(
      *     targetEntity="Product",
      *     mappedBy="category",
@@ -100,7 +99,7 @@ class Category
     /**
      * @param bool $active
      */
-    public function setActive($active)
+    public function setActive(bool $active)
     {
         $this->active = $active;
     }
@@ -114,7 +113,7 @@ class Category
     }
 
     /**
-     * @return Collection
+     * @return ArrayCollection
      */
     public function getProducts()
     {

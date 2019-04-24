@@ -1,0 +1,33 @@
+
+body{margin-top:20px;}
+
+.comment-wrapper .panel-body {
+    max-height:650px;
+    overflow:auto;
+}
+
+.comment-wrapper .media-list .media img {
+    width:64px;
+    height:64px;
+    border:2px solid #e5e7e8;
+    margin-right: 20px;
+}
+
+.comment-wrapper .media-list .media {
+    border-bottom:1px dashed #efefef;
+    margin-bottom:25px;
+}
+.comment_options{
+    font-size: 13px;
+    text-align: right;
+    margin-right: 20%;
+}
+.comment_delete:hover{
+    color: red;
+}
+.comment_delete{
+    color: maroon;
+}
+.comment-image-window{
+    display: inline-block;
+}

@@ -5,10 +5,14 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Basket;
 use AppBundle\Entity\Category;
 use AppBundle\Entity\Comment;
+use AppBundle\Entity\Image\CommentImage;
 use AppBundle\Entity\User;
 use AppBundle\Form\CommentType;
 use AppBundle\Repository\ProductRepository;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -74,25 +78,45 @@ class ProductController extends Controller
      * @Route("/show/{id}", name="product_item", requirements={"id": "[0-9]+"})
      * @param Product $product
      * @param Request $request
-     * @return Response
+     * @return RedirectResponse|Response
+     *
+     * @throws ORMException
+     * @throws OptimisticLockException
      */
     public function showAction(Product $product, Request $request)
     {
         $user = $this->getUser();
 
         $form = $this->createForm(CommentType::class);
-        $form->add('submit', SubmitType::class);
+        $form->add('Post', SubmitType::class, ['attr' => ['class' => 'btn btn-info pull-right']]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             if (!empty($user)) {
                 /** @var Comment $comment */
                 $comment = $form->getData();
-                $em      = $this->getDoctrine()->getManager();
+                /** @var EntityManager $em */
+                $em = $this->getDoctrine()->getManager();
+
+                $commentImages = [];
+                if ($comment->getImages()) {
+                    foreach ($comment->getImages() as $image) {
+                        /** @var CommentImage $commentImage */
+                        $commentImage = new CommentImage();
+
+                        $commentImage
+                            ->setFile($image)
+                            ->uploadImage()
+                            ->setComment($comment);
+
+                        $commentImages[] = $commentImage;
+                    }
+                }
 
                 $comment
                     ->setUser($user)
-                    ->setProduct($product);
+                    ->setProduct($product)
+                    ->setImages($commentImages);
 
                 $em->persist($comment);
                 $em->flush();
@@ -162,6 +186,9 @@ class ProductController extends Controller
      * @Route("/add-to-basket/{id}", name="add_product_to_basket")
      * @param Product $product
      * @return RedirectResponse
+     *
+     * @throws ORMException
+     * @throws OptimisticLockException
      */
     public function addToBasketAction(Product $product)
     {
@@ -177,21 +204,23 @@ class ProductController extends Controller
         $basketItems = $product->getBasketItems();
         /** @var Basket $basketItem */
         foreach ($basketItems as $basketItem) {
-            if ($basketItem->getUser() == $user) {
+            if ($basketItem->getUser() === $user) {
                 $this->addFlash('error', 'This product is already in your basket');
 
                 return $this->redirectToRoute('product_show');
             }
         }
 
-        $em          = $this->getDoctrine()->getManager();
-        $basket_item = new Basket();
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
 
-        $basket_item
+        $basketItem = new Basket();
+
+        $basketItem
             ->setBasketProduct($product)
             ->setUser($user);
 
-        $em->persist($basket_item);
+        $em->persist($basketItem);
         $em->flush();
 
         $this->addFlash('addProductSuccess', 'Product added to basket');

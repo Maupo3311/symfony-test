@@ -89,7 +89,9 @@ class Product
      *
      * @ORM\OneToMany(
      *     targetEntity="Comment",
-     *     mappedBy="product"
+     *     mappedBy="product",
+     *     cascade={"persist","remove"},
+     *     orphanRemoval=true,
      * )
      */
     private $comments;
@@ -120,12 +122,23 @@ class Product
     }
 
     /**
-     * @param ArrayCollection $comments
+     * @param $comments
      * @return $this
      */
-    public function setComments(ArrayCollection $comments)
+    public function setComments($comments)
     {
         $this->comments = $comments;
+
+        return $this;
+    }
+
+    /**
+     * @param Comment $comment
+     * @return $this
+     */
+    public function addComment(Comment $comment)
+    {
+        $this->comments[] = $comment;
 
         return $this;
     }
@@ -139,10 +152,10 @@ class Product
     }
 
     /**
-     * @param ArrayCollection $basketItems
+     * @param array $basketItems
      * @return Product
      */
-    public function setBasketItems(ArrayCollection $basketItems): Product
+    public function setBasketItems(array $basketItems)
     {
         $this->basketItems = $basketItems;
 
@@ -297,10 +310,10 @@ class Product
     }
 
     /**
-     * @param ArrayCollection $images
+     * @param array $images
      * @return $this
      */
-    public function setImages(ArrayCollection $images)
+    public function setImages(array $images)
     {
         $this->images = $images;
 
