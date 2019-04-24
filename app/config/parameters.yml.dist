@@ -11,12 +11,12 @@ parameters:
     #database_path: '%kernel.project_dir%/var/data/data.sqlite'
 
     mailer_encryption: ssl
-        mailer_auth_mode: login
-        mailer_transport: smtp
-        mailer_host: smtp.mail.ru
-        mailer_user: ~
-        mailer_port: 465
-        mailer_password: ~
+    mailer_auth_mode: login
+    mailer_transport: smtp
+    mailer_host: smtp.mail.ru
+    mailer_user: ~
+    mailer_port: 465
+    mailer_password: ~
 
     upload_directory: '%kernel.project_dir%/web/uploads'
 

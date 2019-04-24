@@ -27,6 +27,13 @@ class User extends BaseUser
     /**
      * @var string
      *
+     * @ORM\Column(name="charge_id", type="string", length = 255, nullable = true)
+     */
+    private $chargeId;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="first_name", type="string", length=32)
      */
     private $firstName;
@@ -63,6 +70,22 @@ class User extends BaseUser
      *     )
      */
     private $comments;
+
+    /**
+     * @return string
+     */
+    public function getChargeId()
+    {
+        return $this->chargeId;
+    }
+
+    /**
+     * @param string $chargeId
+     */
+    public function setChargeId(string $chargeId)
+    {
+        $this->chargeId = $chargeId;
+    }
 
     /**
      * @return ArrayCollection
