@@ -185,12 +185,13 @@ class ProductController extends Controller
     /**
      * @Route("/add-to-basket/{id}", name="add_product_to_basket")
      * @param Product $product
+     * @param Request $request
      * @return RedirectResponse
      *
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function addToBasketAction(Product $product)
+    public function addToBasketAction(Product $product, Request $request)
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -201,12 +202,21 @@ class ProductController extends Controller
             return $this->redirectToRoute('product_show');
         }
 
+        $number             = ($request->request->get('number')) ?: 1;
         $existingBasketItem = null;
+
+        if ($product->getNumber() < $number) {
+            $this->addFlash('error', 'There are so many product in stock');
+
+            return $this->redirectToRoute('product_show');
+        }
+
+        /** @var Basket $basketItem */
         foreach ($user->getBasketItems() as $basketItem) {
             $basketProduct = $basketItem->getBasketProduct();
             if ($basketProduct === $product) {
-                if ($basketProduct->getNumber() === 0) {
-                    $this->addFlash('error', 'This product is out of stock');
+                if ($basketProduct->getNumber() - $basketItem->getNumberOfProducts() - $number < 0) {
+                    $this->addFlash('error', 'There are so many product in stock');
 
                     return $this->redirectToRoute('product_show');
                 } else {
@@ -222,7 +232,7 @@ class ProductController extends Controller
 
         if ($existingBasketItem) {
             $existingBasketItem
-                ->setNumberOfProducts($existingBasketItem->getNumberOfProducts() + 1);
+                ->setNumberOfProducts($existingBasketItem->getNumberOfProducts() + $number);
 
             $em->persist($existingBasketItem);
         } else {
@@ -231,7 +241,7 @@ class ProductController extends Controller
             $basketItem
                 ->setBasketProduct($product)
                 ->setUser($user)
-                ->setNumberOfProducts(1);
+                ->setNumberOfProducts($number);
 
             $em->persist($basketItem);
         }

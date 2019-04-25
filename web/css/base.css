@@ -54,3 +54,11 @@
     text-align: right;
     float: right;
 }
+
+.hidden{
+    display: none;
+}
+.basket-number{
+    width: 50px;
+    text-align: center;
+}

@@ -34,11 +34,13 @@
             <td>
                 {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
                     {% if product.number != 0 %}
-                        <a class="noneDecoration" href="{{ path('add_product_to_basket', {'id': product.id}) }}">
+                        <form method="POST" action="{{ path('add_product_to_basket', {'id': product.id}) }}">
                             <span class="add_in_basket">
-                                <i class="fas fa-cart-plus"></i>
+                                <input name="number" class="basket-number">
+                                <label for="submit"> <i class="fas fa-cart-plus"></i> </label>
+                                <input class="hidden" id="submit" type="submit">
                             </span>
-                        </a>
+                        </form>
                     {% else %}
                         <a class="noneDecoration" href="{{ path('basket') }}">
                             <span class="add_in_basket">
