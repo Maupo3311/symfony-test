@@ -8,7 +8,7 @@
 {% block body %}
     <h2 class="center">Basket</h2>
 
-    {% if basket_items.count > 0 %}
+    {% if basket_items.values is not empty %}
         <a class="noneDecoration" href="{{ path('delete_basket_items') }}">
             <p class="basket_remove">✖ Clear Basket </p>
         </a>
@@ -16,8 +16,10 @@
             <caption>Products</caption>
             <tr>
                 <th scope="col" class="center">Product</th>
-                <th scope="col" class="center">Price</th>
+                <th scope="col" class="center">Product price</th>
+                <th scope="col" class="center">Total Price</th>
                 <th scope="col" class="center">Description</th>
+                <th scope="col" class="center">Number</th>
                 <th scope="col" class="center">Action</th>
             </tr>
             {% for basket_item in basket_items %}
@@ -28,10 +30,16 @@
                         </a>
                     </td>
                     <td class="basket_td">
-                        {{ basket_item.basketProduct.price }}
+                        ${{ basket_item.basketProduct.price }}
+                    </td>
+                    <td class="basket_td">
+                        ${{ basket_item.getTotalPriceAllProducts }}
                     </td>
                     <td class="basket_td">
                         {{ basket_item.basketProduct.description }}
+                    </td>
+                    <td class="basket_td">
+                        {{ basket_item.numberOfProducts }}
                     </td>
                     <td class="basket_td basket_action">
                         <a class="noneDecoration" href="{{ path('delete_basket_item', {'id': basket_item.id}) }}">
@@ -42,18 +50,18 @@
             {% endfor %}
         </table>
         <p class="total_price">
-            Total price: {{ app.user.getTotalPriceBasketProducts() }}
+            Total price: ${{ app.user.getTotalPriceBasketProducts() }}
         </p>
 
-        <form method="post">
+        <form class="basket_payment" method="post">
             <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
                     data-key="{{ stripe_public_key }}"
                     data-description="Access for a year"
-                    data-amount="{{ app.user.getTotalPriceBasketProducts() }}"
+                    data-amount="{{ app.user.getTotalPriceBasketProducts() * 100 }}"
                     data-locale="auto"></script>
         </form>
     {% else %}
-        <p class="center">Empty recycle bin...</p>
+        <p class="center">Basket Empty...</p>
     {% endif %}
 {% endblock %}
 

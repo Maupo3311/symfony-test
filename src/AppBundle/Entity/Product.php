@@ -32,9 +32,9 @@ class Product
     private $title;
 
     /**
-     * @var string
+     * @var integer
      *
-     * @ORM\Column(name="price", type="decimal", precision=10, scale=2)
+     * @ORM\Column(name="price", type="integer")
      */
     private $price;
 
@@ -85,6 +85,13 @@ class Product
     private $basketItems;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="number", type="integer", nullable=false)
+     */
+    private $number;
+
+    /**
      * @var ArrayCollection
      *
      * @ORM\OneToMany(
@@ -111,6 +118,25 @@ class Product
         $this->images      = new ArrayCollection();
         $this->basketItems = new ArrayCollection();
         $this->comments    = new ArrayCollection();
+    }
+
+    /**
+     * @return int
+     */
+    public function getNumber()
+    {
+        return $this->number;
+    }
+
+    /**
+     * @param int $number
+     * @return $this
+     */
+    public function setNumber(int $number)
+    {
+        $this->number = $number;
+
+        return $this;
     }
 
     /**
@@ -232,7 +258,7 @@ class Product
     /**
      * Set price
      *
-     * @param string $price
+     * @param integer $price
      *
      * @return Product
      */

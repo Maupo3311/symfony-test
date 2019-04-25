@@ -65,7 +65,7 @@ class Comment
      *      mappedBy="comment"
      * )
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="images_id", referencedColumnName="id", nullable=false)
+     *   @ORM\JoinColumn(name="images_id", referencedColumnName="id", nullable=true)
      * })
      */
     public $images;

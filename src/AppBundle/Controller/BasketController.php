@@ -5,12 +5,16 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Basket;
 use AppBundle\Entity\User;
 use AppBundle\Services\StripeService;
-use Stripe\Checkout\Session;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
+use Stripe\ApiResource;
+use Stripe\StripeObject;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Stripe\Stripe;
 
 /**
  * Class BasketController
@@ -21,35 +25,52 @@ class BasketController extends Controller
 {
     /**
      * @Route("/", name="basket")
+     * @param Request $request
      * @return Response
+     * @throws ORMException
+     * @throws OptimisticLockException
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         /** @var User $user */
         $user        = $this->getUser();
         $basketItems = $user->getBasketItems();
-
         /** @var StripeService $stipeService */
         $stipeService = $this->get('app.stripe');
         $stipeService->setApiKey($this->getParameter('stripe_secret_key'));
 
-        if(!empty($_POST['stripeToken'])){
-            $email  = $_POST['stripeEmail'];
-            $token = $_POST['stripeToken'];
+        /**
+         *  If the payment button has been pressed
+         */
+        if ($token = $request->request->get('stripeToken')) {
+            $userEmail = ($request->request->get('stripeEmail')) ?: $user->getEmail();
 
-            $customer = \Stripe\Customer::create([
-                'email' => $email,
-                'source'  => $token,
-            ]);
+            /** @var ApiResource $charge */
+            $charge = $stipeService->createCharge($token, $user->getTotalPriceBasketProducts(), $userEmail);
 
-            $charge = \Stripe\Charge::create([
-                'customer' => $customer->id,
-                'amount'   => $user->getTotalPriceBasketProducts(),
-                'currency' => 'usd',
-            ]);
+            $sellerMessage = $charge->outcome->seller_message;
+            if ($sellerMessage === 'Payment complete.') {
+                $this->addFlash('success', $sellerMessage);
+
+                /** @var EntityManager $em */
+                $em = $this->getDoctrine()->getManager();
+
+                /** @var Basket $basketItem */
+                foreach ($basketItems as $basketItem) {
+                    $currentNumber = $basketItem->getBasketProduct()->getNumber();
+                    $newNumber     = $currentNumber - $basketItem->getNumberOfProducts();
+
+                    $basketItem->getBasketProduct()->setNumber($newNumber);
+
+                    $em->remove($basketItem);
+                    $em->flush();
+                }
+
+                return $this->redirectToRoute('basket');
+            } else {
+                $this->addFlash('error', $sellerMessage);
+            }
         }
-
-        $stipeService->createObject($basketItems[1]);
 
         return $this->render('basket/index.html.twig', [
             'basket_items'      => $basketItems,
@@ -61,11 +82,15 @@ class BasketController extends Controller
      * @Route("/delete-item/{id}", name="delete_basket_item")
      * @param Basket $basketItem
      * @return RedirectResponse
+     * @throws ORMException
+     * @throws OptimisticLockException
      */
     public function deleteBasketItemAction(Basket $basketItem)
     {
         if ($basketItem->getUser() === $this->getUser()) {
+            /** @var EntityManager $em */
             $em = $this->getDoctrine()->getManager();
+
             $em->remove($basketItem);
             $em->flush();
 
@@ -82,13 +107,17 @@ class BasketController extends Controller
     /**
      * @Route("/delete-items", name="delete_basket_items")
      * @return RedirectResponse
+     * @throws ORMException
+     * @throws OptimisticLockException
      */
     public function deleteBasketItemsAction()
     {
         /** @var User $user */
         $user        = $this->getUser();
         $basketItems = $user->getBasketItems();
-        $em          = $this->getDoctrine()->getManager();
+
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
 
         foreach ($basketItems as $basketItem) {
             $em->remove($basketItem);

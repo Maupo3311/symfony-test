@@ -39,6 +39,37 @@ class Basket
     private $basketProduct;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="number_of_products", type="integer", nullable=false)
+     */
+    private $numberOfProducts;
+
+    /**
+     * @return float|int
+     */
+    public function getTotalPriceAllProducts()
+    {
+        return $this->getBasketProduct()->getPrice() * $this->getNumberOfProducts();
+    }
+
+    /**
+     * @return int
+     */
+    public function getNumberOfProducts()
+    {
+        return $this->numberOfProducts;
+    }
+
+    /**
+     * @param int $numberOfProducts
+     */
+    public function setNumberOfProducts(int $numberOfProducts)
+    {
+        $this->numberOfProducts = $numberOfProducts;
+    }
+
+    /**
      * @return int
      */
     public function getId()

@@ -201,26 +201,41 @@ class ProductController extends Controller
             return $this->redirectToRoute('product_show');
         }
 
-        $basketItems = $product->getBasketItems();
-        /** @var Basket $basketItem */
-        foreach ($basketItems as $basketItem) {
-            if ($basketItem->getUser() === $user) {
-                $this->addFlash('error', 'This product is already in your basket');
+        $existingBasketItem = null;
+        foreach ($user->getBasketItems() as $basketItem) {
+            $basketProduct = $basketItem->getBasketProduct();
+            if ($basketProduct === $product) {
+                if ($basketProduct->getNumber() === 0) {
+                    $this->addFlash('error', 'This product is out of stock');
 
-                return $this->redirectToRoute('product_show');
+                    return $this->redirectToRoute('product_show');
+                } else {
+                    /** @var Basket $existingBasketItem */
+                    $existingBasketItem = $basketItem;
+                    break;
+                }
             }
         }
 
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
 
-        $basketItem = new Basket();
+        if ($existingBasketItem) {
+            $existingBasketItem
+                ->setNumberOfProducts($existingBasketItem->getNumberOfProducts() + 1);
 
-        $basketItem
-            ->setBasketProduct($product)
-            ->setUser($user);
+            $em->persist($existingBasketItem);
+        } else {
+            $basketItem = new Basket();
 
-        $em->persist($basketItem);
+            $basketItem
+                ->setBasketProduct($product)
+                ->setUser($user)
+                ->setNumberOfProducts(1);
+
+            $em->persist($basketItem);
+        }
+
         $em->flush();
 
         $this->addFlash('addProductSuccess', 'Product added to basket');

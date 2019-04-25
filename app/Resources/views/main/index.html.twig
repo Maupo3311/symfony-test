@@ -20,16 +20,7 @@
                     <div class="productBody">
                         <p class="productDescription">{{ product.description }}</p>
                         {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-                            {% set basket_items = app.user.basketItems %}
-                            {% set coincidences = false %}
-
-                            {% for basket_item in basket_items %}
-                                {% if basket_item.basketProduct == product %}
-                                    {% set coincidences = true %}
-                                {% endif %}
-                            {% endfor %}
-
-                            {% if coincidences == false %}
+                            {% if product.number != 0 %}
                                 <a class="noneDecoration" href="{{ path('add_product_to_basket', {'id': product.id}) }}">
                                         <span class="add_in_basket">
                                             <i class="fas fa-cart-plus"></i>
@@ -43,7 +34,7 @@
                                 </a>
                             {% endif %}
                         {% endif %}
-                        <p class="productPrice">Price: {{ product.price }}</p>
+                        <p class="productPrice">Price: ${{ product.price }}</p>
                         <p class="productRating">Rating: {{ product.rating }}</p>
                     </div>
                 </div>

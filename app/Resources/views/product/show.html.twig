@@ -18,27 +18,22 @@
         </tr>
         <tr>
             <th scope="row">Price</th>
-            <td>{{ product.price }}</td>
+            <td>${{ product.price }}</td>
         </tr>
         <tr>
             <th scope="row">Category</th>
             <td>{{ product.category.name }}</td>
         </tr>
         <tr>
+            <th scope="row">Number</th>
+            <td>{{ product.number }}</td>
+        </tr>
+        <tr>
             <th scope="row">Description</th>
             <td>{{ product.description }}</td>
             <td>
                 {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-                    {% set basket_items = app.user.basketItems %}
-                    {% set coincidences = false %}
-
-                    {% for basket_item in basket_items %}
-                        {% if basket_item.basketProduct == product %}
-                            {% set coincidences = true %}
-                        {% endif %}
-                    {% endfor %}
-
-                    {% if coincidences == false %}
+                    {% if product.number != 0 %}
                         <a class="noneDecoration" href="{{ path('add_product_to_basket', {'id': product.id}) }}">
                             <span class="add_in_basket">
                                 <i class="fas fa-cart-plus"></i>

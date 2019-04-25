@@ -3,7 +3,9 @@
 namespace AppBundle\Services;
 
 use AppBundle\Entity\Basket;
+use Stripe\ApiResource;
 use Stripe\Charge;
+use Stripe\Customer;
 use Stripe\Stripe;
 use Stripe\Checkout\Session;
 
@@ -25,36 +27,35 @@ class StripeService
     }
 
     /**
-     * @param Basket $basketItem
+     * @param string $token
+     * @param int    $totalPrice
+     * @param string $userEmail
+     * @return ApiResource
      */
-    public function createSession(Basket $basketItem)
+    public function createCharge(string $token ,int $totalPrice, string $userEmail)
     {
-        Session::create([
-            'customer_email' => $basketItem->getUser()->getEmail(),
-            'success_url' => 'http://127.0.0.1:8000/basket/',
-            'cancel_url' => 'http://127.0.0.1:8000/basket/',
-            'payment_method_types' => ['card'],
-            'line_items' => [[
-                'amount' => round($basketItem->getBasketProduct()->getPrice()),
-                'currency' => 'usd',
-                'name' => $basketItem->getBasketProduct()->getTitle(),
-                'description' => $basketItem->getBasketProduct()->getDescription(),
-                'images' => ['https://www.example.com/t-shirt.png'],
-                'quantity' => 1,
-            ]]
+        return Charge::create([
+            "amount"        => $totalPrice * 100,
+            "currency"      => "usd",
+            'source'        => $token,
+            'receipt_email' => $userEmail,
         ]);
     }
 
-    /**
-     * @param Basket $basketItem
-     */
-    public function createObject(Basket $basketItem)
+    public function createSource(ApiResource $customer)
     {
-        Charge::create([
-                "amount" => round($basketItem->getBasketProduct()->getPrice()),
-                "currency" => "usd",
+        return Customer::createSource($customer->id, [
                 'source' => 'tok_visa',
-                'receipt_email' => $basketItem->getUser()->getEmail(),
-        ]);
+            ]
+        );
+    }
+
+    /**
+     * @param array $data
+     * @return ApiResource
+     */
+    public function createCustomer(array $data)
+    {
+        return Customer::create($data);
     }
 }

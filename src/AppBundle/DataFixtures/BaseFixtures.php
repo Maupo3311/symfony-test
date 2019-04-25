@@ -2,7 +2,6 @@
 
 namespace AppBundle\DataFixtures;
 
-use AppBundle\Entity\Basket;
 use AppBundle\Entity\Category;
 use AppBundle\Entity\Image\FeedbackImage;
 use AppBundle\Entity\Product;
@@ -95,20 +94,14 @@ class BaseFixtures extends Fixture
             for ($i = 0; $i < 20; $i++) {
                 $product = new Product();
                 $product->setTitle('product' . mt_rand(1, 3000) . mt_rand(1, 5000));
-                $product->setPrice(mt_rand(10, 10000) . '.' . mt_rand(1, 99));
+                $product->setPrice(mt_rand(1, 250));
                 $product->setCategory($category);
-                $product->setRating(floatval(mt_rand(0, 10) . '.' . mt_rand(1, 99)));
+                $product->setRating(floatval(mt_rand(0, 9) . '.' . mt_rand(1, 99)));
                 $product->setDescription(md5($i));
+                $product->setNumber(rand(1, 32));
                 $manager->persist($product);
                 $products[] = $product;
             }
-        }
-
-        foreach ($products as $product) {
-            $basket = new Basket();
-            $basket->setUser($users[rand(0, count($users) - 1)]);
-            $basket->setBasketProduct($product);
-            $manager->persist($basket);
         }
 
         $manager->flush();

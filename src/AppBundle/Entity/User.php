@@ -178,9 +178,9 @@ class User extends BaseUser
     {
         $totalPrice = 0;
 
-        /** @var Basket $basketProduct */
-        foreach ($this->getBasketProducts() as $basketProduct) {
-            $totalPrice += $basketProduct->getPrice();
+        /** @var Basket $basketItem */
+        foreach ($this->getBasketItems() as $basketItem) {
+            $totalPrice += $basketItem->getBasketProduct()->getPrice() * $basketItem->getNumberOfProducts();
         }
 
         return $totalPrice;
