@@ -3,6 +3,7 @@
 namespace AppBundle\Services;
 
 use AppBundle\Entity\Basket;
+use Stripe\Charge;
 use Stripe\Stripe;
 use Stripe\Checkout\Session;
 
@@ -34,13 +35,26 @@ class StripeService
             'cancel_url' => 'http://127.0.0.1:8000/basket/',
             'payment_method_types' => ['card'],
             'line_items' => [[
-                'amount' => $basketItem->getBasketProduct()->getPrice(),
+                'amount' => round($basketItem->getBasketProduct()->getPrice()),
                 'currency' => 'usd',
                 'name' => $basketItem->getBasketProduct()->getTitle(),
                 'description' => $basketItem->getBasketProduct()->getDescription(),
                 'images' => ['https://www.example.com/t-shirt.png'],
                 'quantity' => 1,
             ]]
+        ]);
+    }
+
+    /**
+     * @param Basket $basketItem
+     */
+    public function createObject(Basket $basketItem)
+    {
+        Charge::create([
+                "amount" => round($basketItem->getBasketProduct()->getPrice()),
+                "currency" => "usd",
+                'source' => 'tok_visa',
+                'receipt_email' => $basketItem->getUser()->getEmail(),
         ]);
     }
 }

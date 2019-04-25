@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Basket;
 use AppBundle\Entity\User;
 use AppBundle\Services\StripeService;
+use Stripe\Checkout\Session;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,8 +25,6 @@ class BasketController extends Controller
      */
     public function indexAction()
     {
-        Stripe::setApiKey('sk_test_ec1WPctX6q8CQPXVsN1sP7iC00ZaM2dk2G');
-
         /** @var User $user */
         $user        = $this->getUser();
         $basketItems = $user->getBasketItems();
@@ -34,12 +33,27 @@ class BasketController extends Controller
         $stipeService = $this->get('app.stripe');
         $stipeService->setApiKey($this->getParameter('stripe_secret_key'));
 
-        foreach ($basketItems as $basketItem){
-            $stipeService->createSession($basketItem);
+        if(!empty($_POST['stripeToken'])){
+            $email  = $_POST['stripeEmail'];
+            $token = $_POST['stripeToken'];
+
+            $customer = \Stripe\Customer::create([
+                'email' => $email,
+                'source'  => $token,
+            ]);
+
+            $charge = \Stripe\Charge::create([
+                'customer' => $customer->id,
+                'amount'   => $user->getTotalPriceBasketProducts(),
+                'currency' => 'usd',
+            ]);
         }
 
+        $stipeService->createObject($basketItems[1]);
+
         return $this->render('basket/index.html.twig', [
-            'basket_items' => $basketItems,
+            'basket_items'      => $basketItems,
+            'stripe_public_key' => $this->getParameter('stripe_public_key'),
         ]);
     }
 

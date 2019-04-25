@@ -17,6 +17,8 @@ parameters:
     mailer_user: ~
     mailer_port: 465
     mailer_password: ~
+    stripe_secret_key: ~
+    stripe_public_key: ~
 
     upload_directory: '%kernel.project_dir%/web/uploads'
 

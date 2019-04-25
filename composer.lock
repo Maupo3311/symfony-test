@@ -1,7 +1,7 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
     "content-hash": "2f108747c7d2f97e83a5e0d5eaed357c",
@@ -997,16 +997,16 @@
         },
         {
             "name": "doctrine/migrations",
-            "version": "v2.0.0",
+            "version": "v2.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/migrations.git",
-                "reference": "0101f5bd7f4e5043bf8630db2930f8fd7da552b6"
+                "reference": "2d5c1141e91833ae706d5611cb74c56cdc7a7402"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/migrations/zipball/0101f5bd7f4e5043bf8630db2930f8fd7da552b6",
-                "reference": "0101f5bd7f4e5043bf8630db2930f8fd7da552b6",
+                "url": "https://api.github.com/repos/doctrine/migrations/zipball/2d5c1141e91833ae706d5611cb74c56cdc7a7402",
+                "reference": "2d5c1141e91833ae706d5611cb74c56cdc7a7402",
                 "shasum": ""
             },
             "require": {
@@ -1075,7 +1075,7 @@
                 "migrations",
                 "php"
             ],
-            "time": "2019-01-03T18:59:09+00:00"
+            "time": "2019-04-23T14:41:17+00:00"
         },
         {
             "name": "doctrine/orm",
@@ -1161,16 +1161,16 @@
         },
         {
             "name": "doctrine/persistence",
-            "version": "v1.1.0",
+            "version": "1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/persistence.git",
-                "reference": "c0f1c17602afc18b4cbd8e1c8125f264c9cf7d38"
+                "reference": "3da7c9d125591ca83944f477e65ed3d7b4617c48"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/persistence/zipball/c0f1c17602afc18b4cbd8e1c8125f264c9cf7d38",
-                "reference": "c0f1c17602afc18b4cbd8e1c8125f264c9cf7d38",
+                "url": "https://api.github.com/repos/doctrine/persistence/zipball/3da7c9d125591ca83944f477e65ed3d7b4617c48",
+                "reference": "3da7c9d125591ca83944f477e65ed3d7b4617c48",
                 "shasum": ""
             },
             "require": {
@@ -1239,7 +1239,7 @@
                 "orm",
                 "persistence"
             ],
-            "time": "2018-11-21T00:33:13+00:00"
+            "time": "2019-04-23T08:28:24+00:00"
         },
         {
             "name": "doctrine/reflection",
@@ -4154,12 +4154,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/djoos/Symfony-coding-standard.git",
-                "reference": "8214fd7167cd049a8077cf3bf7384c3a5e6f372a"
+                "reference": "a526278d0864e4d4756f0879576a5abe39e2e2c0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/djoos/Symfony-coding-standard/zipball/8214fd7167cd049a8077cf3bf7384c3a5e6f372a",
-                "reference": "8214fd7167cd049a8077cf3bf7384c3a5e6f372a",
+                "url": "https://api.github.com/repos/djoos/Symfony-coding-standard/zipball/a526278d0864e4d4756f0879576a5abe39e2e2c0",
+                "reference": "a526278d0864e4d4756f0879576a5abe39e2e2c0",
                 "shasum": ""
             },
             "require": {
@@ -4199,7 +4199,7 @@
                 "phpcs",
                 "symfony"
             ],
-            "time": "2019-01-17T14:37:49+00:00"
+            "time": "2019-04-23T09:06:38+00:00"
         },
         {
             "name": "sensio/generator-bundle",
