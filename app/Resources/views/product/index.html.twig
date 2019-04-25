@@ -107,8 +107,8 @@
                                     <form method="POST" action="{{ path('add_product_to_basket', {'id': product.id}) }}">
                                         <span class="add_in_basket">
                                             <input name="number" class="basket-number">
-                                            <label for="submit"> <i class="fas fa-cart-plus"></i> </label>
-                                            <input class="hidden" id="submit" type="submit">
+                                            <label for="{{ product.id }}"> <i class="fas fa-cart-plus"></i> </label>
+                                            <input class="hidden" id="{{ product.id }}" type="submit">
                                         </span>
                                     </form>
                                 {% else %}

@@ -40,15 +40,7 @@ final class CategoryAdmin extends AbstractAdmin
                 'sortable' => 'position',
             ]);
     }
-
-    /**
-     * @param RouteCollection $collection
-     */
-    protected function configureRoutes(RouteCollection $collection)
-    {
-        $collection->remove('create');
-    }
-
+    
     /**
      * {@inheritDoc}
      */
