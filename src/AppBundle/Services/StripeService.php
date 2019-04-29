@@ -5,9 +5,14 @@ namespace AppBundle\Services;
 use AppBundle\Entity\Basket;
 use Stripe\ApiResource;
 use Stripe\Charge;
+use Stripe\Collection;
 use Stripe\Customer;
+use Stripe\Error\Api;
+use Stripe\Plan;
 use Stripe\Stripe;
 use Stripe\Checkout\Session;
+use Stripe\StripeObject;
+use Stripe\Subscription;
 
 /**
  * Class StripeService
@@ -15,15 +20,17 @@ use Stripe\Checkout\Session;
  */
 class StripeService
 {
-    /**
-     * @param string $key
-     * @return $this
-     */
-    public function setApiKey(string $key)
-    {
-        Stripe::setApiKey($key);
 
-        return $this;
+    /**
+     * @var string
+     */
+    protected $apiKey;
+
+    public function __construct(string $apiKey)
+    {
+        $this->apiKey = $apiKey;
+
+        Stripe::setApiKey($this->apiKey);
     }
 
     /**
@@ -32,7 +39,7 @@ class StripeService
      * @param string $userEmail
      * @return ApiResource
      */
-    public function createCharge(string $token ,int $totalPrice, string $userEmail)
+    public function createCharge(string $token, int $totalPrice, string $userEmail)
     {
         return Charge::create([
             "amount"        => $totalPrice * 100,
@@ -42,12 +49,44 @@ class StripeService
         ]);
     }
 
-    public function createSource(ApiResource $customer)
+    /**
+     * @return Collection
+     * @throws Api
+     */
+    public function getAllPlans()
     {
-        return Customer::createSource($customer->id, [
-                'source' => 'tok_visa',
-            ]
-        );
+        return Plan::all();
+    }
+
+    /**
+     * @param string $id
+     * @return StripeObject
+     */
+    public function getPlan(string $id)
+    {
+        return Plan::retrieve($id);
+    }
+
+    /**
+     * @param StripeObject $customer
+     * @param Plan         $plan
+     * @return ApiResource
+     */
+    public function createSubscription(StripeObject $customer, Plan $plan)
+    {
+        return Subscription::create([
+            'customer'  => $customer->id,
+            'items'     => [
+                ['plan' => $plan->id],
+            ],
+        ]);
+    }
+
+    public function deleteSubscription($id)
+    {
+        /** @var Subscription $sub */
+        $sub = Subscription::retrieve($id);
+        $sub->cancel();
     }
 
     /**
@@ -57,5 +96,14 @@ class StripeService
     public function createCustomer(array $data)
     {
         return Customer::create($data);
+    }
+
+    /**
+     * @param string $id
+     * @return StripeObject
+     */
+    public function getCustomer(string $id)
+    {
+        return Customer::retrieve($id);
     }
 }

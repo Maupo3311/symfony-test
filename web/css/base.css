@@ -62,3 +62,13 @@
     width: 50px;
     text-align: center;
 }
+
+.gold-item{
+    color: #ffc006;
+}
+.silver-item{
+    color: #10afb5f7;
+}
+.bronze-item{
+    color: #efa346;
+}

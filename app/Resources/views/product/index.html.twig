@@ -102,10 +102,10 @@
                                 </div>
                             {% endfor %}
                             <p class="productPrice">Price: ${{ product.price }}</p>
-                            {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-                                {% if product.number != 0 %}
+                                {% if product.number != 0 and is_granted("IS_AUTHENTICATED_REMEMBERED") %}
                                     <form method="POST" action="{{ path('add_product_to_basket', {'id': product.id}) }}">
                                         <span class="add_in_basket">
+                                            <span>Quantity</span>
                                             <input name="number" class="basket-number">
                                             <label for="{{ product.id }}"> <i class="fas fa-cart-plus"></i> </label>
                                             <input class="hidden" id="{{ product.id }}" type="submit">
@@ -118,7 +118,7 @@
                                         </span>
                                     </a>
                                 {% endif %}
-                            {% endif %}
+
                         </div>
                     </div>
                 {% endfor %}

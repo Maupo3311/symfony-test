@@ -50,14 +50,28 @@
             {% endfor %}
         </table>
         <p class="total_price">
-            Final price: ${{ app.user.getTotalPriceBasketProducts() }}
+        {% if app.user.getSubscription() %}
+            <span>
+                {% if app.user.getSubscription() == 'gold'%}
+                    You have 20% discount
+                {% elseif app.user.getSubscription() == 'silver' %}
+                    You have 15% discount
+                {% elseif app.user.getSubscription() == 'bronze' %}
+                    You have 10% discount
+                {% endif %}
+
+                <span id="old-price">${{ app.user.getTotalPriceBasketProducts }}</span><br>
+            </span>
+        {% endif %}
+            Final price: ${{ app.user.getFinalPriceBasketProducts }}
         </p>
 
         <form class="basket_payment" method="post">
             <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
                     data-key="{{ stripe_public_key }}"
                     data-description="Access for a year"
-                    data-amount="{{ app.user.getTotalPriceBasketProducts() * 100 }}"
+                    data-amount="{{ app.user.getFinalPriceBasketProducts * 100 }}"
+                    data-email="{{ app.user.email }}"
                     data-locale="auto"></script>
         </form>
     {% else %}

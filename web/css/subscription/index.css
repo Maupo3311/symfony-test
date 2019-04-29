@@ -1,0 +1,19 @@
+.subscription:hover{
+    background: #d6d6d6;
+}
+.subscription{
+    height: 370px;
+    width: 32%;
+    display: inline-block;
+    background: #ececec;
+    cursor: pointer;
+}
+.subscription-image{
+    height: 50%;
+}
+.delete{
+    position: absolute;
+    bottom: 2%;
+}
+
+

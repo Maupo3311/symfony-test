@@ -6,6 +6,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as BaseUser;
+use Stripe\Customer;
+use Stripe\Stripe;
 
 /**
  * User
@@ -27,9 +29,9 @@ class User extends BaseUser
     /**
      * @var string
      *
-     * @ORM\Column(name="charge_id", type="string", length = 255, nullable = true)
+     * @ORM\Column(name="customer_id", type="string", length = 255, nullable = true)
      */
-    private $chargeId;
+    private $customerId;
 
     /**
      * @var string
@@ -74,17 +76,20 @@ class User extends BaseUser
     /**
      * @return string
      */
-    public function getChargeId()
+    public function getCustomerId()
     {
-        return $this->chargeId;
+        return $this->customerId;
     }
 
     /**
      * @param string $chargeId
+     * @return $this
      */
-    public function setChargeId(string $chargeId)
+    public function setCustomerId(string $chargeId)
     {
-        $this->chargeId = $chargeId;
+        $this->customerId = $chargeId;
+
+        return $this;
     }
 
     /**
@@ -104,6 +109,41 @@ class User extends BaseUser
         $this->comments = $comments;
 
         return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getSubscription()
+    {
+        Stripe::setApiKey('sk_test_WyBgvLS9GfLuCLKCp2Q5Cngc00XGV4hWVX');
+
+        if ($this->getCustomerId()) {
+            $customer = Customer::retrieve($this->getCustomerId());
+
+            foreach ($customer->subscriptions as $subscription) {
+                return $subscription->plan->id;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @return float|int
+     */
+    public function getCoefficient()
+    {
+        switch ($this->getSubscription()){
+            case 'bronze':
+                return 0.9;
+            case 'silver':
+                return 0.85;
+            case 'gold':
+                return 0.8;
+            default:
+                return 1;
+        }
     }
 
     /**
@@ -184,6 +224,14 @@ class User extends BaseUser
         }
 
         return $totalPrice;
+    }
+
+    /**
+     * @return int
+     */
+    public function getFinalPriceBasketProducts()
+    {
+        return round($this->getTotalPriceBasketProducts() * $this->getCoefficient());
     }
 
     /**

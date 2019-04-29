@@ -8,9 +8,12 @@
 
     <br>
     <a href="{{ path('fos_user_profile_edit') }}">
-        <p>Setting...</p>
+        <button class="btn btn-warning center-block"><i class="fas fa-cog"></i> Setting</button>
     </a>
     <a href="{{ path('fos_user_resetting_request') }}">
-        <p>Reset Password...</p>
+        <button class="btn btn-warning center-block"><i class="fas fa-key"></i> Reset Password</button>
+    </a>
+    <a href="{{ path('subscription') }}">
+        <button class="btn btn-success center-block"><i class="fas fa-money-check"></i> Subscriptions</button>
     </a>
 </div>

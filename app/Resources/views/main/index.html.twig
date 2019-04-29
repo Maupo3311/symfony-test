@@ -12,35 +12,36 @@
     <div class="bestProducts">
         <h3 class="center" id="productInput" data-status="open">Top 10 products</h3>
         {% for product in best_products %}
-            <a href="{{ path('product_item', {'id': product.id}) }}" class="noneDecoration">
-                <div class="product">
+            <div class="product">
+                <a href="{{ path('product_item', {'id': product.id}) }}" class="noneDecoration">
                     <div class="productHead">
                         <p class="productTitle">{{ product.title }}</p>
                     </div>
-                    <div class="productBody">
-                        <p class="productDescription">{{ product.description }}</p>
-                        {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-                            {% if product.number != 0 %}
-                                <form method="POST" action="{{ path('add_product_to_basket', {'id': product.id}) }}">
-                                    <span class="add_in_basket">
-                                        <input name="number" class="basket-number">
-                                        <label for="submit"> <i class="fas fa-cart-plus"></i> </label>
-                                        <input class="hidden" id="submit" type="submit">
-                                    </span>
-                                </form>
-                            {% else %}
-                                <a class="noneDecoration" href="{{ path('basket') }}">
-                                    <span class="add_in_basket">
-                                        <i class="fas fa-shopping-cart"></i>
-                                    </span>
-                                </a>
-                            {% endif %}
+                </a>
+                <div class="productBody">
+                    <p class="productDescription">{{ product.description }}</p>
+                    {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                        {% if product.number != 0 %}
+                            <form method="POST" action="{{ path('add_product_to_basket', {'id': product.id}) }}">
+                                <span class="add_in_basket">
+                                    <span>Quantity</span>
+                                    <input name="number" class="basket-number">
+                                    <label for="submit"> <i class="fas fa-cart-plus"></i> </label>
+                                    <input class="hidden" id="submit" type="submit">
+                                </span>
+                            </form>
+                        {% else %}
+                            <a class="noneDecoration" href="{{ path('basket') }}">
+                                <span class="add_in_basket">
+                                    <i class="fas fa-shopping-cart"></i>
+                                </span>
+                            </a>
                         {% endif %}
-                        <p class="productPrice">Price: ${{ product.price }}</p>
-                        <p class="productRating">Rating: {{ product.rating }}</p>
-                    </div>
+                    {% endif %}
+                    <p class="productPrice">Price: ${{ product.price }}</p>
+                    <p class="productRating">Rating: {{ product.rating }}</p>
                 </div>
-            </a>
+            </div>
         {% endfor %}
     </div>
 {% endblock %}

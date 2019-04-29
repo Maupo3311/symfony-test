@@ -9,7 +9,6 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Stripe\ApiResource;
-use Stripe\StripeObject;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,9 +34,9 @@ class BasketController extends Controller
         /** @var User $user */
         $user        = $this->getUser();
         $basketItems = $user->getBasketItems();
+
         /** @var StripeService $stipeService */
         $stipeService = $this->get('app.stripe');
-        $stipeService->setApiKey($this->getParameter('stripe_secret_key'));
 
         /**
          *  If the payment button has been pressed
@@ -46,7 +45,7 @@ class BasketController extends Controller
             $userEmail = ($request->request->get('stripeEmail')) ?: $user->getEmail();
 
             /** @var ApiResource $charge */
-            $charge = $stipeService->createCharge($token, $user->getTotalPriceBasketProducts(), $userEmail);
+            $charge = $stipeService->createCharge($token, $user->getFinalPriceBasketProducts(), $userEmail);
 
             $sellerMessage = $charge->outcome->seller_message;
             if ($sellerMessage === 'Payment complete.') {

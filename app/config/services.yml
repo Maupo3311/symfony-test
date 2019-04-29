@@ -24,6 +24,7 @@ services:
 
     app.stripe:
         class: AppBundle\Services\StripeService
+        arguments: ["%stripe_secret_key%"]
         public: true
 
     app.form.registration:

@@ -57,15 +57,24 @@
                         </a>
                     </li>
                 {% endif %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('basket') }}">
+                        <i class="fas fa-shopping-cart"></i> Basket
+                    </a>
+                </li>
                 {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ path('basket') }}">
-                            <i class="fas fa-shopping-cart"></i> Basket
-                        </a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link" href="{{ path('fos_user_profile_show') }}">
-                            <i class="fas fa-user"></i> {{ app.user.username }}
+                            <span class="
+                                {% if app.user.getSubscription() == 'gold'%}
+                                    gold-item
+                                {% elseif app.user.getSubscription() == 'silver' %}
+                                    silver-item
+                                {% elseif app.user.getSubscription() == 'bronze' %}
+                                    bronze-item
+                                {% endif %}">
+                                <i class="fas fa-user"></i> {{ app.user.username }}
+                            </span>
                         </a>
                     </li>
                 {% endif %}

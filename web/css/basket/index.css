@@ -23,3 +23,8 @@
 .basket_payment{
     float: right;
 }
+
+#old-price{
+    color: #b50505;
+    text-decoration: line-through;
+}
