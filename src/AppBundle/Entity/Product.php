@@ -197,11 +197,14 @@ class Product
     }
 
     /**
-     * @param mixed $rating
+     * @param $rating
+     * @return $this
      */
     public function setRating($rating)
     {
         $this->rating = $rating;
+
+        return $this;
     }
 
     /**

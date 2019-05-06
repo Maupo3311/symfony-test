@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "122979366b837dd961d300f0b4bfa1be",
+    "content-hash": "ccb16dbe1189ba5fa0810281c37ed152",
     "packages": [
         {
             "name": "cocur/slugify",
@@ -997,16 +997,16 @@
         },
         {
             "name": "doctrine/migrations",
-            "version": "v2.0.1",
+            "version": "v2.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/migrations.git",
-                "reference": "2d5c1141e91833ae706d5611cb74c56cdc7a7402"
+                "reference": "43280c14b696a7896a9c70a5e0e4a312ff003187"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/migrations/zipball/2d5c1141e91833ae706d5611cb74c56cdc7a7402",
-                "reference": "2d5c1141e91833ae706d5611cb74c56cdc7a7402",
+                "url": "https://api.github.com/repos/doctrine/migrations/zipball/43280c14b696a7896a9c70a5e0e4a312ff003187",
+                "reference": "43280c14b696a7896a9c70a5e0e4a312ff003187",
                 "shasum": ""
             },
             "require": {
@@ -1075,7 +1075,7 @@
                 "migrations",
                 "php"
             ],
-            "time": "2019-04-23T14:41:17+00:00"
+            "time": "2019-04-25T22:14:55+00:00"
         },
         {
             "name": "doctrine/orm",
@@ -1369,6 +1369,145 @@
                 "rest"
             ],
             "time": "2016-10-17T18:31:11+00:00"
+        },
+        {
+            "name": "friendsofsymfony/oauth-server-bundle",
+            "version": "2.0.0-alpha.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/FriendsOfSymfony/FOSOAuthServerBundle.git",
+                "reference": "e12b077855b278579f97b293184eed2f1cea1acb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSOAuthServerBundle/zipball/e12b077855b278579f97b293184eed2f1cea1acb",
+                "reference": "e12b077855b278579f97b293184eed2f1cea1acb",
+                "shasum": ""
+            },
+            "require": {
+                "friendsofsymfony/oauth2-php": "~1.1",
+                "php": "^7.1",
+                "symfony/dependency-injection": "~3.0|~4.0",
+                "symfony/framework-bundle": "~3.0|~4.0",
+                "symfony/security-bundle": "~3.0|~4.0"
+            },
+            "require-dev": {
+                "doctrine/doctrine-bundle": "~1.0",
+                "doctrine/mongodb-odm": "~1.0",
+                "doctrine/orm": "~2.2",
+                "phing/phing": "~2.4",
+                "php-mock/php-mock-phpunit": "~1.0|~2.0",
+                "phpstan/phpstan-phpunit": "~0.9",
+                "phpstan/phpstan-shim": "~0.9",
+                "phpunit/phpunit": "~5.0|~6.0",
+                "propel/propel1": "~1.6",
+                "symfony/class-loader": "~3.0|~4.0",
+                "symfony/console": "~3.0|~4.0",
+                "symfony/form": "~3.0|~4.0",
+                "symfony/phpunit-bridge": "~3.0|~4.0",
+                "symfony/templating": "~3.0|~4.0",
+                "symfony/twig-bundle": "~3.0|^4.0",
+                "symfony/yaml": "~3.0|~4.0",
+                "willdurand/propel-typehintable-behavior": "~1.0"
+            },
+            "suggest": {
+                "doctrine/doctrine-bundle": "*",
+                "doctrine/mongodb-odm-bundle": "*",
+                "propel/propel-bundle": "If you want to use Propel with Symfony2, then you will have to install the PropelBundle",
+                "symfony/console": "Needed to be able to use commands",
+                "symfony/form": "Needed to be able to use the AuthorizeFormType",
+                "willdurand/propel-typehintable-behavior": "The Typehintable behavior is useful to add type hints on generated methods, to be compliant with interfaces"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "FOS\\OAuthServerBundle\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Arnaud Le Blanc",
+                    "email": "arnaud.lb@gmail.com"
+                },
+                {
+                    "name": "FriendsOfSymfony Community",
+                    "homepage": "https://github.com/FriendsOfSymfony/FOSOAuthServerBundle/contributors"
+                }
+            ],
+            "description": "Symfony2 OAuth Server Bundle",
+            "homepage": "http://friendsofsymfony.github.com",
+            "keywords": [
+                "oauth",
+                "oauth2",
+                "server"
+            ],
+            "time": "2018-05-01T06:24:45+00:00"
+        },
+        {
+            "name": "friendsofsymfony/oauth2-php",
+            "version": "1.2.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/FriendsOfSymfony/oauth2-php.git",
+                "reference": "a41fef63f81ef2ef632350a6c7dc66d15baa9240"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/oauth2-php/zipball/a41fef63f81ef2ef632350a6c7dc66d15baa9240",
+                "reference": "a41fef63f81ef2ef632350a6c7dc66d15baa9240",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.5.9|>=7.0.8",
+                "symfony/http-foundation": "~3.0|~4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.2.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "OAuth2\\": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Arnaud Le Blanc",
+                    "email": "arnaud.lb@gmail.com"
+                },
+                {
+                    "name": "FriendsOfSymfony Community",
+                    "homepage": "https://github.com/FriendsOfSymfony/oauth2-php/contributors"
+                }
+            ],
+            "description": "OAuth2 library",
+            "homepage": "https://github.com/FriendsOfSymfony/oauth2-php",
+            "keywords": [
+                "oauth",
+                "oauth2"
+            ],
+            "time": "2018-01-30T19:58:25+00:00"
         },
         {
             "name": "friendsofsymfony/rest-bundle",
@@ -3742,16 +3881,16 @@
         },
         {
             "name": "sonata-project/core-bundle",
-            "version": "3.16.2",
+            "version": "3.17.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataCoreBundle.git",
-                "reference": "d0f376d0551358609df523d2e63010c5b42c5887"
+                "reference": "af8ba4f76eef8c855302af8b26713cf33be4103d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataCoreBundle/zipball/d0f376d0551358609df523d2e63010c5b42c5887",
-                "reference": "d0f376d0551358609df523d2e63010c5b42c5887",
+                "url": "https://api.github.com/repos/sonata-project/SonataCoreBundle/zipball/af8ba4f76eef8c855302af8b26713cf33be4103d",
+                "reference": "af8ba4f76eef8c855302af8b26713cf33be4103d",
                 "shasum": ""
             },
             "require": {
@@ -3822,7 +3961,7 @@
             "keywords": [
                 "sonata"
             ],
-            "time": "2019-03-12T07:07:16+00:00"
+            "time": "2019-04-24T18:55:18+00:00"
         },
         {
             "name": "sonata-project/datagrid-bundle",
@@ -3885,16 +4024,16 @@
         },
         {
             "name": "sonata-project/doctrine-extensions",
-            "version": "1.2.0",
+            "version": "1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/sonata-doctrine-extensions.git",
-                "reference": "a22ab48341d1a704cdb823d1d721383bf2feba24"
+                "reference": "aab1ede164095afcb1f40253c5d97258b930a433"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/sonata-doctrine-extensions/zipball/a22ab48341d1a704cdb823d1d721383bf2feba24",
-                "reference": "a22ab48341d1a704cdb823d1d721383bf2feba24",
+                "url": "https://api.github.com/repos/sonata-project/sonata-doctrine-extensions/zipball/aab1ede164095afcb1f40253c5d97258b930a433",
+                "reference": "aab1ede164095afcb1f40253c5d97258b930a433",
                 "shasum": ""
             },
             "require": {
@@ -3950,7 +4089,7 @@
                 "doctrine2",
                 "json"
             ],
-            "time": "2019-03-08T06:51:52+00:00"
+            "time": "2019-04-29T17:07:46+00:00"
         },
         {
             "name": "sonata-project/doctrine-orm-admin-bundle",
@@ -4108,16 +4247,16 @@
         },
         {
             "name": "stripe/stripe-php",
-            "version": "v6.33.0",
+            "version": "v6.34.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stripe/stripe-php.git",
-                "reference": "042acd0d1c956a51f447419075d1f23969b0f262"
+                "reference": "8f74cbe130f962d96d4ba92e75a44396a40cf41a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/042acd0d1c956a51f447419075d1f23969b0f262",
-                "reference": "042acd0d1c956a51f447419075d1f23969b0f262",
+                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/8f74cbe130f962d96d4ba92e75a44396a40cf41a",
+                "reference": "8f74cbe130f962d96d4ba92e75a44396a40cf41a",
                 "shasum": ""
             },
             "require": {
@@ -4160,7 +4299,7 @@
                 "payment processing",
                 "stripe"
             ],
-            "time": "2019-04-22T23:29:54+00:00"
+            "time": "2019-05-01T18:14:32+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -4380,7 +4519,7 @@
                 },
                 {
                     "name": "Gert de Pagter",
-                    "email": "backendtea@gmail.com"
+                    "email": "BackEndTea@gmail.com"
                 }
             ],
             "description": "Symfony polyfill for ctype functions",
@@ -4799,16 +4938,16 @@
         },
         {
             "name": "symfony/symfony",
-            "version": "v3.4.26",
+            "version": "v3.4.27",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/symfony.git",
-                "reference": "1b89e7baec9891c323bbf1ec81af77d901fc60c9"
+                "reference": "a9bb1182151d81054800aa4fa2680d92a5928a6a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/symfony/zipball/1b89e7baec9891c323bbf1ec81af77d901fc60c9",
-                "reference": "1b89e7baec9891c323bbf1ec81af77d901fc60c9",
+                "url": "https://api.github.com/repos/symfony/symfony/zipball/a9bb1182151d81054800aa4fa2680d92a5928a6a",
+                "reference": "a9bb1182151d81054800aa4fa2680d92a5928a6a",
                 "shasum": ""
             },
             "require": {
@@ -4827,7 +4966,7 @@
                 "symfony/polyfill-mbstring": "~1.0",
                 "symfony/polyfill-php56": "~1.0",
                 "symfony/polyfill-php70": "~1.6",
-                "twig/twig": "^1.35|^2.4.4"
+                "twig/twig": "^1.40|^2.9"
             },
             "conflict": {
                 "phpdocumentor/reflection-docblock": "<3.0||>=3.2.0,<3.2.2",
@@ -4950,7 +5089,7 @@
             "keywords": [
                 "framework"
             ],
-            "time": "2019-04-17T15:57:27+00:00"
+            "time": "2019-05-01T13:04:01+00:00"
         },
         {
             "name": "twig/extensions",
@@ -5009,16 +5148,16 @@
         },
         {
             "name": "twig/twig",
-            "version": "v2.8.1",
+            "version": "v2.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "91cc2594d3143761ce0399c1caffd0b500ffe5b9"
+                "reference": "82a1c055c8ed4c4705023bfd0405f3c74db6e3ae"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/91cc2594d3143761ce0399c1caffd0b500ffe5b9",
-                "reference": "91cc2594d3143761ce0399c1caffd0b500ffe5b9",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/82a1c055c8ed4c4705023bfd0405f3c74db6e3ae",
+                "reference": "82a1c055c8ed4c4705023bfd0405f3c74db6e3ae",
                 "shasum": ""
             },
             "require": {
@@ -5034,7 +5173,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.8-dev"
+                    "dev-master": "2.9-dev"
                 }
             },
             "autoload": {
@@ -5072,7 +5211,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2019-04-16T17:14:24+00:00"
+            "time": "2019-04-28T06:57:38+00:00"
         },
         {
             "name": "willdurand/jsonp-callback-validator",
@@ -5404,12 +5543,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/djoos/Symfony-coding-standard.git",
-                "reference": "a526278d0864e4d4756f0879576a5abe39e2e2c0"
+                "reference": "19cb6f30babb2cf6285967e67f14d1cb9c8c09f5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/djoos/Symfony-coding-standard/zipball/a526278d0864e4d4756f0879576a5abe39e2e2c0",
-                "reference": "a526278d0864e4d4756f0879576a5abe39e2e2c0",
+                "url": "https://api.github.com/repos/djoos/Symfony-coding-standard/zipball/19cb6f30babb2cf6285967e67f14d1cb9c8c09f5",
+                "reference": "19cb6f30babb2cf6285967e67f14d1cb9c8c09f5",
                 "shasum": ""
             },
             "require": {
@@ -5449,7 +5588,7 @@
                 "phpcs",
                 "symfony"
             ],
-            "time": "2019-04-23T09:06:38+00:00"
+            "time": "2019-04-29T13:28:49+00:00"
         },
         {
             "name": "sensio/generator-bundle",
@@ -5558,7 +5697,7 @@
         },
         {
             "name": "symfony/phpunit-bridge",
-            "version": "v3.4.26",
+            "version": "v3.4.27",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/phpunit-bridge.git",
@@ -5625,6 +5764,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "friendsofsymfony/oauth-server-bundle": 15,
         "friendsofsymfony/user-bundle": 20,
         "escapestudios/symfony2-coding-standard": 20
     },

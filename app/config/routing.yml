@@ -1,3 +1,8 @@
+api:
+    resource: "@ApiBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 admin:
     resource: "@AdminBundle/Controller/"
     type:     annotation
@@ -22,3 +27,8 @@ _sonata_admin:
     resource: .
     type: sonata_admin
     prefix: /admin
+
+fos_oauth_server_token:
+    resource: "@FOSOAuthServerBundle/Resources/config/routing/token.xml"
+fos_oauth_server_authorize:
+    resource: "@FOSOAuthServerBundle/Resources/config/routing/authorize.xml"

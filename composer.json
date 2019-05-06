@@ -5,7 +5,8 @@
     "autoload": {
         "psr-4": {
             "AppBundle\\": "src/AppBundle",
-            "AdminBundle\\": "src/AdminBundle"
+            "AdminBundle\\": "src/AdminBundle",
+            "ApiBundle\\": "src/ApiBundle"
         },
         "classmap": [
             "app/AppKernel.php",
@@ -25,6 +26,7 @@
         "doctrine/doctrine-bundle": "^1.6",
         "doctrine/doctrine-migrations-bundle": "^2.0",
         "doctrine/orm": "^2.5",
+        "friendsofsymfony/oauth-server-bundle": "2.0.0-alpha.0",
         "friendsofsymfony/rest-bundle": "^2.5",
         "friendsofsymfony/user-bundle": "~2.0@dev",
         "incenteev/composer-parameter-handler": "^2.0",
