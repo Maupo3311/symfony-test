@@ -10,11 +10,13 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Hoa\Exception\Exception;
+use Nelmio\ApiDocBundle\Annotation\Model;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use Symfony\Component\BrowserKit\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\View\View;
+use Swagger\Annotations as SWG;
 
 /**
  * Class ProductController
@@ -25,6 +27,24 @@ class ProductController extends BaseController
 {
     /**
      * @Rest\Get("/product")
+     * @SWG\Response(
+     *     response=200,
+     *     description="For stanadrt will return 10 products on 1 page,
+     *          is governed by the parameters limit and page",
+     *     @Model(type=Product::class)
+     * )
+     * @SWG\Parameter(
+     *     name="page",
+     *     in="query",
+     *     type="integer",
+     *     description="Pagination page"
+     * )
+     * @SWG\Parameter(
+     *     name="limit",
+     *     in="query",
+     *     type="integer",
+     *     description="Number of products per page"
+     * )
      * @param Request $request
      * @return View|mixed
      */
@@ -40,7 +60,7 @@ class ProductController extends BaseController
             $restresult = $productRepository->findByPage($page, $limit);
 
             if ($restresult === null) {
-                return $this->errorResponse("products not found", Response::HTTP_NOT_FOUND);
+                return $this->errorResponse("products not found", 404);
             }
         } catch (Exception $exception) {
             return $this->errorResponse($exception->getMessage(), $exception->getCode());
@@ -51,6 +71,11 @@ class ProductController extends BaseController
 
     /**
      * @Rest\get("/product/{id}")
+     * @SWG\Response(
+     *     response=200,
+     *     description="Returns the product with the specified id",
+     *     @Model(type=Product::class)
+     * )
      * @param int $id
      * @return View|object[]
      */
@@ -58,7 +83,7 @@ class ProductController extends BaseController
     {
         $restresult = $this->getDoctrine()->getRepository(Product::class)->find($id);
         if ($restresult === null) {
-            return $this->errorResponse("there are no users exist", Response::HTTP_NOT_FOUND);
+            return $this->errorResponse("there are no users exist", 404);
         }
 
         return $restresult;
@@ -67,7 +92,7 @@ class ProductController extends BaseController
     /**
      * @Rest\Post("/product")
      * @param Request $request
-     * @return View
+     * @return Response
      *
      * @throws ORMException
      * @throws OptimisticLockException
@@ -82,29 +107,29 @@ class ProductController extends BaseController
 
         /** @var Category $category */
         if (!$category = $categoryRepository->find($request->get('category_id'))) {
-            return new View("Category Not Found", Response::HTTP_NOT_FOUND);
+            return $this->errorResponse('Category Not Found', 404);
         };
 
         $product = new Product();
         $product
             ->setTitle($request->get('title'))
-            ->setRating($data['rating'])
-            ->setNumber($data['number'])
-            ->setDescription($data['description'])
+            ->setRating($request->get('rating'))
+            ->setNumber($request->get('number'))
+            ->setDescription($request->get('description'))
             ->setCategory($category)
-            ->setPrice($data['price']);
+            ->setPrice($request->get('price'));
 
         $em->persist($product);
         $em->flush();
 
-        return new View("Product Added Successfully", Response::HTTP_OK);
+        return $this->successResponse('Product Added Successfully');
     }
 
     /**
      * @Rest\Put("/product/{id}")
      * @param int     $id
      * @param Request $request
-     * @return View
+     * @return Response
      *
      * @throws ORMException
      * @throws OptimisticLockException
@@ -119,7 +144,7 @@ class ProductController extends BaseController
 
         /** @var Product $product */
         if (!$product = $productRepository->find($id)) {
-            return new View("Product Not Found", Response::HTTP_NOT_FOUND);
+            return $this->errorResponse('Product Not Found', 404);
         }
 
         $changed = [];
@@ -149,22 +174,22 @@ class ProductController extends BaseController
         $em->flush();
 
         if (empty($changed)) {
-            return new View("Product has not been changed", Response::HTTP_OK);
+            return $this->successResponse('Product has not been changed');
         } else {
-            $string = 'Has been changed in the product: ';
+            $message = 'Has been changed in the product: ';
 
             foreach ($changed as $item){
-                $string .= "{$item}, ";
+                $message .= "{$item}, ";
             }
 
-            return new View($string, Response::HTTP_OK);
+            return $this->successResponse($message);
         }
     }
 
     /**
      * @Rest\Delete("/product/{id}")
      * @param $id
-     * @return View
+     * @return Response
      *
      * @throws ORMException
      * @throws OptimisticLockException
@@ -177,12 +202,12 @@ class ProductController extends BaseController
         $productRepository = $this->getDoctrine()->getRepository(Product::class);
 
         if(!$product = $productRepository->find($id)){
-            return new View("Product Not Found", Response::HTTP_NOT_FOUND);
+            return $this->errorResponse('Product Not Found', 404);
         }
 
         $em->remove($product);
         $em->flush();
 
-        return new View("Product successfully removed", Response::HTTP_OK);
-    }
+        return $this->successResponse('Product successfully removed');
+}
 }

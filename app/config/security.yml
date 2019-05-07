@@ -13,10 +13,6 @@ security:
                 id: fos_user.user_provider.username_email
 
         firewalls:
-            oauth_token: # Everyone can access the access token URL.
-              pattern: ^/oauth/v2/token
-              security: false
-
             main:
                 pattern: ^/
                 form_login:

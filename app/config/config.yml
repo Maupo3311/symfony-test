@@ -97,15 +97,6 @@ fos_user:
         form:
             type: AppBundle\Form\ProfileFormType
 
-fos_oauth_server:
-    db_driver: orm       # Drivers available: orm, mongodb, or propel
-    client_class:        ApiBundle\Entity\Client
-    access_token_class:  ApiBundle\Entity\AccessToken
-    refresh_token_class: ApiBundle\Entity\RefreshToken
-    auth_code_class:     ApiBundle\Entity\AuthCode
-    service:
-        user_provider: fos_user.user_provider.username
-
 sonata_block:
     blocks:
         # enable the SonataAdminBundle block
@@ -116,16 +107,10 @@ sonata_admin:
     templates:
         layout: '%kernel.project_dir%/app/Resources/SonataAdmin/standard_layout.html.twig'
 
-# Nelmio CORS Configuration
-nelmio_cors:
-    defaults:
-        allow_credentials: false
-        allow_origin: ['*']
-        allow_headers: ['*']
-        allow_methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
-        max_age: 3600
-        hosts: []
-        origin_regex: false
+nelmio_api_doc:
+    areas:
+        path_patterns: # an array of regexps
+            - ^/api(?!/doc$)
 
 # FOSRest Configuration
 fos_rest:
