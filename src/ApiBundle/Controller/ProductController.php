@@ -45,6 +45,7 @@ class ProductController extends BaseController
      *     type="integer",
      *     description="Number of products per page"
      * )
+     * @SWG\Tag(name="product")
      * @param Request $request
      * @return View|mixed
      */
@@ -76,6 +77,7 @@ class ProductController extends BaseController
      *     description="Returns the product with the specified id",
      *     @Model(type=Product::class)
      * )
+     * @SWG\Tag(name="product")
      * @param int $id
      * @return View|object[]
      */
@@ -83,7 +85,7 @@ class ProductController extends BaseController
     {
         $restresult = $this->getDoctrine()->getRepository(Product::class)->find($id);
         if ($restresult === null) {
-            return $this->errorResponse("there are no users exist", 404);
+            return $this->errorResponse("there are no product exist", 404);
         }
 
         return $restresult;
@@ -91,6 +93,48 @@ class ProductController extends BaseController
 
     /**
      * @Rest\Post("/product")
+     * @SWG\Response(
+     *     response=200,
+     *     description="Object with success message",
+     *     @Model(type=Product::class)
+     * )
+     * @SWG\Parameter(
+     *     name="title",
+     *     in="query",
+     *     type="string",
+     *     description="Title product"
+     * )
+     * @SWG\Parameter(
+     *     name="rating",
+     *     in="query",
+     *     type="integer",
+     *     description="Ratong product, from 0.00 to 10.00"
+     * )
+     * @SWG\Parameter(
+     *     name="number",
+     *     in="query",
+     *     type="integer",
+     *     description="Quntity product"
+     * )
+     * @SWG\Parameter(
+     *     name="description",
+     *     in="query",
+     *     type="string",
+     *     description="Description product"
+     * )
+     * @SWG\Parameter(
+     *     name="category_id",
+     *     in="query",
+     *     type="integer",
+     *     description="Id of the category in which the product will consist"
+     * )
+     * @SWG\Parameter(
+     *     name="price",
+     *     in="query",
+     *     type="integer",
+     *     description="Price product in dollars"
+     * )
+     * @SWG\Tag(name="product")
      * @param Request $request
      * @return Response
      *
@@ -127,6 +171,48 @@ class ProductController extends BaseController
 
     /**
      * @Rest\Put("/product/{id}")
+     * @SWG\Response(
+     *     response=200,
+     *     description="Object with a message what fields have been changed",
+     *     @Model(type=Product::class)
+     * )
+     * @SWG\Parameter(
+     *     name="title",
+     *     in="query",
+     *     type="string",
+     *     description="Title product"
+     * )
+     * @SWG\Parameter(
+     *     name="rating",
+     *     in="query",
+     *     type="integer",
+     *     description="Ratong product, from 0.00 to 10.00"
+     * )
+     * @SWG\Parameter(
+     *     name="number",
+     *     in="query",
+     *     type="integer",
+     *     description="Quntity product"
+     * )
+     * @SWG\Parameter(
+     *     name="description",
+     *     in="query",
+     *     type="string",
+     *     description="Description product"
+     * )
+     * @SWG\Parameter(
+     *     name="catefory_id",
+     *     in="query",
+     *     type="integer",
+     *     description="Id of the category in which the product will consist"
+     * )
+     * @SWG\Parameter(
+     *     name="price",
+     *     in="query",
+     *     type="integer",
+     *     description="Price product in dollars"
+     * )
+     * @SWG\Tag(name="product")
      * @param int     $id
      * @param Request $request
      * @return Response
@@ -179,7 +265,7 @@ class ProductController extends BaseController
             $message = 'Has been changed in the product: ';
 
             foreach ($changed as $item){
-                $message .= "{$item}, ";
+                $message .= "{$item} ";
             }
 
             return $this->successResponse($message);
@@ -187,7 +273,13 @@ class ProductController extends BaseController
     }
 
     /**
-     * @Rest\Delete("/product/{id}")
+     * @Rest\delete("/product/{id}")
+     * @SWG\Response(
+     *     response=200,
+     *     description="Object with success message",
+     *     @Model(type=Category::class)
+     * )
+     * @SWG\Tag(name="product")
      * @param $id
      * @return Response
      *
@@ -209,5 +301,29 @@ class ProductController extends BaseController
         $em->flush();
 
         return $this->successResponse('Product successfully removed');
-}
+    }
+
+    /**
+     * @Rest\get("/product/{id}/category")
+     * @SWG\Response(
+     *     response=200,
+     *     description="Category this product",
+     *     @Model(type=Category::class)
+     * )
+     * @SWG\Tag(name="product")
+     * @param int $id
+     * @return Category|Response
+     */
+    public function getCategoryByProduct(int $id)
+    {
+        /** @var ProductRepository $productRepository */
+        $productRepository = $this->getDoctrine()->getRepository(Product::class);
+
+        /** @var Product $product */
+        if(!$product = $productRepository->find($id)){
+            return $this->errorResponse('Product Not Found', 404);
+        }
+
+        return $product->getCategory();
+    }
 }

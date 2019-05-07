@@ -12,4 +12,21 @@ use Doctrine\ORM\EntityRepository;
  */
 class CommentRepository extends EntityRepository
 {
+    /**
+     * @param int $page
+     * @param int $theNumberOnThePage
+     * @return mixed
+     */
+    public function findByPage(int $page, int $theNumberOnThePage)
+    {
+        $lastResult  = $page * $theNumberOnThePage;
+        $firstResult = $lastResult - $theNumberOnThePage;
+
+        return $this
+            ->createQueryBuilder('c')
+            ->setFirstResult($firstResult)
+            ->setMaxResults($theNumberOnThePage)
+            ->getQuery()
+            ->getResult();
+    }
 }
