@@ -2,6 +2,8 @@
 
 namespace AppBundle\Repository;
 
+use Doctrine\ORM\NonUniqueResultException;
+
 /**
  * UserRepository
  *
@@ -10,5 +12,36 @@ namespace AppBundle\Repository;
  */
 class UserRepository extends \Doctrine\ORM\EntityRepository
 {
+    /**
+     * @param int $page
+     * @param int $theNumberOnThePage
+     * @return mixed
+     */
+    public function findByPage(int $page, int $theNumberOnThePage)
+    {
+        $lastResult  = $page * $theNumberOnThePage;
+        $firstResult = $lastResult - $theNumberOnThePage;
 
+        return $this
+            ->createQueryBuilder('u')
+            ->setFirstResult($firstResult)
+            ->setMaxResults($theNumberOnThePage)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @param $username
+     * @return mixed
+     * @throws NonUniqueResultException
+     */
+    public function findByUsername($username)
+    {
+        return $this
+            ->createQueryBuilder('u')
+            ->where('u.username = :username')
+            ->setParameter('username', $username)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }

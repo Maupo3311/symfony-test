@@ -33,18 +33,21 @@ class BaseFixtures extends Fixture
         $user->setEmail('maupo3311@mail.ru');
         $user->setPassword(password_hash("password1234", PASSWORD_DEFAULT));
         $user->setEnabled(true);
+        $user->setApiKey(md5('admin'));
         $users[] = $user;
         $manager->persist($user);
 
         for ($i = 0; $i < 20; $i++) {
+            $username = rand(1, 100000);
             $user = new User();
             $user->setFirstName('name' . mt_rand(1, 99));
             $user->setLastName('surname' . mt_rand(1, 99));
-            $user->setUsername(rand(1, 100000));
+            $user->setUsername($username);
             $user->addRole('ROLE_USER');
             $user->setEmail(rand(10000, 600000) . '@mail.ru');
             $user->setPassword(md5($i));
             $user->setEnabled(true);
+            $user->setApiKey(md5($username));
             $users[] = $user;
             $manager->persist($user);
         }

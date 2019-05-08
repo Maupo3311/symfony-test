@@ -52,7 +52,7 @@ class ProductController extends BaseController
     public function getAllAction(Request $request)
     {
         try {
-            $page = $request->get('page') ?: 1;
+            $page  = $request->get('page') ?: 1;
             $limit = $request->get('limit') ?: 10;
 
             /** @var ProductRepository $productRepository */
@@ -235,23 +235,23 @@ class ProductController extends BaseController
 
         $changed = [];
 
-        if ($request->get('title')){
+        if ($request->get('title')) {
             $product->setTitle($request->get('title'));
             $changed[] = 'title';
         }
-        if ($request->get('description')){
+        if ($request->get('description')) {
             $product->setDescription($request->get('description'));
             $changed[] = 'description';
         }
-        if ($request->get('price')){
+        if ($request->get('price')) {
             $product->setPrice($request->get('price'));
             $changed[] = 'price';
         }
-        if ($request->get('rating')){
+        if ($request->get('rating')) {
             $product->setRating($request->get('rating'));
             $changed[] = 'rating';
         }
-        if ($request->get('number')){
+        if ($request->get('number')) {
             $product->setNumber($request->get('number'));
             $changed[] = 'number';
         }
@@ -264,7 +264,7 @@ class ProductController extends BaseController
         } else {
             $message = 'Has been changed in the product: ';
 
-            foreach ($changed as $item){
+            foreach ($changed as $item) {
                 $message .= "{$item} ";
             }
 
@@ -286,14 +286,15 @@ class ProductController extends BaseController
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function deleteAction($id){
+    public function deleteAction($id)
+    {
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
 
         /** @var ProductRepository $productRepository */
         $productRepository = $this->getDoctrine()->getRepository(Product::class);
 
-        if(!$product = $productRepository->find($id)){
+        if (!$product = $productRepository->find($id)) {
             return $this->errorResponse('Product Not Found', 404);
         }
 
@@ -320,7 +321,7 @@ class ProductController extends BaseController
         $productRepository = $this->getDoctrine()->getRepository(Product::class);
 
         /** @var Product $product */
-        if(!$product = $productRepository->find($id)){
+        if (!$product = $productRepository->find($id)) {
             return $this->errorResponse('Product Not Found', 404);
         }
 

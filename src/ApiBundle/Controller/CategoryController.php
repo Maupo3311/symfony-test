@@ -10,7 +10,6 @@ use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Hoa\Exception\Exception;
 use Nelmio\ApiDocBundle\Annotation\Model;
-use phpDocumentor\Reflection\DocBlock\Tags\Deprecated;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\BrowserKit\Response;

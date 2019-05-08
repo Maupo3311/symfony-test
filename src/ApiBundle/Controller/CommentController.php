@@ -2,11 +2,9 @@
 
 namespace ApiBundle\Controller;
 
-use AppBundle\Entity\Category;
 use AppBundle\Entity\Comment;
 use AppBundle\Entity\Product;
 use AppBundle\Entity\User;
-use AppBundle\Repository\CategoryRepository;
 use AppBundle\Repository\CommentRepository;
 use AppBundle\Repository\ProductRepository;
 use AppBundle\Repository\UserRepository;
@@ -56,7 +54,7 @@ class CommentController extends BaseController
     public function getAllAction(Request $request)
     {
         try {
-            $page = $request->get('page') ?: 1;
+            $page  = $request->get('page') ?: 1;
             $limit = $request->get('limit') ?: 10;
 
             /** @var CommentRepository $commentRepository */
@@ -210,14 +208,15 @@ class CommentController extends BaseController
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function deleteAction($id){
+    public function deleteAction($id)
+    {
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
 
         /** @var CommentRepository $commentRepository */
         $commentRepository = $this->getDoctrine()->getRepository(Comment::class);
 
-        if(!$comment = $commentRepository->find($id)){
+        if (!$comment = $commentRepository->find($id)) {
             return $this->errorResponse('Comment Not Found', 404);
         }
 

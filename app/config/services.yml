@@ -18,6 +18,11 @@ services:
         # if you need to do this, you can override this setting on individual services
         public: false
 
+    api_key_authenticator:
+        class: AppBundle\Security\TokenAuthenticator
+        arguments: ["@router"]
+        public: true
+
     app.pagination:
         class: AppBundle\Services\PaginationService
         public: true

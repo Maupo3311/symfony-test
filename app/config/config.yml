@@ -111,6 +111,11 @@ nelmio_api_doc:
     areas:
         path_patterns: # an array of regexps
             - ^/api(?!/doc$)
+    documentation:
+        info:
+            title: New Project
+            description: New project api documentation!
+            version: 2.0.0
 
 # FOSRest Configuration
 fos_rest:
