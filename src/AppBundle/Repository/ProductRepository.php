@@ -78,6 +78,8 @@ class ProductRepository extends EntityRepository
     }
 
     /**
+     * Quantity all products
+     *
      * @param array $where
      * @return mixed
      * @throws NonUniqueResultException
@@ -106,6 +108,8 @@ class ProductRepository extends EntityRepository
     }
 
     /**
+     * Find product by rating
+     *
      * @return mixed
      */
     public function findByRating()

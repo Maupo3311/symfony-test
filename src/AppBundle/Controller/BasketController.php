@@ -23,6 +23,8 @@ use Symfony\Component\Routing\Annotation\Route;
 class BasketController extends Controller
 {
     /**
+     * Shows the user's basket
+     *
      * @Route("/", name="basket")
      * @param Request $request
      * @return Response
@@ -78,6 +80,8 @@ class BasketController extends Controller
     }
 
     /**
+     * Removes the product item from the basket
+     *
      * @Route("/delete-item/{id}", name="delete_basket_item")
      * @param Basket $basketItem
      * @return RedirectResponse
@@ -104,6 +108,8 @@ class BasketController extends Controller
     }
 
     /**
+     * Completely clears the basket
+     *
      * @Route("/delete-items", name="delete_basket_items")
      * @return RedirectResponse
      * @throws ORMException

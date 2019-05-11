@@ -25,6 +25,8 @@ use Symfony\Component\Routing\Annotation\Route;
 class SubscriptionController extends Controller
 {
     /**
+     * Page with available subscriptions
+     *
      * @Route("/", name="subscription")
      * @param Request $request
      * @return RedirectResponse|Response
@@ -85,6 +87,8 @@ class SubscriptionController extends Controller
     }
 
     /**
+     * Unsubscribe
+     *
      * @Route("/delete", name="delete_subscription")
      * @param Request $request
      * @return RedirectResponse

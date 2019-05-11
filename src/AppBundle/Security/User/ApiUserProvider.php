@@ -3,18 +3,59 @@
 namespace AppBundle\Security\User;
 
 use AppBundle\Entity\User;
+use AppBundle\Repository\UserRepository;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
+/**
+ * Class ApiUserProvider
+ * @package AppBundle\Security\User
+ */
 class ApiUserProvider implements UserProviderInterface
 {
+    /**
+     * @var EntityManager EntityManager
+     */
+    public $entityManager;
+
+    /**
+     * ApiUserProvider constructor.
+     * @param EntityManager $entityManager
+     */
+    public function __construct(EntityManager $entityManager)
+    {
+        $this->entityManager = $entityManager;
+    }
+
+    /**
+     * @param string $username
+     * @return mixed|UserInterface
+     * @throws NonUniqueResultException
+     */
     public function loadUserByUsername($username)
     {
         return $this->fetchUser($username);
     }
 
+    /**
+     * @param $apiKey
+     * @return mixed
+     * @throws NonUniqueResultException
+     */
+    public function loadUserByApiKey($apiKey)
+    {
+        return $this->fetchUser($apiKey);
+    }
+
+    /**
+     * @param UserInterface $user
+     * @return mixed|UserInterface
+     * @throws NonUniqueResultException
+     */
     public function refreshUser(UserInterface $user)
     {
         if (!$user instanceof User) {
@@ -28,27 +69,33 @@ class ApiUserProvider implements UserProviderInterface
         return $this->fetchUser($username);
     }
 
+    /**
+     * @param string $class
+     * @return bool
+     */
     public function supportsClass($class)
     {
         return User::class === $class;
     }
 
-    private function fetchUser($username)
+    /**
+     * @param $usernameOrApiKey
+     * @return mixed
+     * @throws NonUniqueResultException
+     */
+    private function fetchUser($usernameOrApiKey)
     {
-//        // make a call to your webservice here
-//        $userData = ...
-//        // pretend it returns an array on success, false if there is no user
-//
-//        if ($userData) {
-//            $password = '...';
-//
-//            // ...
-//
-//            return new User();
-//        }
+        /** @var UserRepository $userRepository */
+        $userRepository = $this->entityManager->getRepository(User::class);
 
-        throw new UsernameNotFoundException(
-            sprintf('Username "%s" does not exist.', $username)
-        );
+        if (!$user = $userRepository->findByApiKey($usernameOrApiKey)) {
+            if (!$user = $userRepository->findByUsername($usernameOrApiKey)) {
+                throw new UsernameNotFoundException(
+                    sprintf('Username "%s" does not exist.', $usernameOrApiKey)
+                );
+            }
+        }
+
+        return $user;
     }
 }

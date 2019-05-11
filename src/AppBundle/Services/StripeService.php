@@ -75,8 +75,8 @@ class StripeService
     public function createSubscription(StripeObject $customer, Plan $plan)
     {
         return Subscription::create([
-            'customer'  => $customer->id,
-            'items'     => [
+            'customer' => $customer->id,
+            'items'    => [
                 ['plan' => $plan->id],
             ],
         ]);

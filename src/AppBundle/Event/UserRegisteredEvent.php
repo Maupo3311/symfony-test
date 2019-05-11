@@ -6,6 +6,10 @@ use AppBundle\Entity\User;
 use Symfony\Component\EventDispatcher\Event;
 use Swift_Mailer;
 
+/**
+ * Class UserRegisteredEvent
+ * @package AppBundle\Event
+ */
 class UserRegisteredEvent extends Event
 {
     const EVENT_NAME = 'successful.registration.message';

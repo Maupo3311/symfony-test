@@ -35,9 +35,13 @@ final class ProductAdmin extends AbstractAdmin
             ->add('price')
             ->add('description', TextareaType::class)
             ->add('active', BooleanType::class)
-            ->add('rating');
+            ->add('rating')
+            ->add('number');
 
-        if ($this->getRoot()->getClass() === 'AppBundle\Entity\Product') {
+        $requestUri = $this->getRequest()->getRequestUri();
+        $productId = basename(str_replace('/edit', '', $requestUri));
+
+        if ($this->getRoot()->getClass() === 'AppBundle\Entity\Product' && $productId != 'create') {
             $formMapper->
                 add('images', CollectionType::class, [
                     'required' => false,

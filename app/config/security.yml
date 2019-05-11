@@ -9,12 +9,25 @@ security:
             ROLE_SUPER_ADMIN: ROLE_ADMIN
 
         providers:
+            chain_provider:
+                chain:
+                  providers: [fos_userbundle, api_user_provider]
             fos_userbundle:
                 id: fos_user.user_provider.username_email
             api_user_provider:
-                id: AppBundle\Security\User\ApiUserProvider
+                id: api_user_provider
+#                entity:
+#                    class: AppBundle:User
+#                    property: apiKey
 
         firewalls:
+            api:
+                pattern: ^/api/
+                stateless: true
+                guard:
+                    authenticator: api_key_authenticator
+                provider: api_user_provider
+                anonymous: true
             main:
                 pattern: ^/
                 form_login:
@@ -27,13 +40,6 @@ security:
                   path: fos_user_security_logout
                   target: /
                 anonymous: true
-            api:
-                pattern: ^/api/
-                stateless: true
-                simple_preauth:
-                  authenticator: AppBundle\Security\TokenAuthenticator
-                provider: api_user_provider
-
 
         access_control:
             - { path: ^/user/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
@@ -45,4 +51,4 @@ security:
             - { path: ^/user/profile/, role: ROLE_USER }
             - { path: ^/basket/, role: ROLE_USER }
             - { path: ^/product/add-to-basket/, role: ROLE_USER }
-#            - { path: ^/api, roles: ROLE_USER }
+            - { path: ^/api, role: ROLE_USER }

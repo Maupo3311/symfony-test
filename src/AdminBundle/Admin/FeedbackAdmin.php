@@ -37,13 +37,19 @@ final class FeedbackAdmin extends AbstractAdmin
                 'choice_label' => 'username',
             ])
             ->add('message', TextareaType::class)
-            ->add('created')
-            ->add('images', CollectionType::class, [
+            ->add('created');
+
+        $requestUri = $this->getRequest()->getRequestUri();
+        $feedbackId = basename(str_replace('/edit', '', $requestUri));
+
+        if ($feedbackId != 'create') {
+            $formMapper->add('images', CollectionType::class, [
                 'required' => false,
             ], [
-                'edit' => 'inline',
+                'edit'     => 'inline',
                 'sortable' => 'position',
             ]);
+        }
     }
 
     /**
@@ -74,46 +80,6 @@ final class FeedbackAdmin extends AbstractAdmin
             foreach ($object->getImages() as $attachedFile) {
                 $attachedFile->setCreatedAt(new \DateTime());
             }
-        }
-    }
-
-    /**
-     * Takes an image from a one-time feedback
-     *
-     * @param Feedback $object
-     * @throws ORMException
-     * @throws OptimisticLockException
-     */
-    public function postPersist($object)
-    {
-        /** @var ModelManager $modelManager */
-        $modelManager = $this->modelManager;
-
-        /** @var EntityManager $em */
-        $feedbackManager         = $modelManager->getEntityManager(Feedback::class);
-        $FeedbackImageRepository = $modelManager
-            ->getEntityManager(FeedbackImage::class)
-            ->getRepository(FeedbackImage::class);
-
-        /** @var FeedbackRepository $FeedbackRepository */
-        $FeedbackRepository = $feedbackManager
-            ->getRepository(Feedback::class);
-
-        $uploadFeedbacks = $FeedbackRepository->findUploadFeedback();
-        /** @var Feedback $uploadFeedback */
-        foreach ($uploadFeedbacks as $uploadFeedback) {
-            /** @var FeedbackImage $image */
-            $image = $FeedbackImageRepository->findOneBy(['feedback' => $uploadFeedback]);
-
-            if ($image) {
-                $image->setFeedback($object);
-                $object->addImages($image);
-                $feedbackManager->persist($object);
-            }
-
-            $feedbackManager->flush();
-            $feedbackManager->remove($uploadFeedback);
-            $feedbackManager->flush();
         }
     }
 }

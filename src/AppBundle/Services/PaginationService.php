@@ -9,6 +9,8 @@ namespace AppBundle\Services;
 class PaginationService
 {
     /**
+     * Get pagination position
+     *
      * @param $page
      * @param $numberOfPages
      * @return array
@@ -33,6 +35,8 @@ class PaginationService
             $position = [4, 0];
         } elseif ($page - 1 == 1) {
             $position = [1, 3];
+        } else {
+            $position = [2, 2];
         }
 
         return $position;

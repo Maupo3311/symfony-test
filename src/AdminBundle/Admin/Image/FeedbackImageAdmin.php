@@ -21,8 +21,6 @@ class FeedbackImageAdmin extends AbstractAdmin
 {
     /**
      * @return FeedbackImage|mixed
-     * @throws ORMException
-     * @throws OptimisticLockException
      */
     public function getNewInstance()
     {
@@ -42,26 +40,7 @@ class FeedbackImageAdmin extends AbstractAdmin
                     ->getEntityManager(Feedback::class)
                     ->getRepository(Feedback::class);
 
-                $em = $modelManager
-                    ->getEntityManager(Feedback::class);
-
-                /** If the url id has no feedback he will give 'create' */
-                if ($feedbackId == 'create') {
-                    /**
-                     * Create a one-time feedback to save the image.
-                     * Fill it with special values, which then will find him
-                     */
-                    $feedback      = new Feedback();
-                    $specialValues = '71afcc102de47d1d70e45d6179cd496424d8498c';
-                    $feedback
-                        ->setName($specialValues)
-                        ->setMessage($specialValues)
-                        ->setEmail($specialValues . '@mail.ru');
-                    $em->persist($feedback);
-                    $em->flush();
-                } else {
-                    $feedback = $feedbackRepository->find($feedbackId);
-                }
+                $feedback = $feedbackRepository->find($feedbackId);
             }
         }
 

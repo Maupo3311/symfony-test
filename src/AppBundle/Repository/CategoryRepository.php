@@ -14,6 +14,8 @@ use Doctrine\ORM\NonUniqueResultException;
 class CategoryRepository extends EntityRepository
 {
     /**
+     * Quantity all categories
+     *
      * @return mixed
      * @throws NonUniqueResultException
      */

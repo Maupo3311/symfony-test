@@ -69,7 +69,7 @@ class Product
      *      mappedBy="product"
      * )
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="images_id", referencedColumnName="id", nullable=false)
+     *   @ORM\JoinColumn(name="images_id", referencedColumnName="id", nullable=true)
      * })
      */
     public $images;
@@ -178,10 +178,10 @@ class Product
     }
 
     /**
-     * @param array $basketItems
+     * @param  $basketItems
      * @return Product
      */
-    public function setBasketItems(array $basketItems)
+    public function setBasketItems($basketItems)
     {
         $this->basketItems = $basketItems;
 
@@ -339,10 +339,10 @@ class Product
     }
 
     /**
-     * @param array $images
+     * @param  $images
      * @return $this
      */
-    public function setImages(array $images)
+    public function setImages($images)
     {
         $this->images = $images;
 

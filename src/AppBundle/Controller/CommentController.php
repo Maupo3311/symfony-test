@@ -20,6 +20,8 @@ use Symfony\Component\Routing\Annotation\Route;
 class CommentController extends Controller
 {
     /**
+     * Deletes the comment
+     *
      * @Route("/delete/{id}/{productId}", name="comment_delete")
      * @param Comment $comment
      * @param Int     $productId

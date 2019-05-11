@@ -128,27 +128,27 @@
 
             {% if numberOfPages > 1 %}
                 <div class="center-block center">
-                    <a href="?page=1">
+                    <a href="?page=1&sort={{ current_field }}&order={{ current_order }}">
                         <b> << </b>
                     </a>
 
-                    <a href="?page={% if page == 1 %}{{ 1 }}{% else %}{{ page - 1 }}{% endif %}">
+                    <a href="?page={% if page == 1 %}{{ 1 }}{% else %}{{ page - 1 }}{% endif %}&sort={{ current_field }}&order={{ current_order }}">
                         <b> < </b>
                     </a>
 
                     <span>
                         {% for number in page-position[0]..page+position[1] if number <= numberOfPages %}
-                            <a href="?page={{ number }}" class="{% if number == page %}{{ 'noneDecoration' }}{% endif %}">
+                            <a href="?page={{ number }}&sort={{ current_field }}&order={{ current_order }}" class="{% if number == page %}{{ 'noneDecoration' }}{% endif %}">
                                 <span>{{ number }}</span>
                             </a>
                         {% endfor %}
                     </span>
 
-                    <a href="?page={% if page >= numberOfPages %}{{ page }}{% else %}{{ page + 1 }}{% endif %}">
+                    <a href="?page={% if page >= numberOfPages %}{{ page }}{% else %}{{ page + 1 }}{% endif %}&sort={{ current_field }}&order={{ current_order }}">
                         <b> > </b>
                     </a>
 
-                    <a href="?page= {{ numberOfPages }}">
+                    <a href="?page= {{ numberOfPages }}&sort={{ current_field }}&order={{ current_order }}">
                         <b> >> </b>
                     </a>
                 </div>

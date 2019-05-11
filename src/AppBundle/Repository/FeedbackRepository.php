@@ -34,6 +34,8 @@ class FeedbackRepository extends EntityRepository
     }
 
     /**
+     * Quantity all feedbacks
+     *
      * @return mixed
      * @throws NonUniqueResultException
      */
@@ -44,22 +46,5 @@ class FeedbackRepository extends EntityRepository
             ->select('count(f.id)')
             ->getQuery()
             ->getSingleScalarResult();
-    }
-
-    /**
-     * @return mixed
-     */
-    public function findUploadFeedback()
-    {
-        $specialValues = '71afcc102de47d1d70e45d6179cd496424d8498c';
-
-        return $this
-            ->createQueryBuilder('f')
-            ->where('f.name=:name')
-            ->andWhere('f.email=:email')
-            ->andWhere('f.message=:message')
-            ->setParameters(['name' => $specialValues, 'email' => $specialValues . '@mail.ru', 'message' => $specialValues])
-            ->getQuery()
-            ->getResult();
     }
 }

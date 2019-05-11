@@ -7,10 +7,15 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
 
+/**
+ * Class TokenAuthenticator
+ * @package AppBundle\Security
+ */
 class TokenAuthenticator extends AbstractGuardAuthenticator
 {
     /**
@@ -23,7 +28,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
      */
     public function supports(Request $request)
     {
-        return $request->headers->has('X-AUTH-TOKEN');
+        return ($request->headers->has('X-AUTH-TOKEN') || $request->query->has('token')) ? true : false;
     }
 
     /**
@@ -35,9 +40,18 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
      */
     public function getCredentials(Request $request)
     {
+        if (!$token = $request->headers->get('X-AUTH-TOKEN')) {
+            $token = $request->query->get('token');
+        }
+
+        if ($token == 'ILuvAPIs') {
+            throw new CustomUserMessageAuthenticationException(
+                'ILuvAPIs is not a real API key: it\'s just a silly phrase'
+            );
+        }
+
         return [
-            'token'    => $request->headers->get('X-AUTH-TOKEN'),
-            'password' => $request->get('password'),
+            'token' => $token,
         ];
     }
 
@@ -54,7 +68,6 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
             return;
         }
 
-        // if a User object, checkCredentials() is called
         return $userProvider->loadUserByUsername($apiKey);
     }
 
@@ -65,10 +78,10 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
      */
     public function checkCredentials($credentials, UserInterface $user)
     {
-        if($credentials['password'] === $user->getPassword()){
-            return true;
-        }
-        return false;
+//        if($credentials['password'] === $user->getPassword()){
+//            return true;
+//        }
+        return true;
     }
 
     /**
@@ -109,7 +122,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
     {
         $data = [
             // you might translate this message
-            'message' => 'Authentication Required'
+            'message' => 'Authentication Required',
         ];
 
         return new JsonResponse($data, Response::HTTP_UNAUTHORIZED);

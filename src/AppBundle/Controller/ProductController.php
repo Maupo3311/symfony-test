@@ -183,6 +183,8 @@ class ProductController extends Controller
     }
 
     /**
+     * Adds the product to the user's basket
+     *
      * @Route("/add-to-basket/{id}", name="add_product_to_basket")
      * @param Product $product
      * @param Request $request

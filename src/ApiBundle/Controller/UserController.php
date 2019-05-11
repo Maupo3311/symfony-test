@@ -17,6 +17,7 @@ use Symfony\Component\BrowserKit\Response;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\View\View;
 use Swagger\Annotations as SWG;
+use Symfony\Component\Security\Core\Authentication\Token\PreAuthenticatedToken;
 use Symfony\Component\Security\Guard\Token\PostAuthenticationGuardToken;
 
 /**
@@ -308,6 +309,12 @@ class UserController extends BaseController
      *     type="string",
      *     description="User login"
      * )
+     *  @SWG\Parameter(
+     *     name="password",
+     *     in="query",
+     *     type="string",
+     *     description="User password"
+     * )
      * @SWG\Tag(name="user")
      * @param Request $request
      * @return string|Response
@@ -323,48 +330,31 @@ class UserController extends BaseController
             return $this->errorResponse('A user with this username does not exist', 404);
         }
 
-//        if ($user->getPassword() != password_hash($request->get('password'), PASSWORD_DEFAULT)){
-//            return $this->errorResponse('Wrong password', 400);
-//        }
+        if ($user->getPassword() != password_hash($request->get('password'), PASSWORD_DEFAULT)) {
+            return $this->errorResponse('Wrong password', 400);
+        }
 
         return $user->getApiKey();
     }
 
     /**
-     * @Rest\get("/get-user-token-test")
+     * @Rest\Get("/me")
      * @SWG\Response(
      *     response=200,
-     *     description="Return user token",
-     * )
-     * @SWG\Parameter(
-     *     name="username",
-     *     in="query",
-     *     type="string",
-     *     description="User login"
+     *     description="Return your entity user"
      * )
      * @SWG\Tag(name="user")
-     * @param Request $request
-     * @return string|Response
-     * @throws NonUniqueResultException
      */
-    public function testGetTokenAction(Request $request)
+    public function getMeAction()
     {
-        /** @var TokenAuthenticator $tokenAuth */
-        $tokenAuth = $this->get('api_key_authenticator');
+        return $this->getUser();
+    }
 
-        /** @var UserRepository $userRepository */
-        $userRepository = $this->getDoctrine()->getRepository(User::class);
-
-        /** @var User $user */
-        if (!$user = $userRepository->findByUsername($request->get('username'))) {
-            return $this->errorResponse('A user with this username does not exist', 404);
-        }
-
-//        if ($user->getPassword() != password_hash($request->get('password'), PASSWORD_DEFAULT)){
-//            return $this->errorResponse('Wrong password', 400);
-//        }
-
-
-        return $tokenAuth->createAuthenticatedToken($user, 'api_user_provider');
+    /**
+     * @return mixed
+     */
+    public function getBasketItems()
+    {
+        return $this->getUser()->getBasketProducts();
     }
 }

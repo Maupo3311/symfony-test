@@ -114,8 +114,17 @@ nelmio_api_doc:
     documentation:
         info:
             title: New Project
-            description: New project api documentation!
+            description: This api documentation new project
             version: 2.0.0
+        securityDefinitions:
+            Bearer:
+                type: apiKey
+                description: 'Your api key'
+                name: X-AUTH-TOKEN
+                in: header
+        security:
+            - Bearer: []
+
 
 # FOSRest Configuration
 fos_rest:

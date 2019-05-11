@@ -5,9 +5,15 @@ namespace ApiBundle\Controller;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\BrowserKit\Response;
 
+/**
+ * Class BaseController
+ * @package ApiBundle\Controller
+ */
 class BaseController extends FOSRestController
 {
     /**
+     * Is called for a successful conclusion
+     *
      * @param $message
      * @return Response
      */
@@ -17,6 +23,8 @@ class BaseController extends FOSRestController
     }
 
     /**
+     * Called to output an error
+     *
      * @param     $error
      * @param int $code
      * @return Response
