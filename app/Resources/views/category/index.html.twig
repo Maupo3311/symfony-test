@@ -13,7 +13,7 @@
 
         <div class="list-group">
             <a href="#" class="list-group-item list-group-item-action active">
-                Categories, page = {{ page }}
+                Categories, page {{ page }}
             </a>
             {% for category in categories %}
                 <a href="{{ path('show_by_category', {id: category.id}) }}" class="list-group-item list-group-item-action">{{ category.name }}</a>
