@@ -2,6 +2,7 @@
 
 namespace AppBundle\Form;
 
+use AppBundle\Entity\Feedback;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -17,8 +18,9 @@ class FeedbackType extends AbstractType
         $builder
             ->add('message')
             ->add('images', FileType::class, [
-                'multiple' => true,
+                'multiple'   => true,
                 'data_class' => null,
+                'required'   => false,
             ]);
     }
 
@@ -28,7 +30,7 @@ class FeedbackType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\Feedback'
+            'data_class' => Feedback::class
         ));
     }
 

@@ -72,3 +72,8 @@
 .bronze-item{
     color: #efa346;
 }
+
+.label-button{
+    height: 38px;
+    cursor: pointer;
+}

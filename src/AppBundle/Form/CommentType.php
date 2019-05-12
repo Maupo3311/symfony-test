@@ -21,8 +21,9 @@ class CommentType extends AbstractType
         $builder
             ->add('message', null, ['label' => 'Comment'])
             ->add('images', FileType::class, [
-                'multiple' => true,
+                'multiple'   => true,
                 'data_class' => null,
+                'required'   => false,
             ]);
     }
 

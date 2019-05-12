@@ -88,7 +88,7 @@ class ProductController extends Controller
         $user = $this->getUser();
 
         $form = $this->createForm(CommentType::class);
-        $form->add('Post', SubmitType::class, ['attr' => ['class' => 'btn btn-info pull-right']]);
+        $form->add('submit', SubmitType::class, ['attr' => ['class' => 'btn btn-info pull-right']]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

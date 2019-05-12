@@ -68,6 +68,19 @@
     {% endif %}
 
     {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-        {{ form(formView) }}
+        {{ form_start(formView) }}
+            {{ form_label(formView.message) }}
+            {{ form_widget(formView.message) }}
+            {{ form_errors(formView.message) }}
+
+            {{ form_widget(formView.submit) }}
+            <div class="label-button btn btn-success">{{ form_label(formView.images) }}</div>
+
+            <div class="hidden">
+                {{ form_widget(formView.images) }}
+            </div>
+            {{ form_errors(formView.images) }}
+        {{ form_end(formView) }}
     {% endif %}
+    <br><br><br><br><br><br><br><br>
 {% endblock %}

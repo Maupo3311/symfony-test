@@ -42,7 +42,7 @@ class Feedback
     /**
      * @var string
      * @Assert\NotBlank
-     * @ORM\Column(name="message", type="text", nullable=true)
+     * @ORM\Column(name="message", type="text", nullable=false)
      */
     private $message;
 
@@ -63,7 +63,7 @@ class Feedback
      *      mappedBy="feedback"
      * )
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="images_id", referencedColumnName="id", nullable=false)
+     *   @ORM\JoinColumn(name="images_id", referencedColumnName="id", nullable=true)
      * })
      */
     public $images;
