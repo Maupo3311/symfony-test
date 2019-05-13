@@ -9,7 +9,6 @@ use AppBundle\Repository\ProductRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
-use Hoa\Exception\Exception;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -26,7 +25,7 @@ use Swagger\Annotations as SWG;
 class ProductController extends BaseController
 {
     /**
-     * @Rest\Get("/product")
+     * @Rest\Get("/product-list")
      * @SWG\Response(
      *     response=200,
      *     description="For stanadrt will return 10 products on 1 page,
@@ -63,7 +62,7 @@ class ProductController extends BaseController
             if ($restresult === null) {
                 return $this->errorResponse("products not found", 404);
             }
-        } catch (Exception $exception) {
+        } catch (\Exception $exception) {
             return $this->errorResponse($exception->getMessage(), $exception->getCode());
         }
 
@@ -295,7 +294,7 @@ class ProductController extends BaseController
         $productRepository = $this->getDoctrine()->getRepository(Product::class);
 
         if (!$product = $productRepository->find($id)) {
-            return $this->errorResponse('Product Not Found', 404);
+            return $this->errorResponse('product not found', 404);
         }
 
         $em->remove($product);
@@ -315,7 +314,7 @@ class ProductController extends BaseController
      * @param int $id
      * @return Category|Response
      */
-    public function getCategoryByProduct(int $id)
+    public function getCategory(int $id)
     {
         /** @var ProductRepository $productRepository */
         $productRepository = $this->getDoctrine()->getRepository(Product::class);

@@ -112,6 +112,8 @@ nelmio_api_doc:
         path_patterns: # an array of regexps
             - ^/api(?!/doc$)
     documentation:
+        host: 127.0.0.1:8000
+        schemes: [http, https]
         info:
             title: New Project
             description: This api documentation new project
@@ -119,8 +121,8 @@ nelmio_api_doc:
         securityDefinitions:
             Bearer:
                 type: apiKey
-                description: 'Your api key'
-                name: X-AUTH-TOKEN
+                description: 'Your token'
+                name: Authorization
                 in: header
         security:
             - Bearer: []
@@ -139,3 +141,9 @@ fos_rest:
             json: true
     zone:
         - { path: ^/api/* }
+
+lexik_jwt_authentication :
+    secret_key :        "%kernel.project_dir%/app/config/jwt/private.pem"
+    public_key :        "%kernel.project_dir%/app/config/jwt/public.pem"
+    pass_phrase :       '123456'
+    token_ttl :         3600

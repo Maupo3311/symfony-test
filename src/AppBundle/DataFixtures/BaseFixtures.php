@@ -3,6 +3,7 @@
 namespace AppBundle\DataFixtures;
 
 use AppBundle\Entity\Category;
+use AppBundle\Entity\Comment;
 use AppBundle\Entity\Image\FeedbackImage;
 use AppBundle\Entity\Product;
 use AppBundle\Entity\Feedback;
@@ -94,7 +95,7 @@ class BaseFixtures extends Fixture
 
         $products = [];
         foreach ($categories as $category) {
-            for ($i = 0; $i < 20; $i++) {
+            for ($i = 0; $i < 5; $i++) {
                 $product = new Product();
                 $product->setTitle('product' . mt_rand(1, 3000) . mt_rand(1, 5000));
                 $product->setPrice(mt_rand(1, 250));
@@ -106,6 +107,17 @@ class BaseFixtures extends Fixture
                 $products[] = $product;
             }
         }
+
+//        foreach ($products as $product){
+//            $user = $users[rand(0, count($users - 1))];
+//            $comment = new Comment();
+//            $comment
+//                ->setProduct($product)
+//                ->setMessage(md5(rand(0, 1000)))
+//                ->setUser($user);
+//
+//            $manager->persist($comment);
+//        }
 
         $manager->flush();
     }

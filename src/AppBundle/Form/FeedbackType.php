@@ -8,6 +8,10 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Class FeedbackType
+ * @package AppBundle\Form
+ */
 class FeedbackType extends AbstractType
 {
     /**
@@ -29,9 +33,9 @@ class FeedbackType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => Feedback::class
-        ));
+        $resolver->setDefaults([
+            'data_class' => Feedback::class,
+        ]);
     }
 
     /**
@@ -41,6 +45,5 @@ class FeedbackType extends AbstractType
     {
         return 'appbundle_feedback';
     }
-
 
 }

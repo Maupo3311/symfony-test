@@ -39,16 +39,16 @@ final class ProductAdmin extends AbstractAdmin
             ->add('number');
 
         $requestUri = $this->getRequest()->getRequestUri();
-        $productId = basename(str_replace('/edit', '', $requestUri));
+        $productId  = basename(str_replace('/edit', '', $requestUri));
 
         if ($this->getRoot()->getClass() === 'AppBundle\Entity\Product' && $productId != 'create') {
             $formMapper->
-                add('images', CollectionType::class, [
-                    'required' => false,
-                ], [
-                    'edit'     => 'inline',
-                    'sortable' => 'position',
-                ])
+            add('images', CollectionType::class, [
+                'required' => false,
+            ], [
+                'edit'     => 'inline',
+                'sortable' => 'position',
+            ])
                 ->add('comments', CollectionType::class, [
                     'required' => false,
                 ], [

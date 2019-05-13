@@ -7,6 +7,10 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Class RegistrationType
+ * @package AppBundle\Form
+ */
 class RegistrationType extends AbstractType
 {
     /**
@@ -24,9 +28,9 @@ class RegistrationType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\User'
-        ));
+        $resolver->setDefaults([
+            'data_class' => 'AppBundle\Entity\User',
+        ]);
     }
 
     /**
@@ -37,11 +41,17 @@ class RegistrationType extends AbstractType
         return 'app_user_registration';
     }
 
+    /**
+     * @return string|null
+     */
     public function getParent()
     {
         return 'FOS\UserBundle\Form\Type\RegistrationFormType';
     }
 
+    /**
+     * @return string
+     */
     public function getName()
     {
         return $this->getBlockPrefix();

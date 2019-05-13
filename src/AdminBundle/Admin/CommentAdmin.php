@@ -39,7 +39,7 @@ final class CommentAdmin extends AbstractAdmin
             ->add('message', TextareaType::class);
 
         $requestUri = $this->getRequest()->getRequestUri();
-        $commentId = basename(str_replace('/edit', '', $requestUri));
+        $commentId  = basename(str_replace('/edit', '', $requestUri));
 
         if ($this->getRoot()->getClass() === 'AppBundle\Entity\Comment' && $commentId != 'create') {
             $formMapper->add('images', CollectionType::class, [

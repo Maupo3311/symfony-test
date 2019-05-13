@@ -30,7 +30,7 @@ class CommentImageAdmin extends AbstractAdmin
 
         if (!$comment = $instance->getComment()) {
             $refererUrl = $this->getRequest()->headers->get('referer');
-            $commentId = basename(str_replace('/edit', '', $refererUrl));
+            $commentId  = basename(str_replace('/edit', '', $refererUrl));
 
             if ($commentId) {
                 /** @var ModelManager $modelManager */

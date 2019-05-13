@@ -40,7 +40,7 @@ final class CategoryAdmin extends AbstractAdmin
                 'sortable' => 'position',
             ]);
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -57,7 +57,7 @@ final class CategoryAdmin extends AbstractAdmin
         $listMapper
             ->addIdentifier('name')
             ->add('active', null, [
-               'editable' => true,
+                'editable' => true,
             ]);
     }
 }

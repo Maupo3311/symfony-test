@@ -105,17 +105,19 @@
             </div>
     {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
         {{ form_start(comment_form) }}
-        {{ form_label(comment_form.message) }}
-        {{ form_widget(comment_form.message) }}
-        {{ form_errors(comment_form.message) }}
 
-        {{ form_widget(comment_form.submit) }}
-        <div class="label-button btn btn-success">{{ form_label(comment_form.images) }}</div>
+            {{ form_label(comment_form.message) }}
+            {{ form_widget(comment_form.message, {'attr': {'placeholder': 'Leave your comment...'}}) }}
+            {{ form_errors(comment_form.message) }}
 
-        <div class="hidden">
-            {{ form_widget(comment_form.images) }}
-        </div>
-        {{ form_errors(comment_form.images) }}
+            {{ form_widget(comment_form.submit) }}
+            <div class="label-button btn btn-success">{{ form_label(comment_form.images) }}</div>
+
+            <div class="hidden">
+                {{ form_widget(comment_form.images) }}
+            </div>
+            {{ form_errors(comment_form.images) }}
+
         {{ form_end(comment_form) }}
     {% endif %}
     <br><br><br><br><br><br><br><br>

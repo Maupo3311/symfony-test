@@ -64,13 +64,6 @@ class User extends BaseUser
     private $basketItems;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="api_key", type="string")
-     */
-    private $apiKey;
-
-    /**
      * @var ArrayCollection
      *
      * @ORM\OneToMany(
@@ -79,25 +72,6 @@ class User extends BaseUser
      *     )
      */
     private $comments;
-
-    /**
-     * @return string
-     */
-    public function getApiKey()
-    {
-        return $this->apiKey;
-    }
-
-    /**
-     * @param string $apiKey
-     * @return $this
-     */
-    public function setApiKey(string $apiKey)
-    {
-        $this->apiKey = $apiKey;
-
-        return $this;
-    }
 
     /**
      * @return string
@@ -160,7 +134,7 @@ class User extends BaseUser
      */
     public function getCoefficient()
     {
-        switch ($this->getSubscription()){
+        switch ($this->getSubscription()) {
             case 'bronze':
                 return 0.9;
             case 'silver':

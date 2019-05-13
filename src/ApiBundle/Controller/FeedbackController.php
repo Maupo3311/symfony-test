@@ -4,14 +4,10 @@ namespace ApiBundle\Controller;
 
 use AppBundle\Entity\Feedback;
 use AppBundle\Entity\User;
-use AppBundle\Repository\CategoryRepository;
 use AppBundle\Repository\FeedbackRepository;
-use AppBundle\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
-use Hoa\Exception\Exception;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -28,7 +24,7 @@ use FOS\RestBundle\View\View;
 class FeedbackController extends BaseController
 {
     /**
-     * @Rest\Get("/feedback")
+     * @Rest\Get("/feedback-list")
      * @SWG\Response(
      *     response=200,
      *     description="For stanadrt will return 10 feedbacks on 1 page,
@@ -101,10 +97,10 @@ class FeedbackController extends BaseController
      *     @Model(type=Feedback::class)
      * )
      * @SWG\Parameter(
-     *     name="user_id",
+     *     name="message",
      *     in="query",
-     *     type="integer",
-     *     description="ID of the sender this feedback"
+     *     type="string",
+     *     description="Feddback message"
      * )
      * @SWG\Tag(name="feedback")
      * @param Request $request
@@ -118,17 +114,9 @@ class FeedbackController extends BaseController
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
 
-        /** @var UserRepository $userRepository */
-        $userRepository = $em->getRepository(User::class);
-
-        /** @var User $user */
-        if (!$user = $userRepository->find($request->get('user_id'))) {
-            return $this->errorResponse('there are no user exist');
-        }
-
         $feedback = new Feedback();
         $feedback
-            ->setUser($user)
+            ->setUser($this->getUser())
             ->setMessage($request->get('message'));
 
         $em->persist($feedback);
@@ -171,6 +159,10 @@ class FeedbackController extends BaseController
             return $this->errorResponse('feedback not found', 404);
         }
 
+        if ($feedback->getUser() !== $this->getUser()) {
+            return $this->errorResponse('you cannot change this feedback', 403);
+        }
+
         $feedback->setMessage($request->get('message'));
 
         $em->persist($feedback);
@@ -201,8 +193,13 @@ class FeedbackController extends BaseController
         /** @var FeedbackRepository $feedbackRepository */
         $feedbackRepository = $em->getRepository(Feedback::class);
 
+        /** @var Feedback $feedback */
         if (!$feedback = $feedbackRepository->find($id)) {
             return $this->errorResponse('feedback not found', 404);
+        }
+
+        if ($feedback->getUser() !== $this->getUser()) {
+            return $this->errorResponse('you cannot delete this feedback', 403);
         }
 
         $em->remove($feedback);

@@ -16,18 +16,23 @@ security:
                 id: fos_user.user_provider.username_email
             api_user_provider:
                 id: api_user_provider
-#                entity:
-#                    class: AppBundle:User
-#                    property: apiKey
 
         firewalls:
+            login:
+                pattern:  ^/api/login
+                stateless: true
+                anonymous: true
+                json_login:
+                    check_path:               /api/login_check
+                    success_handler:          lexik_jwt_authentication.handler.authentication_success
+                    failure_handler:          lexik_jwt_authentication.handler.authentication_failure
             api:
-                pattern: ^/api/
+                anonymous: ~
+                pattern:   ^/api
                 stateless: true
                 guard:
-                    authenticator: api_key_authenticator
-                provider: api_user_provider
-                anonymous: true
+                    authenticators:
+                        - lexik_jwt_authentication.jwt_token_authenticator
             main:
                 pattern: ^/
                 form_login:
@@ -51,4 +56,7 @@ security:
             - { path: ^/user/profile/, role: ROLE_USER }
             - { path: ^/basket/, role: ROLE_USER }
             - { path: ^/product/add-to-basket/, role: ROLE_USER }
-            - { path: ^/api, role: ROLE_USER }
+            - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+            - { path: ^/api/get-token, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+            - { path: ^/api/doc, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+            - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }

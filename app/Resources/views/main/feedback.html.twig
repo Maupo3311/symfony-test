@@ -70,7 +70,7 @@
     {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
         {{ form_start(formView) }}
             {{ form_label(formView.message) }}
-            {{ form_widget(formView.message) }}
+            {{ form_widget(formView.message, {'attr': {'placeholder': 'Leave your feedback...'}}) }}
             {{ form_errors(formView.message) }}
 
             {{ form_widget(formView.submit) }}

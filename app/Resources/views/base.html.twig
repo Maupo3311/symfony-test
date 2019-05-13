@@ -65,14 +65,7 @@
                 {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
                     <li class="nav-item">
                         <a class="nav-link" href="{{ path('fos_user_profile_show') }}">
-                            <span class="
-                                {% if app.user.getSubscription() == 'gold'%}
-                                    gold-item
-                                {% elseif app.user.getSubscription() == 'silver' %}
-                                    silver-item
-                                {% elseif app.user.getSubscription() == 'bronze' %}
-                                    bronze-item
-                                {% endif %}">
+                            <span>
                                 <i class="fas fa-user"></i> {{ app.user.username }}
                             </span>
                         </a>

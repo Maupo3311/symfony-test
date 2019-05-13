@@ -4,12 +4,9 @@ namespace ApiBundle\Controller;
 
 use AppBundle\Entity\User;
 use AppBundle\Repository\UserRepository;
-use AppBundle\Security\TokenAuthenticator;
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
-use Hoa\Exception\Exception;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -17,8 +14,7 @@ use Symfony\Component\BrowserKit\Response;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\View\View;
 use Swagger\Annotations as SWG;
-use Symfony\Component\Security\Core\Authentication\Token\PreAuthenticatedToken;
-use Symfony\Component\Security\Guard\Token\PostAuthenticationGuardToken;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
  * Class UserController
@@ -28,7 +24,7 @@ use Symfony\Component\Security\Guard\Token\PostAuthenticationGuardToken;
 class UserController extends BaseController
 {
     /**
-     * @Rest\Get("/user")
+     * @Rest\Get("/user-list")
      * @SWG\Response(
      *     response=200,
      *     description="For stanadrt will return 10 users on 1 page,
@@ -65,7 +61,7 @@ class UserController extends BaseController
             if ($restresult === null) {
                 return $this->errorResponse("users not found", 404);
             }
-        } catch (Exception $exception) {
+        } catch (\Exception $exception) {
             return $this->errorResponse($exception->getMessage(), $exception->getCode());
         }
 
@@ -169,7 +165,7 @@ class UserController extends BaseController
     }
 
     /**
-     * @Rest\Put("/user/{id}")
+     * @Rest\Put("/me")
      * @SWG\Response(
      *     response=200,
      *     description="Object with a message what fields have been changed",
@@ -187,44 +183,19 @@ class UserController extends BaseController
      *     type="string",
      *     description="User surname"
      * )
-     * @SWG\Parameter(
-     *     name="username",
-     *     in="query",
-     *     type="string",
-     *     description="User login"
-     * )
-     * @SWG\Parameter(
-     *     name="password",
-     *     in="query",
-     *     type="string",
-     *     description="User password"
-     * )
-     * @SWG\Parameter(
-     *     name="email",
-     *     in="query",
-     *     type="string",
-     *     description="User email"
-     * )
      * @SWG\Tag(name="user")
-     * @param int     $id
      * @param Request $request
      * @return Response
      *
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function putAction(int $id, Request $request)
+    public function putAction(Request $request)
     {
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
 
-        /** @var UserRepository $userRepository */
-        $userRepository = $this->getDoctrine()->getRepository(User::class);
-
-        /** @var User $user */
-        if (!$user = $userRepository->find($id)) {
-            return $this->errorResponse('user not found', 404);
-        }
+        $user = $this->getUser();
 
         $changed = [];
 
@@ -232,21 +203,10 @@ class UserController extends BaseController
             $user->setFirstName($request->get('first_name'));
             $changed[] = 'first_name';
         }
+
         if ($request->get('last_name')) {
             $user->setLastName($request->get('last_name'));
             $changed[] = 'last_name';
-        }
-        if ($request->get('username')) {
-            $user->setUsername($request->get('username'));
-            $changed[] = 'username';
-        }
-        if ($request->get('password')) {
-            $user->setPassword($request->get('password'));
-            $changed[] = 'password';
-        }
-        if ($request->get('email')) {
-            $user->setEmail($request->get('email'));
-            $changed[] = 'email';
         }
 
         $em->persist($user);
@@ -266,75 +226,56 @@ class UserController extends BaseController
     }
 
     /**
-     * @Rest\delete("/user/{id}")
+     * @Rest\delete("/me")
      * @SWG\Response(
      *     response=200,
      *     description="Object with success message",
      *     @Model(type=User::class)
      * )
+     * @SWG\Parameter(
+     *     name="password",
+     *     in="query",
+     *     type="string",
+     *     description="Your password"
+     * )
      * @SWG\Tag(name="user")
-     * @param $id
      * @return Response
      *
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function deleteAction($id)
+    public function deleteAction()
     {
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
 
-        /** @var UserRepository $userRepository */
-        $userRepository = $this->getDoctrine()->getRepository(User::class);
-
-        if (!$user = $userRepository->find($id)) {
-            return $this->errorResponse('user not found', 404);
-        }
-
-        $em->remove($user);
+        $em->remove($this->getUser());
         $em->flush();
 
         return $this->successResponse('User successfully removed');
     }
 
     /**
-     * @Rest\get("/get-user-token")
+     * @Rest\Post("/login_check")
      * @SWG\Response(
      *     response=200,
      *     description="Return user token",
      * )
      * @SWG\Parameter(
-     *     name="username",
-     *     in="query",
-     *     type="string",
-     *     description="User login"
+     *     name="user",
+     *     description="{'username': '{{Your username}}', 'password': '{{Your password}}'}",
+     *     in="body",
+     *     @SWG\Schema(type="object")
      * )
-     *  @SWG\Parameter(
-     *     name="password",
-     *     in="query",
-     *     type="string",
-     *     description="User password"
-     * )
-     * @SWG\Tag(name="user")
+     * @SWG\Tag(name="login")
      * @param Request $request
-     * @return string|Response
-     * @throws NonUniqueResultException
+     * @return false|string
      */
     public function getTokenAction(Request $request)
     {
-        /** @var UserRepository $userRepository */
-        $userRepository = $this->getDoctrine()->getRepository(User::class);
-
-        /** @var User $user */
-        if (!$user = $userRepository->findByUsername($request->get('username'))) {
-            return $this->errorResponse('A user with this username does not exist', 404);
-        }
-
-        if ($user->getPassword() != password_hash($request->get('password'), PASSWORD_DEFAULT)) {
-            return $this->errorResponse('Wrong password', 400);
-        }
-
-        return $user->getApiKey();
+        /**
+         * Return user token
+         */
     }
 
     /**
@@ -351,6 +292,12 @@ class UserController extends BaseController
     }
 
     /**
+     * @Rest\Get("/me-basket")
+     * @SWG\Response(
+     *     response=200,
+     *     description="Returns everything that is in the user's cart"
+     * )
+     * @SWG\Tag(name="user")
      * @return mixed
      */
     public function getBasketItems()

@@ -14,13 +14,13 @@ class UserRegisteredEvent extends Event
 {
     const EVENT_NAME = 'successful.registration.message';
 
-    /** @var User  */
+    /** @var User */
     protected $user;
 
-    /** @var Swift_Mailer  */
+    /** @var Swift_Mailer */
     protected $mailer;
 
-    /** @var string  */
+    /** @var string */
     protected $mailerUser;
 
     /**

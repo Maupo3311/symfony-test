@@ -27,7 +27,7 @@ class ProductImageAdmin extends AbstractAdmin
 
         if (!$product = $instance->getProduct()) {
             $refererUrl = $this->getRequest()->headers->get('referer');
-            $productId = basename(str_replace('/edit', '', $refererUrl));
+            $productId  = basename(str_replace('/edit', '', $refererUrl));
 
             if ($productId) {
                 /** @var ModelManager $modelManager */

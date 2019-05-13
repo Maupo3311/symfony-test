@@ -105,7 +105,7 @@ class Feedback
     public function __construct()
     {
         $this->created = new DateTime();
-        $this->images = [];
+        $this->images  = [];
     }
 
     /**

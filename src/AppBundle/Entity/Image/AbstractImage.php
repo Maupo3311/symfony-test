@@ -201,8 +201,8 @@ abstract class AbstractImage
         }
 
         /** you must throw an exception here if the image cannot be moved
-           so that the entity is not persisted to the database
-           which the UploadedFile move() method does */
+         * so that the entity is not persisted to the database
+         * which the UploadedFile move() method does */
         $this->getFile()->move(
             $this->getImageUploadRootDir(),
             $this->imagePath

@@ -4,14 +4,11 @@ namespace ApiBundle\Controller;
 
 use AppBundle\Entity\Comment;
 use AppBundle\Entity\Product;
-use AppBundle\Entity\User;
 use AppBundle\Repository\CommentRepository;
 use AppBundle\Repository\ProductRepository;
-use AppBundle\Repository\UserRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
-use Hoa\Exception\Exception;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -28,7 +25,7 @@ use Swagger\Annotations as SWG;
 class CommentController extends BaseController
 {
     /**
-     * @Rest\Get("/comment")
+     * @Rest\Get("/comment-list")
      * @SWG\Response(
      *     response=200,
      *     description="For stanadrt will return 10 comments on 1 page,
@@ -63,7 +60,7 @@ class CommentController extends BaseController
             if (!$restresult = $commentRepository->findByPage($page, $limit)) {
                 return $this->errorResponse("comment not found", 404);
             }
-        } catch (Exception $exception) {
+        } catch (\Exception $exception) {
             return $this->errorResponse($exception->getMessage(), $exception->getCode());
         }
 
@@ -99,12 +96,6 @@ class CommentController extends BaseController
      *     @Model(type=Comment::class)
      * )
      * @SWG\Parameter(
-     *     name="user_id",
-     *     in="query",
-     *     type="integer",
-     *     description="ID of the sender this comment"
-     * )
-     * @SWG\Parameter(
      *     name="product_id",
      *     in="query",
      *     type="integer",
@@ -128,12 +119,6 @@ class CommentController extends BaseController
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
 
-        /** @var UserRepository $userRepository */
-        $userRepository = $this->getDoctrine()->getRepository(User::class);
-
-        /** @var User $user */
-        $user = $userRepository->find($request->get('user_id'));
-
         /** @var ProductRepository $productRepository */
         $productRepository = $this->getDoctrine()->getRepository(Product::class);
 
@@ -142,7 +127,7 @@ class CommentController extends BaseController
 
         $comment = new Comment();
         $comment
-            ->setUser($user)
+            ->setUser($this->getUser())
             ->setMessage($request->get('message'))
             ->setProduct($product);
 
@@ -183,7 +168,11 @@ class CommentController extends BaseController
 
         /** @var Comment $comment */
         if (!$comment = $commentRepository->find($id)) {
-            return $this->errorResponse('Comment Not Found', 404);
+            return $this->errorResponse('comment not found', 404);
+        }
+
+        if ($comment->getUser() !== $this->getUser()) {
+            return $this->errorResponse('you cannot change this comment', 403);
         }
 
         $comment->setMessage($request->get('message'));
@@ -216,8 +205,13 @@ class CommentController extends BaseController
         /** @var CommentRepository $commentRepository */
         $commentRepository = $this->getDoctrine()->getRepository(Comment::class);
 
+        /** @var Comment $comment */
         if (!$comment = $commentRepository->find($id)) {
             return $this->errorResponse('Comment Not Found', 404);
+        }
+
+        if ($comment->getUser() !== $this->getUser()) {
+            return $this->errorResponse('you cannot delete this comment', 403);
         }
 
         $em->remove($comment);

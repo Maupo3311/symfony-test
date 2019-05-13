@@ -8,7 +8,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
-use Hoa\Exception\Exception;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -25,7 +24,7 @@ use FOS\RestBundle\View\View;
 class CategoryController extends BaseController
 {
     /**
-     * @Rest\Get("/category")
+     * @Rest\Get("/category-list")
      * @SWG\Response(
      *     response=200,
      *     description="For stanadrt will return 10 categories on 1 page,
@@ -62,7 +61,7 @@ class CategoryController extends BaseController
             if ($restresult === null) {
                 return $this->errorResponse("category not found", 404);
             }
-        } catch (Exception $exception) {
+        } catch (\Exception $exception) {
             return $this->errorResponse($exception->getMessage(), $exception->getCode());
         }
 
