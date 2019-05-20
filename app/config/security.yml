@@ -18,6 +18,19 @@ security:
                 id: api_user_provider
 
         firewalls:
+            secured_area:
+                anonymous: ~
+                oauth:
+                    resource_owners:
+                        vkontakte:     /user/login/check-vkontakte
+                        github:        /user/login/check-github
+                    login_path:        /user/login-auth
+                    use_forward:       false
+                    failure_path:      /user/login-auth
+
+                    oauth_user_provider:
+                        service: my.oauth_aware.user_provider.service
+
             login:
                 pattern:  ^/api/login
                 stateless: true

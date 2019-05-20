@@ -22,4 +22,17 @@
                 <input class="btn btn-primary" type="submit" id="_submit" name="_submit" value="{{ 'login'|trans }}" />
     </form>
     <p class="center">If you still do not have an account - <a href="{{ path('fos_user_registration_register') }}">register</a></p>
+    <p class="center">
+        Or login in via
+        <a href="{{ path('hwi_oauth_service_redirect', {'service': 'vkontakte' }) }}">
+            <span>VKontakte</span>
+        </a>
+    </p>
+    <p class="center">
+        Or login in via
+        <a href="{{ path('hwi_oauth_service_redirect', {'service': 'github' }) }}">
+            <span>GitHub</span>
+        </a>
+    </p>
+
 {% endblock fos_user_content %}

@@ -26,6 +26,38 @@ class User extends BaseUser
      */
     protected $id;
 
+    /** @ORM\Column(
+     *     name="vkontakte_id",
+     *     type="string",
+     *     length=255,
+     *     nullable=true)
+     */
+    protected $vkontakte_id;
+
+    /** @ORM\Column(
+     *     name="vkontakte_access_token",
+     *     type="string",
+     *     length=255,
+     *     nullable=true)
+     */
+    protected $vkontakte_access_token;
+
+    /** @ORM\Column(
+     *     name="github_id",
+     *     type="string",
+     *     length=255,
+     *     nullable=true)
+     */
+    protected $github_id;
+
+    /** @ORM\Column(
+     *     name="github_access_token",
+     *     type="string",
+     *     length=255,
+     *     nullable=true)
+     */
+    protected $github_access_token;
+
     /**
      * @var string
      *
@@ -72,6 +104,76 @@ class User extends BaseUser
      *     )
      */
     private $comments;
+
+    /**
+     * @return mixed
+     */
+    public function getGithubId()
+    {
+        return $this->github_id;
+    }
+
+    /**
+     * @param mixed $github_id
+     */
+    public function setGithubId($github_id)
+    {
+        $this->github_id = $github_id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getGithubAccessToken()
+    {
+        return $this->github_access_token;
+    }
+
+    /**
+     * @param mixed $github_access_token
+     */
+    public function setGithubAccessToken($github_access_token)
+    {
+        $this->github_access_token = $github_access_token;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getVkontakteId()
+    {
+        return $this->vkontakte_id;
+    }
+
+    /**
+     * @param $vkontakte_id
+     * @return $this
+     */
+    public function setVkontakteId($vkontakte_id)
+    {
+        $this->vkontakte_id = $vkontakte_id;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getVkontakteAccessToken()
+    {
+        return $this->vkontakte_access_token;
+    }
+
+    /**
+     * @param $vkontakte_access_token
+     * @return $this
+     */
+    public function setVkontakteAccessToken($vkontakte_access_token)
+    {
+        $this->vkontakte_access_token = $vkontakte_access_token;
+
+        return $this;
+    }
 
     /**
      * @return string
