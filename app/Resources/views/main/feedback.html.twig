@@ -11,30 +11,32 @@
     <h2>Feedback page</h2>
 
     {% if allFeedbacks != null %}
-        {% for feedback in allFeedbacks %}
-            <div class="feedback">
-                <div class="feedbackHead">
-                    <div class="feedbackCreated">{{ feedback.created.date|slice(0, -7) }}</div>
-                    <p class="feedbackName">{{ feedback.user.firstName ~ ' ' ~ feedback.user.lastName}}</p>
-                    <p class="feedbackEmail">{{ feedback.user.email }}</p>
+        <div id="feedback-window">
+            {% for feedback in allFeedbacks %}
+                <div class="feedback">
+                    <div class="feedbackHead">
+                        <div class="feedbackCreated">{{ feedback.created.date|slice(0, -7) }}</div>
+                        <p class="feedbackName">{{ feedback.user.firstName ~ ' ' ~ feedback.user.lastName}}</p>
+                        <p class="feedbackEmail">{{ feedback.user.email }}</p>
+                    </div>
+                    <div class="feedbackBody">
+                        <p class="feedbackMessage">{{ feedback.message }}</p>
+                        {% for image in feedback.images %}
+                            <div class="feedbackFile">
+                                <img alt="img" class="feedbackFileImages" src="{{ image.getImageWebPath() }}">
+                            </div>
+                        {% endfor %}
+                        {% if is_granted("IS_AUTHENTICATED_REMEMBERED") and feedback.user.id == app.user.id %}
+                            <div class="feedbackOptions">
+                                <a href="{{ path('delete_feedback', {'id': feedback.id}) }}" class="noneDecoration">
+                                    <span class="feedbackDelete"><i class="fas fa-trash-alt"></i></span>
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
                 </div>
-                <div class="feedbackBody">
-                    <p class="feedbackMessage">{{ feedback.message }}</p>
-                    {% for image in feedback.images %}
-                        <div class="feedbackFile">
-                            <img alt="img" class="feedbackFileImages" src="{{ image.getImageWebPath() }}">
-                        </div>
-                    {% endfor %}
-                    {% if is_granted("IS_AUTHENTICATED_REMEMBERED") and feedback.user.id == app.user.id %}
-                        <div class="feedbackOptions">
-                            <a href="{{ path('delete_feedback', {'id': feedback.id}) }}" class="noneDecoration">
-                                <span class="feedbackDelete"><i class="fas fa-trash-alt"></i></span>
-                            </a>
-                        </div>
-                    {% endif %}
-                </div>
-            </div>
-        {% endfor %}
+            {% endfor %}
+        </div>
     {% else %}
         <p>No feedbacks found</p>
     {% endif %}
@@ -89,6 +91,6 @@
     {{ parent() }}
     <script src="{{ asset('/js/ajax/feedback.js') }}"></script>
     <script>
-        formChecker()
+        formChecker({{ page }}, {{ theNumberOnThePage }}, {{ app.user.id }})
     </script>
 {% endblock %}
