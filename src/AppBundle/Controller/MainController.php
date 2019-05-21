@@ -76,48 +76,48 @@ class MainController extends Controller
         $form->add('submit', SubmitType::class);
         $form->handleRequest($request);
 
-        /**@var User $user */
-        $user = $this->getUser();
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            if (!empty($user)) {
-                /** @var Feedback $feedback */
-                $feedback = $form->getData();
-                /** @var EntityManager $em */
-                $em = $this->getDoctrine()->getManager();
-
-                $images = $feedback->getImages();
-
-                $feedbackImages = [];
-                if ($images) {
-                    foreach ($images as $image) {
-                        /** @var FeedbackImage $feedbackImage */
-                        $feedbackImage = new FeedbackImage();
-                        $feedbackImage
-                            ->setFile($image)
-                            ->uploadImage()
-                            ->setFeedback($feedback);
-                        $feedbackImages[] = $feedbackImage;
-                        $em->persist($feedbackImage);
-                    }
-                }
-
-                $feedback
-                    ->setImages($feedbackImages)
-                    ->setUser($user)
-                    ->setName($user->getFirstName() . ' ' . $user->getLastName())
-                    ->setEmail($user->getEmail());
-
-                $em->persist($feedback);
-                $em->flush();
-
-                $this->addFlash('success', 'Saved!');
-            } else {
-                $this->addFlash('error', 'You can\'t send feedback to unauthorized people!');
-            }
-
-            return $this->redirectToRoute('feedback');
-        }
+//        /**@var User $user */
+//        $user = $this->getUser();
+//
+//        if ($form->isSubmitted() && $form->isValid()) {
+//            if (!empty($user)) {
+//                /** @var Feedback $feedback */
+//                $feedback = $form->getData();
+//                /** @var EntityManager $em */
+//                $em = $this->getDoctrine()->getManager();
+//
+//                $images = $feedback->getImages();
+//
+//                $feedbackImages = [];
+//                if ($images) {
+//                    foreach ($images as $image) {
+//                        /** @var FeedbackImage $feedbackImage */
+//                        $feedbackImage = new FeedbackImage();
+//                        $feedbackImage
+//                            ->setFile($image)
+//                            ->uploadImage()
+//                            ->setFeedback($feedback);
+//                        $feedbackImages[] = $feedbackImage;
+//                        $em->persist($feedbackImage);
+//                    }
+//                }
+//
+//                $feedback
+//                    ->setImages($feedbackImages)
+//                    ->setUser($user)
+//                    ->setName($user->getFirstName() . ' ' . $user->getLastName())
+//                    ->setEmail($user->getEmail());
+//
+//                $em->persist($feedback);
+//                $em->flush();
+//
+//                $this->addFlash('success', 'Saved!');
+//            } else {
+//                $this->addFlash('error', 'You can\'t send feedback to unauthorized people!');
+//            }
+//
+//            return $this->redirectToRoute('feedback');
+//        }
 
         $formView = $form->createView();
 

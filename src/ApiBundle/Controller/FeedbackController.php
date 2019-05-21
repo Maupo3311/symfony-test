@@ -111,12 +111,17 @@ class FeedbackController extends BaseController
      */
     public function postAction(Request $request)
     {
+        /** @var User $user */
+        if (!$user = $this->getUser()) {
+            return $this->errorResponse('You are not logged in', 401);
+        }
+
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
 
         $feedback = new Feedback();
         $feedback
-            ->setUser($this->getUser())
+            ->setUser($user)
             ->setMessage($request->get('message'));
 
         $em->persist($feedback);
@@ -148,6 +153,11 @@ class FeedbackController extends BaseController
      */
     public function putAction(int $id, Request $request)
     {
+        /** @var User $user */
+        if (!$user = $this->getUser()) {
+            return $this->errorResponse('You are not logged in', 401);
+        }
+
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
 
@@ -159,7 +169,7 @@ class FeedbackController extends BaseController
             return $this->errorResponse('feedback not found', 404);
         }
 
-        if ($feedback->getUser() !== $this->getUser()) {
+        if ($feedback->getUser() !== $user) {
             return $this->errorResponse('you cannot change this feedback', 403);
         }
 
@@ -187,6 +197,11 @@ class FeedbackController extends BaseController
      */
     public function deleteAction($id)
     {
+        /** @var User $user */
+        if (!$user = $this->getUser()) {
+            return $this->errorResponse('You are not logged in', 401);
+        }
+
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
 
@@ -198,7 +213,7 @@ class FeedbackController extends BaseController
             return $this->errorResponse('feedback not found', 404);
         }
 
-        if ($feedback->getUser() !== $this->getUser()) {
+        if ($feedback->getUser() !== $user) {
             return $this->errorResponse('you cannot delete this feedback', 403);
         }
 

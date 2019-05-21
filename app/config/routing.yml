@@ -16,6 +16,9 @@ vkontakte_login:
 github_login:
     path: /user/login/check-github
 
+yandex_login:
+    path: /user/login/check-yandex
+
 api:
     resource: "@ApiBundle/Controller/"
     type:     annotation

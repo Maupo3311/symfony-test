@@ -43,6 +43,22 @@ class User extends BaseUser
     protected $vkontakte_access_token;
 
     /** @ORM\Column(
+     *     name="yandex_id",
+     *     type="string",
+     *     length=255,
+     *     nullable=true)
+     */
+    protected $yandex_id;
+
+    /** @ORM\Column(
+     *     name="yandex_access_token",
+     *     type="string",
+     *     length=255,
+     *     nullable=true)
+     */
+    protected $yandex_access_token;
+
+    /** @ORM\Column(
      *     name="github_id",
      *     type="string",
      *     length=255,
@@ -108,17 +124,55 @@ class User extends BaseUser
     /**
      * @return mixed
      */
+    public function getYandexId()
+    {
+        return $this->yandex_id;
+    }
+
+    /**
+     * @param mixed $yandex_id
+     */
+    public function setYandexId($yandex_id)
+    {
+        $this->yandex_id = $yandex_id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getYandexAccessToken()
+    {
+        return $this->yandex_access_token;
+    }
+
+    /**
+     * @param $yandex_access_token
+     * @return $this
+     */
+    public function setYandexAccessToken($yandex_access_token)
+    {
+        $this->yandex_access_token = $yandex_access_token;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
     public function getGithubId()
     {
         return $this->github_id;
     }
 
     /**
-     * @param mixed $github_id
+     * @param $github_id
+     * @return $this
      */
     public function setGithubId($github_id)
     {
         $this->github_id = $github_id;
+
+        return $this;
     }
 
     /**

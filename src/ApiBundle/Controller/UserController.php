@@ -192,9 +192,14 @@ class UserController extends BaseController
      */
     public function putAction(Request $request)
     {
+        if (!$this->getUser()) {
+            return $this->errorResponse('You are not logged in', 401);
+        }
+
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
 
+        /** @var User $user */
         $user = $this->getUser();
 
         $changed = [];
@@ -246,6 +251,10 @@ class UserController extends BaseController
      */
     public function deleteAction()
     {
+        if (!$this->getUser()) {
+            return $this->errorResponse('You are not logged in', 401);
+        }
+
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
 
@@ -263,9 +272,13 @@ class UserController extends BaseController
      * )
      * @SWG\Parameter(
      *     name="user",
-     *     description="{'username': '{{Your username}}', 'password': '{{Your password}}'}",
+     *     description="Object with username and password",
      *     in="body",
-     *     @SWG\Schema(type="object")
+     *     @SWG\Schema(
+     *     type="object",
+     *      @SWG\Property(property="username", type="string", example="Mr"),
+     *      @SWG\Property(property="password", type="string", example="Bob"),
+     *     )
      * )
      * @SWG\Tag(name="login")
      * @param Request $request
@@ -285,10 +298,11 @@ class UserController extends BaseController
      *     description="Return your entity user"
      * )
      * @SWG\Tag(name="user")
+     * @return Response
      */
     public function getMeAction()
     {
-        return $this->getUser();
+        return ($this->getUser()) ?: $this->errorResponse('You are not logged in', 401);
     }
 
     /**
@@ -302,6 +316,8 @@ class UserController extends BaseController
      */
     public function getBasketItems()
     {
-        return $this->getUser()->getBasketProducts();
+        return ($this->getUser()) ?
+            $this->getUser()->getBasketProducts() :
+            $this->errorResponse('You are not logged in', 401);
     }
 }

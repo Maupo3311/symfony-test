@@ -34,7 +34,6 @@ class BaseFixtures extends Fixture
         $user->setEmail('maupo3311@mail.ru');
         $user->setPassword(password_hash("password1234", PASSWORD_DEFAULT));
         $user->setEnabled(true);
-        $user->setApiKey(md5('admin'));
         $users[] = $user;
         $manager->persist($user);
 
@@ -48,7 +47,6 @@ class BaseFixtures extends Fixture
             $user->setEmail(rand(10000, 600000) . '@mail.ru');
             $user->setPassword(md5($i));
             $user->setEnabled(true);
-            $user->setApiKey(md5($username));
             $users[] = $user;
             $manager->persist($user);
         }

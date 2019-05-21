@@ -24,6 +24,8 @@ parameters:
     vkontakte_secret: ~
     github_client_id: ~
     github_secret: ~
+    yandex_client_id: ~
+    yandex_secret: ~
 
     upload_directory: '%kernel.project_dir%/web/uploads'
 

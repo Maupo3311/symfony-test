@@ -5,34 +5,42 @@
     {% if error %}
         <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
     {% endif %}
-    <form action="{{ path("fos_user_security_check") }}" method="post">
-        <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
-        <div class="formgroup">
-            <label for="username">{{ 'Username'|trans }}</label>
-            <input class="form-control" type="text" id="username" name="_username" value="{{ last_username }}" required="required" />
-        </div>
-        <div class="formgroup">
-            <label for="password">{{ 'Password'|trans }}</label>
-            <input class="form-control" type="password" id="password" name="_password" required="required" />
-            <div>
-                <div class="checkbox">
-                    <input type="checkbox" id="remember_me" name="_remember_me" value="on" />
-                    <label for="remember_me">{{ 'Renember Me'|trans }}</label>
+    <div class="form-window">
+        <form action="{{ path("fos_user_security_check") }}" method="post">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+            <div class="formgroup">
+                <label for="username">{{ 'Username'|trans }}</label>
+                <input class="form-control" type="text" id="username" name="_username" value="{{ last_username }}" required="required" />
+            </div>
+            <div class="formgroup">
+                <label for="password">{{ 'Password'|trans }}</label>
+                <input class="form-control" type="password" id="password" name="_password" required="required" />
+                <div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="remember_me" name="_remember_me" value="on" />
+                        <label for="remember_me">{{ 'Renember Me'|trans }}</label>
+                    </div>
+                    <input class="btn btn-primary" type="submit" id="_submit" name="_submit" value="{{ 'login'|trans }}" />
                 </div>
-                <input class="btn btn-primary" type="submit" id="_submit" name="_submit" value="{{ 'login'|trans }}" />
-    </form>
-    <p class="center">If you still do not have an account - <a href="{{ path('fos_user_registration_register') }}">register</a></p>
-    <p class="center">
-        Or login in via
-        <a href="{{ path('hwi_oauth_service_redirect', {'service': 'vkontakte' }) }}">
-            <span>VKontakte</span>
-        </a>
-    </p>
-    <p class="center">
-        Or login in via
-        <a href="{{ path('hwi_oauth_service_redirect', {'service': 'github' }) }}">
-            <span>GitHub</span>
-        </a>
-    </p>
+            </div>
+        </form>
+        <p class="center">If you still do not have an account - <a href="{{ path('fos_user_registration_register') }}">register</a></p>
+        <p class="center">
+            <a class="icon-vk" href="{{ path('hwi_oauth_service_redirect', {'service': 'vkontakte' }) }}">
+                <span><i class="fab fa-vk"></i></span>
+            </a>
+            <a class="icon-github" href="{{ path('hwi_oauth_service_redirect', {'service': 'github' }) }}">
+                <span><i class="fab fa-github"></i></span>
+            </a>
+            <a class="icon-yandex" href="{{ path('hwi_oauth_service_redirect', {'service': 'yandex' }) }}">
+                <span> <i class="fab fa-yandex"></i></span>
+            </a>
+        </p>
+    </div>
 
 {% endblock fos_user_content %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('/css/FOSUserBundle/login.css') }}">
+{% endblock %}

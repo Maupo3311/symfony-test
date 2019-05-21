@@ -18,19 +18,6 @@ security:
                 id: api_user_provider
 
         firewalls:
-            secured_area:
-                anonymous: ~
-                oauth:
-                    resource_owners:
-                        vkontakte:     /user/login/check-vkontakte
-                        github:        /user/login/check-github
-                    login_path:        /user/login-auth
-                    use_forward:       false
-                    failure_path:      /user/login-auth
-
-                    oauth_user_provider:
-                        service: my.oauth_aware.user_provider.service
-
             login:
                 pattern:  ^/api/login
                 stateless: true
@@ -47,6 +34,18 @@ security:
                     authenticators:
                         - lexik_jwt_authentication.jwt_token_authenticator
             main:
+                oauth:
+                    resource_owners:
+                        vkontakte:     /user/login/check-vkontakte
+                        github:        /user/login/check-github
+                        yandex:        /user/login/check-yandex
+                    login_path:        /user/login-auth
+                    use_forward:       false
+                    failure_path:      /user/login-auth
+
+                    oauth_user_provider:
+                        service: my.custom.user_provider
+
                 pattern: ^/
                 form_login:
                     provider: fos_userbundle
@@ -70,6 +69,8 @@ security:
             - { path: ^/basket/, role: ROLE_USER }
             - { path: ^/product/add-to-basket/, role: ROLE_USER }
             - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-            - { path: ^/api/get-token, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-            - { path: ^/api/doc, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-            - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
+#            - { path: ^/api/get-token, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+#            - { path: ^/api/doc, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+#            - { path: ^/api/category, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+#            - { path: ^/api/product, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+#            - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }

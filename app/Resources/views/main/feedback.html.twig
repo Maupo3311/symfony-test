@@ -68,7 +68,7 @@
     {% endif %}
 
     {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-        {{ form_start(formView) }}
+        {{ form_start(formView, {'attr': {'action': path('submit_feedback'), 'class': 'ajaxForm', 'method': 'POST'}}) }}
             {{ form_label(formView.message) }}
             {{ form_widget(formView.message, {'attr': {'placeholder': 'Leave your feedback...'}}) }}
             {{ form_errors(formView.message) }}
@@ -83,4 +83,12 @@
         {{ form_end(formView) }}
     {% endif %}
     <br><br><br><br><br><br><br><br>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('/js/ajax/feedback.js') }}"></script>
+    <script>
+        formChecker()
+    </script>
 {% endblock %}

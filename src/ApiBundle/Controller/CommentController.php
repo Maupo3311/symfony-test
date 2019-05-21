@@ -4,6 +4,7 @@ namespace ApiBundle\Controller;
 
 use AppBundle\Entity\Comment;
 use AppBundle\Entity\Product;
+use AppBundle\Entity\User;
 use AppBundle\Repository\CommentRepository;
 use AppBundle\Repository\ProductRepository;
 use Doctrine\ORM\EntityManager;
@@ -116,6 +117,11 @@ class CommentController extends BaseController
      */
     public function postAction(Request $request)
     {
+        /** @var User $user */
+        if (!$user = $this->getUser()) {
+            return $this->errorResponse('You are not logged in', 401);
+        }
+
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
 
@@ -127,7 +133,7 @@ class CommentController extends BaseController
 
         $comment = new Comment();
         $comment
-            ->setUser($this->getUser())
+            ->setUser($user)
             ->setMessage($request->get('message'))
             ->setProduct($product);
 
@@ -160,6 +166,11 @@ class CommentController extends BaseController
      */
     public function putAction(int $id, Request $request)
     {
+        /** @var User $user */
+        if (!$user = $this->getUser()) {
+            return $this->errorResponse('You are not logged in', 401);
+        }
+
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
 
@@ -171,7 +182,7 @@ class CommentController extends BaseController
             return $this->errorResponse('comment not found', 404);
         }
 
-        if ($comment->getUser() !== $this->getUser()) {
+        if ($comment->getUser() !== $user) {
             return $this->errorResponse('you cannot change this comment', 403);
         }
 
@@ -199,6 +210,11 @@ class CommentController extends BaseController
      */
     public function deleteAction($id)
     {
+        /** @var User $user */
+        if (!$user = $this->getUser()) {
+            return $this->errorResponse('You are not logged in', 401);
+        }
+
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
 
@@ -210,7 +226,7 @@ class CommentController extends BaseController
             return $this->errorResponse('Comment Not Found', 404);
         }
 
-        if ($comment->getUser() !== $this->getUser()) {
+        if ($comment->getUser() !== $user) {
             return $this->errorResponse('you cannot delete this comment', 403);
         }
 

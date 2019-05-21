@@ -41,21 +41,21 @@ class AuthenticationSuccessHandler implements AuthenticationSuccessHandlerInterf
     public function onSecurityInteractiveLogin(InteractiveLoginEvent $event)
     {
 
-        /** @var User $user */
-        $user = $event->getAuthenticationToken()->getUser();
-        $date = date('d-m-Y H:i');
-
-        $message = Swift_Message::newInstance()
-            ->setSubject('Authorization')
-            ->setFrom($this->mailerUser)
-            ->setTo($user->getEmail())
-            ->setBody(
-                "User with username 
-                {$user->getUsername()} logged in at {$date}
-                with ip: {$_SERVER['REMOTE_ADDR']}"
-            );
-
-        $this->mailer->send($message);
+//        /** @var User $user */
+//        $user = $event->getAuthenticationToken()->getUser();
+//        $date = date('d-m-Y H:i');
+//
+//        $message = Swift_Message::newInstance()
+//            ->setSubject('Authorization')
+//            ->setFrom($this->mailerUser)
+//            ->setTo($user->getEmail())
+//            ->setBody(
+//                "User with username
+//                {$user->getUsername()} logged in at {$date}
+//                with ip: {$_SERVER['REMOTE_ADDR']}"
+//            );
+//
+//        $this->mailer->send($message);
 
         $token   = $event->getAuthenticationToken();
         $request = $event->getRequest();

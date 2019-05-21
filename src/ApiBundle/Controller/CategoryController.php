@@ -3,6 +3,7 @@
 namespace ApiBundle\Controller;
 
 use AppBundle\Entity\Category;
+use AppBundle\Entity\User;
 use AppBundle\Repository\CategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
@@ -111,6 +112,13 @@ class CategoryController extends BaseController
      */
     public function postAction(Request $request)
     {
+        /** @var User $user */
+        if (!$user = $this->getUser()) {
+            return $this->errorResponse('You are not logged in', 401);
+        } else if (!$user->hasRole('ROLE_ADMIN')) {
+            return $this->errorResponse('You don\'t have enough rights', 403);
+        }
+
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
 
@@ -146,6 +154,13 @@ class CategoryController extends BaseController
      */
     public function putAction(int $id, Request $request)
     {
+        /** @var User $user */
+        if (!$user = $this->getUser()) {
+            return $this->errorResponse('You are not logged in', 401);
+        } else if (!$user->hasRole('ROLE_ADMIN')) {
+            return $this->errorResponse('You don\'t have enough rights', 403);
+        }
+
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
 
@@ -181,6 +196,13 @@ class CategoryController extends BaseController
      */
     public function deleteAction($id)
     {
+        /** @var User $user */
+        if (!$user = $this->getUser()) {
+            return $this->errorResponse('You are not logged in', 401);
+        } else if (!$user->hasRole('ROLE_ADMIN')) {
+            return $this->errorResponse('You don\'t have enough rights', 403);
+        }
+
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
 

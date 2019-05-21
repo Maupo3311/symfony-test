@@ -4,6 +4,7 @@ namespace ApiBundle\Controller;
 
 use AppBundle\Entity\Category;
 use AppBundle\Entity\Product;
+use AppBundle\Entity\User;
 use AppBundle\Repository\CategoryRepository;
 use AppBundle\Repository\ProductRepository;
 use Doctrine\ORM\EntityManager;
@@ -142,6 +143,13 @@ class ProductController extends BaseController
      */
     public function postAction(Request $request)
     {
+        /** @var User $user */
+        if (!$user = $this->getUser()) {
+            return $this->errorResponse('You are not logged in', 401);
+        } elseif (!$user->hasRole('ROLE_ADMIN')) {
+            return $this->errorResponse('You don\'t have enough rights', 403);
+        }
+
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
 
@@ -221,6 +229,13 @@ class ProductController extends BaseController
      */
     public function putAction(int $id, Request $request)
     {
+        /** @var User $user */
+        if (!$user = $this->getUser()) {
+            return $this->errorResponse('You are not logged in', 401);
+        } elseif (!$user->hasRole('ROLE_ADMIN')) {
+            return $this->errorResponse('You don\'t have enough rights', 403);
+        }
+
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
 
@@ -287,6 +302,13 @@ class ProductController extends BaseController
      */
     public function deleteAction($id)
     {
+        /** @var User $user */
+        if (!$user = $this->getUser()) {
+            return $this->errorResponse('You are not logged in', 401);
+        } elseif (!$user->hasRole('ROLE_ADMIN')) {
+            return $this->errorResponse('You don\'t have enough rights', 403);
+        }
+
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
 

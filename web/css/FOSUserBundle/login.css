@@ -1,0 +1,17 @@
+.form-window{
+    width: 50%;
+    margin: auto;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 15px;
+    background: #fffbe05c;
+}
+.icon-github{
+    color: black;
+}
+.icon-vk{
+    text-decoration: none;
+}
+.icon-yandex{
+    color: red;
+}
