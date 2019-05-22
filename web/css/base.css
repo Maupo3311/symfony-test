@@ -77,3 +77,9 @@
     height: 38px;
     cursor: pointer;
 }
+
+#flush-block{
+    position: fixed;
+    right: 0;
+    top: 50px;
+}

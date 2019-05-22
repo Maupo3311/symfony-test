@@ -7,6 +7,7 @@ use AppBundle\Entity\Product;
 use AppBundle\Entity\User;
 use AppBundle\Repository\CategoryRepository;
 use AppBundle\Repository\ProductRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
@@ -347,5 +348,29 @@ class ProductController extends BaseController
         }
 
         return $product->getCategory();
+    }
+
+    /**
+     * @Rest\get("/product/{id}/comments")
+     * @SWG\Response(
+     *     response=200,
+     *     description="Comments this product",
+     *     @Model(type=Comment::class)
+     * )
+     * @SWG\Tag(name="product")
+     * @param int $id
+     * @return ArrayCollection|Response
+     */
+    public function getComments(int $id)
+    {
+        /** @var ProductRepository $productRepository */
+        $productRepository = $this->getDoctrine()->getRepository(Product::class);
+
+        /** @var Product $product */
+        if (!$product = $productRepository->find($id)) {
+            return $this->errorResponse('Product Not Found', 404);
+        }
+
+        return $product->getComments();
     }
 }

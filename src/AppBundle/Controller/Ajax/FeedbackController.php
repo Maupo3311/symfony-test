@@ -3,12 +3,12 @@
 namespace AppBundle\Controller\Ajax;
 
 use AppBundle\Entity\Feedback;
-use AppBundle\Form\FeedbackType;
+use AppBundle\Entity\Image\FeedbackImage;
 use AppBundle\Repository\FeedbackRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -22,20 +22,20 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 class FeedbackController extends BaseController
 {
     /**
-     * @Route("/feedback/submit", name="submit_feedback")
+     * @Route("/feedback/submit", name="ajax_submit_feedback")
      * @param Request $request
      * @return Response
-     *
      * @throws ORMException
      * @throws OptimisticLockException
      */
     public function submitFeedbackAction(Request $request)
     {
-        $data = $request->request->get('appbundle_feedback');
+        $images  = $request->files->get('appbundle_feedback')['images'];
+        $message = $request->request->get('appbundle_feedback')['message'];
 
-        if (!$message = $data['message']) {
+        if (!$message) {
             return $this->errorResponse('Message cannot be empty', 400);
-        } else if (!$user = $this->getUser()) {
+        } elseif (!$user = $this->getUser()) {
             return $this->errorResponse('You are not logged in', 401);
         }
 
@@ -46,6 +46,23 @@ class FeedbackController extends BaseController
         $feedback->setUser($user)
             ->setMessage($message);
 
+        $feedbackImages = [];
+        if ($images) {
+            /** @var UploadedFile $image */
+            foreach ($images as $image) {
+
+                /** @var FeedbackImage $feedbackImage */
+                $feedbackImage = new FeedbackImage();
+
+                $feedbackImage->setFile($image)
+                    ->uploadImage()
+                    ->setFeedback($feedback);
+
+                $em->persist($feedbackImage);
+                $feedbackImages[] = $feedbackImage;
+            }
+        }
+
         $em->persist($feedback);
         $em->flush();
 
@@ -53,19 +70,36 @@ class FeedbackController extends BaseController
     }
 
     /**
-     * @Rest\Get("/feedback/load", name="load_feedback")
+     * @Route("/feedback/delete", name="ajax_delete_feedback")
      * @param Request $request
-     * @return mixed
+     * @return Response
+     * @throws ORMException
+     * @throws OptimisticLockException
      */
-    public function loadFeedbackAction(Request $request)
+    public function deleteFeedback(Request $request)
     {
-        $page = ($request->get('page')) ?: 1;
-        $theNumberOnThePage = ($request->get('theNumberOnThePage')) ?: 5;
+        if (!$id = $request->get('id')) {
+            return $this->errorResponse('No feedback id specified', 401);
+        }
+
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
 
         /** @var FeedbackRepository $feedbackRepository */
         $feedbackRepository = $this->getDoctrine()->getRepository(Feedback::class);
 
-        dump($feedbackRepository->findByPage($page, $theNumberOnThePage));
-        return $this->successResponse(\GuzzleHttp\json_encode($feedbackRepository->findByPage($page, $theNumberOnThePage)));
+        /** @var Feedback $feedback */
+        if (!$feedback = $feedbackRepository->find($id)) {
+            return $this->errorResponse('feedback does not exist', 404);
+        }
+
+        if ($this->getUser() !== $feedback->getUser()) {
+            return $this->errorResponse('You can\'t remove this feedback', 403);
+        }
+
+        $em->remove($feedback);
+        $em->flush();
+
+        return $this->successResponse('Feedback successfully removed');
     }
 }

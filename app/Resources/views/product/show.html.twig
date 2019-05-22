@@ -68,43 +68,12 @@
                         <div class="clearfix">Comments</div>
                         <hr>
                         <ul class="media-list">
-                            {% for comment in product.comments|reverse %}
-                                <li class="media">
-                                    <a href="#" class="pull-left">
-                                        <img src="https://bootdey.com/img/Content/user_1.jpg" alt="" class="img-circle">
-                                    </a>
-                                    <div class="media-body">
-                                        <span class="text-muted pull-right">
-                                            <small class="text-muted"> {{ comment.createdAt.date|slice(0, -7)}} </small>
-                                        </span>
-                                        <strong class="text-success">@{{ comment.user.firstName }} {{ comment.user.lastName }}</strong>
-                                        <p>
-                                            {{ comment.message }}
-                                            {% if comment.images != null %}
-                                                {% for image in comment.images %}
-                                                    <div class="comment-image-window">
-                                                        <img alt="" class="comment-image" src="{{ asset(image.getImageWebPath()) }}">
-                                                    </div>
-                                                {% endfor %}
-                                            {% endif %}
-                                            {% if comment.user == app.user %}
-                                                <p class="comment_options">
-                                                    <a class="noneDecoration" href="
-                                                    {{ path('comment_delete', {'id': comment.id, 'productId': product.id}) }}">
-                                                        <span class="comment_delete"><i class="fas fa-trash-alt"></i></span>
-                                                    </a>
-                                                </p>
-                                            {% endif %}
-                                        </p>
-                                    </div>
-                                </li>
-                            {% endfor %}
                         </ul>
                     </div>
                 </div>
             </div>
     {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-        {{ form_start(comment_form) }}
+        {{ form_start(comment_form, {'attr': {'class': 'comment-form', 'method': 'POST', 'action': path('ajax_submit_comment') }}) }}
 
             {{ form_label(comment_form.message) }}
             {{ form_widget(comment_form.message, {'attr': {'placeholder': 'Leave your comment...'}}) }}
@@ -122,4 +91,18 @@
     {% endif %}
     <br><br><br><br><br><br><br><br>
 
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('/js/ajax/comment.js') }}"></script>
+    <script>
+        var userId = null;
+        {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+            userId = {{ app.user.id }}
+        {% endif %}
+
+        loadComments(userId, {{ product.id }});
+        formChecker(userId, {{ product.id }});
+    </script>
 {% endblock %}

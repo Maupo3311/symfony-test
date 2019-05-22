@@ -12,30 +12,6 @@
 
     {% if allFeedbacks != null %}
         <div id="feedback-window">
-            {% for feedback in allFeedbacks %}
-                <div class="feedback">
-                    <div class="feedbackHead">
-                        <div class="feedbackCreated">{{ feedback.created.date|slice(0, -7) }}</div>
-                        <p class="feedbackName">{{ feedback.user.firstName ~ ' ' ~ feedback.user.lastName}}</p>
-                        <p class="feedbackEmail">{{ feedback.user.email }}</p>
-                    </div>
-                    <div class="feedbackBody">
-                        <p class="feedbackMessage">{{ feedback.message }}</p>
-                        {% for image in feedback.images %}
-                            <div class="feedbackFile">
-                                <img alt="img" class="feedbackFileImages" src="{{ image.getImageWebPath() }}">
-                            </div>
-                        {% endfor %}
-                        {% if is_granted("IS_AUTHENTICATED_REMEMBERED") and feedback.user.id == app.user.id %}
-                            <div class="feedbackOptions">
-                                <a href="{{ path('delete_feedback', {'id': feedback.id}) }}" class="noneDecoration">
-                                    <span class="feedbackDelete"><i class="fas fa-trash-alt"></i></span>
-                                </a>
-                            </div>
-                        {% endif %}
-                    </div>
-                </div>
-            {% endfor %}
         </div>
     {% else %}
         <p>No feedbacks found</p>
@@ -70,7 +46,7 @@
     {% endif %}
 
     {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-        {{ form_start(formView, {'attr': {'action': path('submit_feedback'), 'class': 'ajaxForm', 'method': 'POST'}}) }}
+        {{ form_start(formView, {'attr': {'action': path('ajax_submit_feedback'), 'class': 'ajaxForm', 'method': 'POST'}}) }}
             {{ form_label(formView.message) }}
             {{ form_widget(formView.message, {'attr': {'placeholder': 'Leave your feedback...'}}) }}
             {{ form_errors(formView.message) }}
@@ -91,6 +67,12 @@
     {{ parent() }}
     <script src="{{ asset('/js/ajax/feedback.js') }}"></script>
     <script>
-        formChecker({{ page }}, {{ theNumberOnThePage }}, {{ app.user.id }})
+        var userId = null;
+        {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+            userId = {{ app.user.id }}
+        {% endif %}
+
+        formChecker({{ page }}, {{ theNumberOnThePage }}, userId)
+        loadFeedback({{ page }}, {{ theNumberOnThePage }}, userId)
     </script>
 {% endblock %}
