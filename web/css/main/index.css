@@ -2,8 +2,6 @@
     cursor: pointer;
 }
 .bestProducts{
-    background: #d3ffde;
-    border: 2px solid black;
     border-radius: 10px;
     padding: 10px;
 }
@@ -38,4 +36,18 @@
 
 .add_in_basket{
     margin-right: 10px;
+}
+
+.geocode-zone{
+    background: #ffdddd;
+    border: 1px solid black;
+    border-radius: 10px;
+    width: 100%;
+    padding: 20px;
+    display: inline-block;
+}
+#sibers-image{
+    width: 100%;
+    border: 1px solid black;
+    border-radius: 5px;
 }

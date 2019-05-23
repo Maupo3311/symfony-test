@@ -171,13 +171,3 @@ hwi_oauth:
             type:            yandex
             client_id:       "%yandex_client_id%"
             client_secret:   "%yandex_secret%"
-
-bazinga_geocoder:
-    fake_ip : 123.123.123.123
-    providers:
-        acme:
-            aliases:
-                - my_geocoder
-            factory: Bazinga\GeocoderBundle\ProviderFactory\GoogleMapsFactory
-            options:
-              api_key: "%google_geokoding_api%"

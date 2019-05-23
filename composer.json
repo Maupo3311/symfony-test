@@ -28,6 +28,7 @@
         "doctrine/orm": "^2.5",
         "friendsofsymfony/rest-bundle": "^2.5",
         "friendsofsymfony/user-bundle": "~2.0@dev",
+        "geocoder-php/free-geoip-provider": "^4.1",
         "geocoder-php/google-maps-provider": "^4.4",
         "hwi/oauth-bundle": "^0.6.3",
         "incenteev/composer-parameter-handler": "^2.0",

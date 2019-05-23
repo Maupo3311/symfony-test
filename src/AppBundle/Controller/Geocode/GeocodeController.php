@@ -2,11 +2,12 @@
 
 namespace AppBundle\Controller\Geocode;
 
-use Geocoder\Query\GeocodeQuery;
+use AppBundle\Services\GeocodeService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
+use Geocoder\Exception\Exception;
 
 /**
  * Class GeocodeController
@@ -17,21 +18,17 @@ class GeocodeController extends Controller
 {
     /**
      * @Route("/")
+     * @param Request $request
      * @return Response
+     * @throws Exception
      */
     public function indexAction(Request $request)
     {
-        $result = $this->container
-            ->get('bazinga_geocoder.provider.acme')
-            ->geocodeQuery(GeocodeQuery::create('address'));
+        /** @var GeocodeService $geocdeService */
+        $geocdeService = $this->get('app.geocode');
 
-        $body = $this->container
-            ->get('Geocoder\Dumper\GeoJson')
-            ->dump($result);
+        $result = $geocdeService->startTest('178.219.184.0');
 
-        $response = new Response();
-        $response->setContent($body);
-
-        return $response;
+        return new Response('Your city - ' . $result->city);
     }
 }

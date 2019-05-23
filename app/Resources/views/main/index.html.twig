@@ -9,44 +9,71 @@
 
 {% block body %}
     <h2 class="center">Homepage</h2>
-    <p class="center">The project was carried out on an internship in the company of sibers</p>
-    <div class="bestProducts">
-        <h3 class="center" id="productInput" data-status="open">Top 10 products</h3>
-        {% for product in best_products %}
-            <div class="product">
-                <a href="{{ path('product_item', {'id': product.id}) }}" class="noneDecoration">
-                    <div class="productHead">
-                        <p class="productTitle">{{ product.title }}</p>
-                    </div>
-                </a>
-                <div class="productBody">
-                    <p class="productDescription">{{ product.description }}</p>
-                    {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-                        {% if product.number != 0 %}
-                            <form method="POST" action="{{ path('add_product_to_basket', {'id': product.id}) }}">
+
+    <div id="tabs">
+        <ul>
+            <li><a href="#tabs-1">Description</a></li>
+            <li><a href="#tabs-2">Best products</a></li>
+        </ul>
+        <div id="tabs-1">
+            <p class="center">The project was carried out on an internship in the company of sibers</p>
+            <img id="sibers-image" src="https://pp.userapi.com/c836725/v836725061/3fb98/C8Uo58eGkkQ.jpg">
+        </div>
+        <div id="tabs-2">
+            <div class="bestProducts">
+                <h3 class="center" id="productInput" data-status="open">
+                    Top 10 products
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </h3>
+                {% for product in best_products %}
+                    <div class="product">
+                        <a href="{{ path('product_item', {'id': product.id}) }}" class="noneDecoration">
+                            <div class="productHead">
+                                <p class="productTitle">{{ product.title }}</p>
+                            </div>
+                        </a>
+                        <div class="productBody">
+                            <p class="productDescription">{{ product.description }}</p>
+                            {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                                {% if product.number != 0 %}
+                                    <form method="POST" action="{{ path('add_product_to_basket', {'id': product.id}) }}">
                                 <span class="add_in_basket">
                                     <span>Quantity</span>
                                     <input name="number" class="basket-number">
                                     <label for="submit"> <i class="fas fa-cart-plus"></i> </label>
                                     <input class="hidden" id="submit" type="submit">
                                 </span>
-                            </form>
-                        {% else %}
-                            <a class="noneDecoration" href="{{ path('basket') }}">
+                                    </form>
+                                {% else %}
+                                    <a class="noneDecoration" href="{{ path('basket') }}">
                                 <span class="add_in_basket">
                                     <i class="fas fa-shopping-cart"></i>
                                 </span>
-                            </a>
-                        {% endif %}
-                    {% endif %}
-                    <p class="productPrice">Price: ${{ product.price }}</p>
-                    <p class="productRating">Rating: {{ product.rating }}</p>
-                </div>
+                                    </a>
+                                {% endif %}
+                            {% endif %}
+                            <p class="productPrice">Price: ${{ product.price }}</p>
+                            <p class="productRating">Rating: {{ product.rating }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
             </div>
-        {% endfor %}
+        </div>
     </div>
 {% endblock %}
 
 {% block javascripts %}
+    {{ parent() }}
     <script src="{{ asset('/js/main/index.js') }}"></script>
+    <script src="{{ asset('/js/ajax/main.js') }}"></script>
+    <script>
+        formChecker();
+        $(document).ready(function() {
+
+            $("#tabs").tabs();
+
+        });
+    </script>
 {% endblock %}

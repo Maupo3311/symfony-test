@@ -8,10 +8,6 @@
 {% endblock %}
 
 {% block body %}
-    {% for flash in app.session.flashbag.get('addProductSuccess') %}
-        <div class="alert alert-success">Product added to <a href="{{ path('basket') }}">basket</a></div>
-    {% endfor %}
-
     <div class="row">
         <div class="col-md-3">
             <div class="menu">
@@ -90,36 +86,47 @@
                                 <p class="productTitle">{{ product.title }}</p>
                             </div>
                         </a>
-                        <div class="productBody">
-                            <p class="productDescription">{{ product.description }}</p>
-                            <p class="productCategory">
-                                This product is from the category
-                                "{{ product.category.name }}"
-                            </p>
-                            {% for image in product.images %}
-                                <div class="productImage">
-                                    <img class="Image" src="{{ asset( image.getImageWebPath() ) }}" alt="Image">
-                                </div>
-                            {% endfor %}
-                            <p class="productPrice">Price: ${{ product.price }}</p>
-                                {% if product.number != 0 and is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-                                    <form method="POST" action="{{ path('add_product_to_basket', {'id': product.id}) }}">
-                                        <span class="add_in_basket">
-                                            <span>Quantity</span>
-                                            <input name="number" class="basket-number">
-                                            <label for="{{ product.id }}"> <i class="fas fa-cart-plus"></i> </label>
-                                            <input class="hidden" id="{{ product.id }}" type="submit">
-                                        </span>
-                                    </form>
-                                {% else %}
-                                    <a class="noneDecoration" href="{{ path('basket') }}">
-                                        <span class="add_in_basket">
-                                            <i class="fas fa-shopping-cart"></i>
-                                        </span>
-                                    </a>
-                                {% endif %}
+                        <a href="#text-popup{{ product.id }}" class="popup-content noneDecoration">
+                            <div class="productBody">
+                                <p class="productDescription">{{ product.description }}</p>
+                                <p class="productCategory">
+                                    This product is from the category
+                                    "{{ product.category.name }}"
+                                </p>
+                                {% for image in product.images %}
+                                    <div class="productImage">
+                                        <img class="Image" src="{{ asset( image.getImageWebPath() ) }}" alt="Image">
+                                    </div>
+                                {% endfor %}
+                                <p class="productPrice">Price: ${{ product.price }}</p>
+                                    {% if product.number != 0 and is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                                        <form method="POST" action="{{ path('add_product_to_basket', {'id': product.id}) }}">
+                                            <span class="add_in_basket">
+                                                <span>Quantity</span>
+                                                <input name="number" class="basket-number">
+                                                <label for="{{ product.id }}"> <i class="fas fa-cart-plus"></i> </label>
+                                                <input class="hidden" id="{{ product.id }}" type="submit">
+                                            </span>
+                                        </form>
+                                    {% else %}
+                                        <a class="noneDecoration" href="{{ path('basket') }}">
+                                            <span class="add_in_basket">
+                                                <i class="fas fa-shopping-cart"></i>
+                                            </span>
+                                        </a>
+                                    {% endif %}
 
-                        </div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div id="text-popup{{ product.id }}" class="white-popup mfp-hide">
+                        <p>Title: {{ product.title }}</p>
+                        <p>Description: {{ product.description }}</p>
+                        <p>Quantity: {{ product.number }}</p>
+                        <p>Price: {{ product.price }}</p>
+                        <p>Rating: {{ product.rating }}</p>
+                        <p>Category: {{ product.category.name }}</p>
                     </div>
                 {% endfor %}
             {% else %}
@@ -155,5 +162,15 @@
             {% endif %}
         </div>
     </div>
+{% endblock %}
 
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function() {
+            $('.popup-content').magnificPopup({
+                type: 'inline'
+            });
+        });
+    </script>
 {% endblock %}

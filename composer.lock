@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c37dbf3cf0e73709958170e6b8c37196",
+    "content-hash": "bf4346b0c057ec47ec4eb8937c9cb05c",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -1706,6 +1706,63 @@
                 "http geocoder"
             ],
             "time": "2018-11-15T22:27:27+00:00"
+        },
+        {
+            "name": "geocoder-php/free-geoip-provider",
+            "version": "4.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/geocoder-php/free-geoip-provider.git",
+                "reference": "b0798674957d7066010a6f918fa8dea2de6d844f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/geocoder-php/free-geoip-provider/zipball/b0798674957d7066010a6f918fa8dea2de6d844f",
+                "reference": "b0798674957d7066010a6f918fa8dea2de6d844f",
+                "shasum": ""
+            },
+            "require": {
+                "geocoder-php/common-http": "^4.1",
+                "php": "^7.0",
+                "willdurand/geocoder": "^4.0"
+            },
+            "provide": {
+                "geocoder-php/provider-implementation": "1.0"
+            },
+            "require-dev": {
+                "geocoder-php/provider-integration-tests": "^1.0",
+                "nyholm/psr7": "^0.2.2",
+                "php-http/curl-client": "^1.7",
+                "php-http/message": "^1.0",
+                "phpunit/phpunit": "6.3.*"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "4.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Geocoder\\Provider\\FreeGeoIp\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "William Durand",
+                    "email": "william.durand1@gmail.com"
+                }
+            ],
+            "description": "Geocoder FreeGeoIp adapter",
+            "homepage": "http://geocoder-php.org/Geocoder/",
+            "time": "2018-06-28T14:34:11+00:00"
         },
         {
             "name": "geocoder-php/google-maps-provider",
