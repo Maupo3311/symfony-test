@@ -75,8 +75,7 @@
             </div>
         </div>
 
-        <div class="col-md-9">
-            <b>Products:</b>
+        <div class="col-md-12 product-window">
 
             {% if products != null %}
                 {% for product in products %}
@@ -93,11 +92,11 @@
                                     This product is from the category
                                     "{{ product.category.name }}"
                                 </p>
-                                {% for image in product.images %}
-                                    <div class="productImage">
-                                        <img class="Image" src="{{ asset( image.getImageWebPath() ) }}" alt="Image">
-                                    </div>
-                                {% endfor %}
+{#                                {% for image in product.images %}#}
+{#                                    <div class="productImage">#}
+{#                                        <img class="Image" src="{{ asset( image.getImageWebPath() ) }}" alt="Image">#}
+{#                                    </div>#}
+{#                                {% endfor %}#}
                                 <p class="productPrice">Price: ${{ product.price }}</p>
                                     {% if product.number != 0 and is_granted("IS_AUTHENTICATED_REMEMBERED") %}
                                         <form method="POST" action="{{ path('add_product_to_basket', {'id': product.id}) }}">
@@ -127,6 +126,9 @@
                         <p>Price: {{ product.price }}</p>
                         <p>Rating: {{ product.rating }}</p>
                         <p>Category: {{ product.category.name }}</p>
+                        {% for image in product.images %}
+                            <img class="mfp-img" src="{{ asset( image.getImageWebPath() ) }}" alt="Image">
+                        {% endfor %}
                     </div>
                 {% endfor %}
             {% else %}

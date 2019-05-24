@@ -47,11 +47,38 @@ class Category
     private $products;
 
     /**
+     * @var Shop
+     *
+     * @ORM\ManyToOne(targetEntity="Shop", inversedBy="categories")
+     * @ORM\JoinColumn(name="shop_id", referencedColumnName="id")
+     */
+    private $shop;
+
+    /**
      * Category constructor.
      */
     public function __construct()
     {
         $this->products = new ArrayCollection();
+    }
+
+    /**
+     * @return Shop
+     */
+    public function getShop()
+    {
+        return $this->shop;
+    }
+
+    /**
+     * @param Shop $shop
+     * @return $this
+     */
+    public function setShop(Shop $shop)
+    {
+        $this->shop = $shop;
+
+        return $this;
     }
 
     /**
@@ -126,5 +153,13 @@ class Category
     public function deleteProduct(Product $product)
     {
         $this->products->removeElement($product);
+    }
+
+    /**
+     * @return int|void
+     */
+    public function getQuantityProducts()
+    {
+        return count($this->products);
     }
 }

@@ -12,13 +12,15 @@
 
     <div id="tabs">
         <ul>
-            <li><a href="#tabs-1">Description</a></li>
+            <li><a href="#tabs-1">About</a></li>
             <li><a href="#tabs-2">Best products</a></li>
+            <li><a href="#tabs-3">Shopping opportunities</a></li>
         </ul>
         <div id="tabs-1">
             <p class="center">The project was carried out on an internship in the company of sibers</p>
             <img id="sibers-image" src="https://pp.userapi.com/c836725/v836725061/3fb98/C8Uo58eGkkQ.jpg">
         </div>
+
         <div id="tabs-2">
             <div class="bestProducts">
                 <h3 class="center" id="productInput" data-status="open">
@@ -60,6 +62,20 @@
                     </div>
                 {% endfor %}
             </div>
+        </div>
+
+        <div id="tabs-3">
+            <ul class="list-group">
+                {% for shop in shops %}
+                    <a class="noneDecoration" href="{{ path('show_shop_by_id', {'id': shop.id}) }}">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            {{ shop.name }}
+                            <span class="badge badge-primary badge-pill">{{ shop.getQuantityProducts() }}</span>
+                        </li>
+                    </a>
+                {% endfor %}
+
+            </ul>
         </div>
     </div>
 {% endblock %}

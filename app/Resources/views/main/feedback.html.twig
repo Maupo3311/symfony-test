@@ -51,11 +51,13 @@
             {{ form_widget(formView.message, {'attr': {'placeholder': 'Leave your feedback...'}}) }}
             {{ form_errors(formView.message) }}
 
-            {{ form_widget(formView.submit) }}
-            <div class="label-button btn btn-success">{{ form_label(formView.images) }}</div>
+            <div class="feedback-buttons">
+                {{ form_widget(formView.submit) }}
+                <div class="label-button btn btn-success">{{ form_label(formView.images) }}</div>
 
-            <div class="hidden">
-                {{ form_widget(formView.images) }}
+                <div class="hidden">
+                    {{ form_widget(formView.images) }}
+                </div>
             </div>
             {{ form_errors(formView.images) }}
         {{ form_end(formView) }}

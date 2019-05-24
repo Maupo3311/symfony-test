@@ -7,6 +7,7 @@ use AppBundle\Entity\Comment;
 use AppBundle\Entity\Image\FeedbackImage;
 use AppBundle\Entity\Product;
 use AppBundle\Entity\Feedback;
+use AppBundle\Entity\Shop;
 use AppBundle\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -39,7 +40,7 @@ class BaseFixtures extends Fixture
 
         for ($i = 0; $i < 20; $i++) {
             $username = rand(1, 100000);
-            $user = new User();
+            $user     = new User();
             $user->setFirstName('name' . mt_rand(1, 99));
             $user->setLastName('surname' . mt_rand(1, 99));
             $user->setUsername($username);
@@ -81,19 +82,34 @@ class BaseFixtures extends Fixture
             $feedbackImages[] = $feedbackImage;
         }
 
+        $shops = [];
+        for ($i = 0; $i < 5; ++$i) {
+            $shop = new Shop();
+            $shop->setName('shop ' . rand(100, 100000))
+                ->setDescription(md5(rand(0, 100)))
+                ->setPhoneNumber('7' . rand(100000000, 999999999));
+
+            $manager->persist($shop);
+            $shops[] = $shop;
+        }
+
         $categories = [];
 
-        for ($i = 0; $i < 20; $i++) {
-            $category = new Category();
-            $category->setName('Category -' . mt_rand(1, 30000) . mt_rand(1, 500));
+        foreach ($shops as $shop) {
+            for ($i = 0; $i < 5; $i++) {
+                $category = new Category();
+                $category
+                    ->setName('Category -' . mt_rand(1, 30000) . mt_rand(1, 500))
+                    ->setShop($shop);
 
-            $categories[] = $category;
-            $manager->persist($category);
+                $categories[] = $category;
+                $manager->persist($category);
+            }
         }
 
         $products = [];
         foreach ($categories as $category) {
-            for ($i = 0; $i < 5; $i++) {
+            for ($i = 0; $i < 3; $i++) {
                 $product = new Product();
                 $product->setTitle('product' . mt_rand(1, 3000) . mt_rand(1, 5000));
                 $product->setPrice(mt_rand(1, 250));

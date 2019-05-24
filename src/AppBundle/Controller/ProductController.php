@@ -85,51 +85,9 @@ class ProductController extends Controller
      */
     public function showAction(Product $product, Request $request)
     {
-        $user = $this->getUser();
-
         $form = $this->createForm(CommentType::class);
         $form->add('submit', SubmitType::class, ['attr' => ['class' => 'btn btn-info pull-right']]);
         $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            if (!empty($user)) {
-                /** @var Comment $comment */
-                $comment = $form->getData();
-                /** @var EntityManager $em */
-                $em = $this->getDoctrine()->getManager();
-
-                $commentImages = [];
-                if ($comment->getImages()) {
-                    foreach ($comment->getImages() as $image) {
-                        /** @var CommentImage $commentImage */
-                        $commentImage = new CommentImage();
-
-                        $commentImage
-                            ->setFile($image)
-                            ->uploadImage()
-                            ->setComment($comment);
-
-                        $commentImages[] = $commentImage;
-                    }
-                }
-
-                $comment
-                    ->setUser($user)
-                    ->setProduct($product)
-                    ->setImages($commentImages);
-
-                $em->persist($comment);
-                $em->flush();
-
-                $this->addFlash('success', 'You comment successful saved');
-
-                return $this->redirectToRoute('product_item', ['id' => $product->getId()]);
-            } else {
-                $this->addFlash('success', 'You dont authorization');
-
-                return $this->redirectToRoute('product_item', ['id' => $product->getId()]);
-            }
-        }
 
         return $this->render('product/show.html.twig', [
             'product'      => $product,

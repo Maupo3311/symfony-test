@@ -5,10 +5,12 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Feedback;
 use AppBundle\Entity\Image\FeedbackImage;
 use AppBundle\Entity\Product;
+use AppBundle\Entity\Shop;
 use AppBundle\Entity\User;
 use AppBundle\Form\FeedbackType;
 use AppBundle\Repository\FeedbackImageRepository;
 use AppBundle\Repository\ProductRepository;
+use AppBundle\Repository\ShopRepository;
 use AppBundle\Services\FileUploader;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\NonUniqueResultException;
@@ -39,10 +41,15 @@ class MainController extends Controller
             ->getDoctrine()
             ->getRepository(Product::class);
 
+        /** @var ShopRepository $shopRepository */
+        $shopRepository = $this->getDoctrine()->getRepository(Shop::class);
+
         $bestProducts = $productRepository->findBestProducts();
+        $shops        = $shopRepository->findAll();
 
         return $this->render('main/index.html.twig', [
             'best_products' => $bestProducts,
+            'shops'         => $shops,
         ]);
     }
 
@@ -75,49 +82,6 @@ class MainController extends Controller
         $form = $this->createForm(FeedbackType::class);
         $form->add('submit', SubmitType::class);
         $form->handleRequest($request);
-
-//        /**@var User $user */
-//        $user = $this->getUser();
-//
-//        if ($form->isSubmitted() && $form->isValid()) {
-//            if (!empty($user)) {
-//                /** @var Feedback $feedback */
-//                $feedback = $form->getData();
-//                /** @var EntityManager $em */
-//                $em = $this->getDoctrine()->getManager();
-//
-//                $images = $feedback->getImages();
-//
-//                $feedbackImages = [];
-//                if ($images) {
-//                    foreach ($images as $image) {
-//                        /** @var FeedbackImage $feedbackImage */
-//                        $feedbackImage = new FeedbackImage();
-//                        $feedbackImage
-//                            ->setFile($image)
-//                            ->uploadImage()
-//                            ->setFeedback($feedback);
-//                        $feedbackImages[] = $feedbackImage;
-//                        $em->persist($feedbackImage);
-//                    }
-//                }
-//
-//                $feedback
-//                    ->setImages($feedbackImages)
-//                    ->setUser($user)
-//                    ->setName($user->getFirstName() . ' ' . $user->getLastName())
-//                    ->setEmail($user->getEmail());
-//
-//                $em->persist($feedback);
-//                $em->flush();
-//
-//                $this->addFlash('success', 'Saved!');
-//            } else {
-//                $this->addFlash('error', 'You can\'t send feedback to unauthorized people!');
-//            }
-//
-//            return $this->redirectToRoute('feedback');
-//        }
 
         $formView = $form->createView();
 

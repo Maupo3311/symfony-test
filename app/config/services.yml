@@ -18,11 +18,6 @@ services:
         # if you need to do this, you can override this setting on individual services
         public: false
 
-    api_user_provider:
-        class: AppBundle\Security\User\ApiUserProvider
-        arguments: ["@doctrine.orm.entity_manager"]
-        public: true
-
     api_key_authenticator:
         class: AppBundle\Security\TokenAuthenticator
         arguments: ["@router"]

@@ -86,7 +86,7 @@ function loadFeedback(page, theNumberOnThePage, userId) {
                 html += '<div class="feedback">\n' +
                     '       <div class="feedbackHead">\n' +
                     '    <div class="feedbackCreated">' + feedback.created.slice(0, -9) + '</div>\n' +
-                    '       <p class="feedbackName">' + feedback.user.first_name + '' + feedback.user.last_name + '</p>\n' +
+                    '       <p class="feedbackName">' + feedback.user.first_name + ' ' + feedback.user.last_name + '</p>\n' +
                     '       <p class="feedbackEmail">' + feedback.user.email + '</p>\n' +
                     '    </div>\n' +
                     '    <div class="feedbackBody">\n' +

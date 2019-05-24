@@ -2,6 +2,7 @@
 
 namespace ApiBundle\Controller;
 
+use AppBundle\Entity\Comment;
 use AppBundle\Entity\Category;
 use AppBundle\Entity\Product;
 use AppBundle\Entity\User;

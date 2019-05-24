@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <main role="main">
+
+        <div class="jumbotron">
+            <div class="container">
+                <h1 class="display-3">{{ shop.name }}</h1>
+                <p>{{ shop.description }}</p>
+            </div>
+        </div>
+
+
+        <div class="container">
+            <h2 class="center">Our categories</h2>
+
+            <div class="list-group">
+                {% for category in shop.categories %}
+                    <div class="col-md-12">
+                        <a href="{{ path('show_by_category', {id: category.id}) }}" class="list-group-item list-group-item-action">{{ category.name }}</a>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <hr>
+        </div>
+
+    </main>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

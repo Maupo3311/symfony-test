@@ -28,8 +28,9 @@
     border: 3px solid #000000;
     text-align: center;
     height: 150px;
-    width: 22%;
+    width: 100%;
     position: fixed;
+
 }
 .menu .button{
     margin: 10px 0;

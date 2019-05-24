@@ -79,11 +79,13 @@
             {{ form_widget(comment_form.message, {'attr': {'placeholder': 'Leave your comment...'}}) }}
             {{ form_errors(comment_form.message) }}
 
-            {{ form_widget(comment_form.submit) }}
-            <div class="label-button btn btn-success">{{ form_label(comment_form.images) }}</div>
+            <div class="comment-buttons">
+                 {{ form_widget(comment_form.submit) }}
+                <div class="label-button btn btn-success">{{ form_label(comment_form.images) }}</div>
 
-            <div class="hidden">
-                {{ form_widget(comment_form.images) }}
+                <div class="hidden">
+                    {{ form_widget(comment_form.images) }}
+                </div>
             </div>
             {{ form_errors(comment_form.images) }}
 
