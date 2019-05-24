@@ -21,18 +21,13 @@
     color: #bb3447;
 }
 .buttonSort:hover{
-    background: #f38181;
+    color: dimgrey;
 }
 .buttonSort{
-    width: 48%;
-    display: inline-block;
-    border: 1px solid black;
-    font-size: 10px;
-    background: #f3818169;
-    color: white
+    margin: 0 20px
 }
 .arrowSort{
-    color: white;
+
 }
 .productImage{
     width: 49%;

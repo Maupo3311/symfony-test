@@ -7,117 +7,148 @@
     <link rel="stylesheet" href="{{ asset('css/product/index.css') }}">
 {% endblock %}
 
+{% block crumbs %}
+    <ol class = "breadcrumb">
+        <li><a href = "{{ path('homepage') }}">Home</a></li>
+        <li class = "active">Products</li>
+        <li class = "active">
+            Sort By
+            {% if pagination.currentField == 'id' %}
+                {{ 'created'|capitalize }}
+            {% else %}
+                {{ pagination.currentField|capitalize }}
+            {% endif %}
+        </li>
+        <li class = "active">Page {{ pagination.page }}</li>
+    </ol>
+{% endblock %}
+
 {% block body %}
-    <div class="row">
-        <div class="col-md-3">
-            <div class="menu">
-                <p>Sort by: </p>
-                <a class="menu-noneDecoration" href="?page={{ page }}&sort=id&order={{ nextOrder }}">
-                    <div class="buttonSort">
-                        created
-                        {% if current_field == 'id' %}
-                            {% if current_order == 'ASC' %}
-                                <span class="arrowSort"><i class="fas fa-arrow-circle-up"></i></span>
-                            {% else %}
-                                <span class="arrowSort"><i class="fas fa-arrow-circle-down"></i></span>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Sort By</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="noneDecoration" href="?page={{ pagination.page }}&sort=id&order={{ pagination.getNextOrder() }}">
+                        <div class="buttonSort">
+                            created
+                            {% if pagination.currentField == 'id' %}
+                                {% if pagination.currentOrder == 'ASC' %}
+                                    <span class="arrowSort"><i class="fas fa-arrow-circle-up"></i></span>
+                                {% else %}
+                                    <span class="arrowSort"><i class="fas fa-arrow-circle-down"></i></span>
+                                {% endif %}
                             {% endif %}
-                        {% endif %}
-                    </div>
-                </a>
-                <a class="menu-noneDecoration" href="?page={{ page }}&sort=price&order={{ nextOrder }}">
-                    <div class="buttonSort">
-                        Price
-                        {% if current_field == 'price' %}
-                            {% if current_order == 'ASC' %}
-                                <span class="arrowSort"><i class="fas fa-arrow-circle-up"></i></span>
-                            {% else %}
-                                <span class="arrowSort"><i class="fas fa-arrow-circle-down"></i></span>
+                        </div>
+                     </a>
+                </li>
+                <li class="nav-item">
+                    <a class="noneDecoration" href="?page={{ pagination.page }}&sort=price&order={{ pagination.getNextOrder }}">
+                        <div class="buttonSort">
+                            Price
+                            {% if pagination.currentField == 'price' %}
+                                {% if pagination.currentOrder == 'ASC' %}
+                                    <span class="arrowSort"><i class="fas fa-arrow-circle-up"></i></span>
+                                {% else %}
+                                    <span class="arrowSort"><i class="fas fa-arrow-circle-down"></i></span>
+                                {% endif %}
                             {% endif %}
-                        {% endif %}
-                    </div>
-                </a>
-                <a class="menu-noneDecoration" href="?page={{ page }}&sort=rating&order={{ nextOrder }}">
-                    <div class="buttonSort">
-                        Rating
-                        {% if current_field == 'rating' %}
-                            {% if current_order == 'ASC' %}
-                                <span class="arrowSort"><i class="fas fa-arrow-circle-up"></i></span>
-                            {% else %}
-                                <span class="arrowSort"><i class="fas fa-arrow-circle-down"></i></span>
+                        </div>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="noneDecoration" href="?page={{ pagination.page }}&sort=rating&order={{ pagination.getNextOrder }}">
+                        <div class="buttonSort">
+                            Rating
+                            {% if pagination.currentField == 'rating' %}
+                                {% if pagination.currentOrder == 'ASC' %}
+                                    <span class="arrowSort"><i class="fas fa-arrow-circle-up"></i></span>
+                                {% else %}
+                                    <span class="arrowSort"><i class="fas fa-arrow-circle-down"></i></span>
+                                {% endif %}
                             {% endif %}
-                        {% endif %}
-                    </div>
-                </a>
-                <a class="menu-noneDecoration" href="?page={{ page }}&sort=title&order={{ nextOrder }}">
-                    <div class="buttonSort">
-                        Title
-                        {% if current_field == 'title' %}
-                            {% if current_order == 'ASC' %}
-                                <span class="arrowSort"><i class="fas fa-arrow-circle-up"></i></span>
-                            {% else %}
-                                <span class="arrowSort"><i class="fas fa-arrow-circle-down"></i></span>
+                        </div>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="noneDecoration" href="?page={{ pagination.page }}&sort=title&order={{ pagination.getNextOrder }}">
+                        <div class="buttonSort">
+                            Title
+                            {% if pagination.currentField == 'title' %}
+                                {% if pagination.currentOrder == 'ASC' %}
+                                    <span class="arrowSort"><i class="fas fa-arrow-circle-up"></i></span>
+                                {% else %}
+                                    <span class="arrowSort"><i class="fas fa-arrow-circle-down"></i></span>
+                                {% endif %}
                             {% endif %}
-                        {% endif %}
-                    </div>
-                </a>
-                <a class="menu-noneDecoration" href="?page={{ page }}&sort=category&order={{ nextOrder }}">
-                    <div class="buttonSort">
-                        Category
-                        {% if current_field == 'category' %}
-                            {% if current_order == 'ASC' %}
-                                <span class="arrowSort"><i class="fas fa-arrow-circle-up"></i></span>
-                            {% else %}
-                                <span class="arrowSort"><i class="fas fa-arrow-circle-down"></i></span>
+                        </div>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="noneDecoration" href="?page={{ pagination.page }}&sort=category&order={{ pagination.getNextOrder }}">
+                        <div class="buttonSort">
+                            Category
+                            {% if pagination.currentField == 'category' %}
+                                {% if pagination.currentOrder == 'ASC' %}
+                                    <span class="arrowSort"><i class="fas fa-arrow-circle-up"></i></span>
+                                {% else %}
+                                    <span class="arrowSort"><i class="fas fa-arrow-circle-down"></i></span>
+                                {% endif %}
                             {% endif %}
-                        {% endif %}
-                    </div>
-                </a>
-            </div>
+                        </div>
+                    </a>
+                </li>
+            </ul>
         </div>
+    </nav>
 
         <div class="col-md-12 product-window">
 
+            <table id="dtBasicExample" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
+                <thead>
+                <tr>
+                    <th class="th-sm">Title</th>
+                    <th class="th-sm">Price</th>
+                    <th class="th-sm">Rating</th>
+                    <th class="th-sm">Category</th>
+                    <th class="th-sm">Shop</th>
+                    <th class="th-sm">Info</th>
+                    <th class="th-sm">Add To Basket</th>
+                </tr>
+                </thead>
+                <tbody>
             {% if products != null %}
                 {% for product in products %}
-                    <div class="product">
-                        <a href="{{ path('product_item', {'id': product.id }) }}" class="noneDecoration">
-                            <div class="productHead">
-                                <p class="productTitle">{{ product.title }}</p>
-                            </div>
-                        </a>
-                        <a href="#text-popup{{ product.id }}" class="popup-content noneDecoration">
-                            <div class="productBody">
-                                <p class="productDescription">{{ product.description }}</p>
-                                <p class="productCategory">
-                                    This product is from the category
-                                    "{{ product.category.name }}"
-                                </p>
-{#                                {% for image in product.images %}#}
-{#                                    <div class="productImage">#}
-{#                                        <img class="Image" src="{{ asset( image.getImageWebPath() ) }}" alt="Image">#}
-{#                                    </div>#}
-{#                                {% endfor %}#}
-                                <p class="productPrice">Price: ${{ product.price }}</p>
-                                    {% if product.number != 0 and is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-                                        <form method="POST" action="{{ path('add_product_to_basket', {'id': product.id}) }}">
-                                            <span class="add_in_basket">
-                                                <span>Quantity</span>
-                                                <input name="number" class="basket-number">
-                                                <label for="{{ product.id }}"> <i class="fas fa-cart-plus"></i> </label>
-                                                <input class="hidden" id="{{ product.id }}" type="submit">
-                                            </span>
-                                        </form>
-                                    {% else %}
-                                        <a class="noneDecoration" href="{{ path('basket') }}">
-                                            <span class="add_in_basket">
-                                                <i class="fas fa-shopping-cart"></i>
-                                            </span>
-                                        </a>
-                                    {% endif %}
-
-                            </div>
-                        </a>
-                    </div>
+                        <tr>
+                            <td>
+                                <a href="{{ path('product_item', {'id': product.id }) }}">
+                                    {{ product.title }}
+                                </a>
+                            </td>
+                            <td>{{ product.price }}</td>
+                            <td>{{ product.rating }}</td>
+                            <td>{{ product.category.name }}</td>
+                            <td><a href="{{ path('show_shop_by_id', {'id': product.category.shop.id}) }}">{{ product.category.shop.name }}</a></td>
+                            <td>
+                                <a href="#text-popup{{ product.id }}" class="popup-content noneDecoration">
+                                    <i class="fas fa-info-circle"></i>
+                                </a>
+                            </td>
+                            <td>
+                                <form method="POST" action="{{ path('add_product_to_basket', {'id': product.id}) }}">
+                                     <span class="add_in_basket">
+                                         <span>Quantity</span>
+                                         <input name="number" class="basket-number">
+                                         <label for="{{ product.id }}"> <i class="fas fa-cart-plus"></i> </label>
+                                         <input class="hidden" id="{{ product.id }}" type="submit">
+                                     </span>
+                                </form>
+                            </td>
+                        </tr>
 
                     <div id="text-popup{{ product.id }}" class="white-popup mfp-hide">
                         <p>Title: {{ product.title }}</p>
@@ -125,43 +156,22 @@
                         <p>Quantity: {{ product.number }}</p>
                         <p>Price: {{ product.price }}</p>
                         <p>Rating: {{ product.rating }}</p>
+                        <p>Shop: {{ product.category.shop.name }}</p>
                         <p>Category: {{ product.category.name }}</p>
                         {% for image in product.images %}
                             <img class="mfp-img" src="{{ asset( image.getImageWebPath() ) }}" alt="Image">
                         {% endfor %}
                     </div>
                 {% endfor %}
+                </tbody>
+            </table>
+
+
             {% else %}
                 <p>No active products</p>
             {% endif %}
 
-            {% if numberOfPages > 1 %}
-                <div class="center-block center">
-                    <a href="?page=1&sort={{ current_field }}&order={{ current_order }}">
-                        <b> << </b>
-                    </a>
-
-                    <a href="?page={% if page == 1 %}{{ 1 }}{% else %}{{ page - 1 }}{% endif %}&sort={{ current_field }}&order={{ current_order }}">
-                        <b> < </b>
-                    </a>
-
-                    <span>
-                        {% for number in page-position[0]..page+position[1] if number <= numberOfPages %}
-                            <a href="?page={{ number }}&sort={{ current_field }}&order={{ current_order }}" class="{% if number == page %}{{ 'noneDecoration' }}{% endif %}">
-                                <span>{{ number }}</span>
-                            </a>
-                        {% endfor %}
-                    </span>
-
-                    <a href="?page={% if page >= numberOfPages %}{{ page }}{% else %}{{ page + 1 }}{% endif %}&sort={{ current_field }}&order={{ current_order }}">
-                        <b> > </b>
-                    </a>
-
-                    <a href="?page= {{ numberOfPages }}&sort={{ current_field }}&order={{ current_order }}">
-                        <b> >> </b>
-                    </a>
-                </div>
-            {% endif %}
+            {% include 'pagination.html.twig' %}
         </div>
     </div>
 {% endblock %}

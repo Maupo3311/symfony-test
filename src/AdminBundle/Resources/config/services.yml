@@ -32,6 +32,12 @@ services:
       tags:
         - { name: sonata.admin, manager_type: orm, group: 'User', label: Comment }
 
+    admin.shop:
+      class: AdminBundle\Admin\ShopAdmin
+      arguments: [~, AppBundle\Entity\Shop, ~]
+      tags:
+        - { name: sonata.admin, manager_type: orm, group: 'Product', label: Shop }
+
     admin.feedback_image:
       class: AdminBundle\Admin\Image\FeedbackImageAdmin
       arguments: [~, AppBundle\Entity\Image\FeedbackImage, ~]
@@ -47,6 +53,12 @@ services:
     admin.comment_image:
       class: AdminBundle\Admin\Image\CommentImageAdmin
       arguments: [~, AppBundle\Entity\Image\CommentImage, ~]
+      tags:
+        - { name: sonata.admin, manager_type: orm, show_in_dashboard: false }
+
+    admin.shop_image:
+      class: AdminBundle\Admin\Image\ShopImageAdmin
+      arguments: [~, AppBundle\Entity\Image\ShopImage, ~]
       tags:
         - { name: sonata.admin, manager_type: orm, show_in_dashboard: false }
 

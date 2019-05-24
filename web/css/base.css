@@ -86,3 +86,9 @@
     right: 0;
     top: 50px;
 }
+
+.breadcrumb > li + li:before {
+    color: #cccccc;
+    content: "/";
+    padding: 0 5px;
+}

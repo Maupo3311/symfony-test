@@ -31,19 +31,22 @@ class CategoryController extends Controller
             ->getDoctrine()
             ->getRepository(Category::class);
 
-        $theNumberOnThePage = 10;
-        $page               = $request->get('page') ?: 1;
-        $countCategories    = $categoryRepository->count([]);
-        $numberOfPages      = ceil($countCategories / $theNumberOnThePage);
-        $categories         = $categoryRepository->findByPage($page, $theNumberOnThePage);
+        /** @var PaginationService $pagination */
+        $pagination = $this->container->get('app.pagination');
 
-        /** @var PaginationService $service */
-        $service  = $this->container->get('app.pagination');
-        $position = $service->getHrefPosition($page, $numberOfPages);
+        $pagination->setData(
+            $request->get('page') ?: 1,
+            $categoryRepository->count([]),
+            10
+        );
+
+        $categories = $categoryRepository->findByPage($pagination->getPage(), $pagination->getTheNumberOnThePage());
 
         return $this->render(
-            'category/index.html.twig',
-            compact('categories', 'page', 'theNumberOnThePage', 'countCategories', 'numberOfPages', 'position')
+            'category/index.html.twig', [
+                'categories' => $categories,
+                'pagination' => $pagination,
+            ]
         );
     }
 }

@@ -12,6 +12,7 @@ use AppBundle\Repository\FeedbackImageRepository;
 use AppBundle\Repository\ProductRepository;
 use AppBundle\Repository\ShopRepository;
 use AppBundle\Services\FileUploader;
+use AppBundle\Services\PaginationService;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\NonUniqueResultException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -69,15 +70,17 @@ class MainController extends Controller
             ->getDoctrine()
             ->getRepository(Feedback::class);
 
-        $page                   = ($request->get('page')) ? $request->get('page') : 1;
-        $theNumberOnThePage     = 5;
-        $allFeedbacks           = $feedbackRepository->findByPage($page, $theNumberOnThePage);
-        $quantityOfAllFeedbacks = $feedbackRepository->getTheQuantityOfAllFeedbacks();
-        $numberOfPages          = ceil($quantityOfAllFeedbacks / $theNumberOnThePage);
-        $pathForFiles           = $fileUploader->getTargetDirectory();
 
-        $service  = $this->container->get('app.pagination');
-        $position = $service->getHrefPosition($page, $numberOfPages);
+        /** @var PaginationService $pagination */
+        $pagination  = $this->container->get('app.pagination');
+        $pagination->setData(
+            ($request->get('page')) ? $request->get('page') : 1,
+            $feedbackRepository->getTheQuantityOfAllFeedbacks(),
+            5
+        );
+
+        $allFeedbacks           = $feedbackRepository->findByPage($pagination->getPage(), $pagination->getTheNumberOnThePage());
+        $pathForFiles           = $fileUploader->getTargetDirectory();
 
         $form = $this->createForm(FeedbackType::class);
         $form->add('submit', SubmitType::class);
@@ -88,11 +91,7 @@ class MainController extends Controller
         return $this->render('main/feedback.html.twig', [
             'formView'               => $formView,
             'allFeedbacks'           => $allFeedbacks,
-            'page'                   => $page,
-            'theNumberOnThePage'     => $theNumberOnThePage,
-            'quantityOfAllFeedbacks' => $quantityOfAllFeedbacks,
-            'numberOfPages'          => $numberOfPages,
-            'position'               => $position,
+            'pagination'             => $pagination,
             'path_for_files'         => $pathForFiles,
         ]);
     }

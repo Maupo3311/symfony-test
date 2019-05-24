@@ -68,11 +68,46 @@ class Shop
     private $categories;
 
     /**
+     * @var ArrayCollection $images
+     *
+     * @ORM\OneToMany(
+     *     targetEntity="AppBundle\Entity\Image\ShopImage",
+     *      cascade={"persist","remove"},
+     *      orphanRemoval=true,
+     *      mappedBy="shop"
+     * )
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="images_id", referencedColumnName="id", nullable=true)
+     * })
+     */
+    private $images;
+
+    /**
      * Shop constructor.
      */
     public function __construct()
     {
         $this->categories = new ArrayCollection();
+        $this->images     = new ArrayCollection();
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getImages()
+    {
+        return $this->images;
+    }
+
+    /**
+     * @param ArrayCollection $images
+     * @return $this
+     */
+    public function setImages(ArrayCollection $images)
+    {
+        $this->images = $images;
+
+        return $this;
     }
 
     /**
@@ -107,7 +142,7 @@ class Shop
     /**
      * @return string
      */
-    public function getDescription(): string
+    public function getDescription()
     {
         return $this->description;
     }

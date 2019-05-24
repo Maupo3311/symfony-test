@@ -17,33 +17,7 @@
         <p>No feedbacks found</p>
     {% endif %}
 
-    {% if numberOfPages > 1 %}
-        <div class="center-block center">
-            <a href="?page=1">
-                <b> << </b>
-            </a>
-
-            <a href="?page={% if page == 1 %}{{ 1 }}{% else %}{{ page - 1 }}{% endif %}">
-                <b> < </b>
-            </a>
-
-            <span>
-                {% for number in page-position[0]..page+position[1] if number <= numberOfPages %}
-                    <a href="?page={{ number }}" class="{% if number == page %}{{ 'noneDecoration' }}{% endif %}">
-                        <span>{{ number }}</span>
-                    </a>
-                {% endfor %}
-            </span>
-
-            <a href="?page={% if page >= numberOfPages %}{{ page }}{% else %}{{ page + 1 }}{% endif %}">
-                <b> > </b>
-            </a>
-
-            <a href="?page= {{ numberOfPages }}">
-                <b> >> </b>
-            </a>
-        </div>
-    {% endif %}
+   {% include 'pagination.html.twig' %}
 
     {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
         {{ form_start(formView, {'attr': {'action': path('ajax_submit_feedback'), 'class': 'ajaxForm', 'method': 'POST'}}) }}
@@ -74,7 +48,7 @@
             userId = {{ app.user.id }}
         {% endif %}
 
-        formChecker({{ page }}, {{ theNumberOnThePage }}, userId)
-        loadFeedback({{ page }}, {{ theNumberOnThePage }}, userId)
+        formChecker({{ pagination.page }}, {{ pagination.theNumberOnThePage }}, userId)
+        loadFeedback({{ pagination.page }}, {{ pagination.theNumberOnThePage }}, userId)
     </script>
 {% endblock %}

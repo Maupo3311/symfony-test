@@ -9,6 +9,14 @@
     <link rel="stylesheet" href="{{ asset('css/comment.css') }}">
 {% endblock %}
 
+{% block crumbs %}
+     <ol class = "breadcrumb">
+        <li><a href = "{{ path('homepage') }}">Home</a></li>
+        <li><a href="{{ path('product_show') }}">Products</a></li>
+        <li class="active">{{ product.title|capitalize }}</li>
+    </ol>
+{% endblock %}
+
 {% block body %}
     <table class="table table-hover">
         <tbody>

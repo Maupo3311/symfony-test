@@ -1,0 +1,75 @@
+{% if pagination.sort %}
+    {% if pagination.numberOfPages > 1 %}
+        <div class="center-block center">
+            <nav aria-label="Page navigation example" style="display: inline-block">
+                <ul class="pagination">
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1&sort={{ pagination.currentField }}&order={{ pagination.currentOrder }}">
+                            <b> << </b>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={% if pagination.page == 1 %}{{ 1 }}{% else %}{{ pagination.page - 1 }}{% endif %}&sort={{ pagination.currentField }}&order={{ pagination.currentOrder }}">
+                            <b> < </b>
+                        </a>
+                    </li>
+                    {% for number in pagination.page - pagination.position[0]..pagination.page+pagination.position[1] if number <= pagination.numberOfPages %}
+                    <li class="page-item">
+                        <a class="page-link {% if number == pagination.page %}{{ 'noneDecoration' }}{% endif %}" href="?page={{ number }}&sort={{ pagination.currentField }}&order={{ pagination.currentOrder }}">
+                            <span>
+                                {{ number }}
+                            </span>
+                        </a>
+                    </li>
+                    {% endfor %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={% if pagination.page >= pagination.numberOfPages %}{{ pagination.page }}{% else %}{{ pagination.page + 1 }}{% endif %}&sort={{ pagination.currentField }}&order={{ pagination.currentOrder }}">
+                            <b> > </b>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page= {{ pagination.numberOfPages }}&sort={{ pagination.currentField }}&order={{ pagination.currentOrder }}">
+                            <b> >> </b>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    {% endif %}
+{% else %}
+    <div class="center-block center">
+        <nav aria-label="Page navigation example" style="display: inline-block">
+            <ul class="pagination">
+                <li class="page-item">
+                    <a class="page-link" href="?page=1">
+                        <b> << </b>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={% if pagination.page == 1 %}{{ 1 }}{% else %}{{ pagination.page - 1 }}{% endif %}">
+                        <b> < </b>
+                    </a>
+                </li>
+                {% for number in pagination.page - pagination.position[0]..pagination.page+pagination.position[1] if number <= pagination.numberOfPages %}
+                    <li class="page-item">
+                        <a class="page-link {% if number == pagination.page %}{{ 'noneDecoration' }}{% endif %}" href="?page={{ number }}">
+                            <span>
+                                {{ number }}
+                            </span>
+                        </a>
+                    </li>
+                {% endfor %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={% if pagination.page >= pagination.numberOfPages %}{{ pagination.page }}{% else %}{{ pagination.page + 1 }}{% endif %}">
+                        <b> > </b>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page= {{ pagination.numberOfPages }}">
+                        <b> >> </b>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+{% endif %}

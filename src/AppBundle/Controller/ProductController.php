@@ -9,6 +9,7 @@ use AppBundle\Entity\Image\CommentImage;
 use AppBundle\Entity\User;
 use AppBundle\Form\CommentType;
 use AppBundle\Repository\ProductRepository;
+use AppBundle\Services\PaginationService;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\OptimisticLockException;
@@ -38,37 +39,29 @@ class ProductController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $page = ($request->get('page')) ? $request->get('page') : 1;
-
         /** @var ProductRepository $productsRepository */
         $productsRepository = $this
             ->getDoctrine()
             ->getRepository(Product::class);
 
-        $theNumberOnThePage = 10;
-        $field              = $request->get('sort') ?: 'id';
-        $order              = $request->get('order') ? trim($request->get('order')) : 'ASC';
-        $nextOrder          = $order == 'ASC' ? 'DESC' : 'ASC';
-        $sort               = [$field => $order];
-        $products           = $productsRepository->findBySortAndPage($sort, $page, $theNumberOnThePage);
+        /** @var PaginationService $pagination */
+        $pagination = $this->container->get('app.pagination');
+        $pagination->setData(
+            ($request->get('page')) ? $request->get('page') : 1,
+            $productsRepository->getTheQuantityOfAllProducts(),
+            15
+        );
+        $pagination->setSort(
+            $request->get('order') ? trim($request->get('order')) : 'ASC',
+            $request->get('sort') ?: 'id'
+        );
 
-        $quantityOfAllProducts = $productsRepository->getTheQuantityOfAllProducts();
-        $numberOfPages         = ceil($quantityOfAllProducts / $theNumberOnThePage);
-
-        $service  = $this->container->get('app.pagination');
-        $position = $service->getHrefPosition($page, $numberOfPages);
+        $sort     = $pagination->getSort();
+        $products = $productsRepository->findBySortAndPage($sort, $pagination->getPage(), $pagination->getTheNumberOnThePage());
 
         return $this->render('product/index.html.twig', [
-            'products'              => $products,
-            'page'                  => $page,
-            'theNumberOnThePage'    => $theNumberOnThePage,
-            'quantityOfAllProducts' => $quantityOfAllProducts,
-            'position'              => $position,
-            'numberOfPages'         => $numberOfPages,
-            'nextOrder'             => $nextOrder,
-            'sort'                  => $sort,
-            'current_field'         => $field,
-            'current_order'         => $order,
+            'products'   => $products,
+            'pagination' => $pagination,
         ]);
     }
 
@@ -106,37 +99,33 @@ class ProductController extends Controller
      */
     public function showByCategoryAction(Category $category, Request $request)
     {
-        $page = ($request->get('page')) ? $request->get('page') : 1;
-
-        $theNumberOnThePage = 10;
-
         /** @var ProductRepository $productRepository */
         $productRepository = $this
             ->getDoctrine()
             ->getRepository(Product::class);
 
-        $field                 = ($request->get('sort')) ? $request->get('sort') : 'id';
-        $order                 = ($request->get('order')) ? trim($request->get('order')) : 'ASC';
-        $nextOrder             = ($order == 'ASC') ? 'DESC' : 'ASC';
-        $sort                  = [$field => $order];
-        $products              = $productRepository->findByCategory($category, $page, $theNumberOnThePage, $sort);
-        $quantityOfAllProducts = $productRepository->getTheQuantityOfAllProducts(['category' => $category->getId()]);
-        $numberOfPages         = ceil($quantityOfAllProducts / $theNumberOnThePage);
+        /** @var PaginationService $pagination */
+        $pagination = $this->container->get('app.pagination');
+        $pagination->setData(
+            ($request->get('page')) ? $request->get('page') : 1,
+            $productRepository->getTheQuantityOfAllProducts(['category' => $category->getId()]),
+            15
+        );
+        $pagination->setSort(
+            $request->get('order') ? trim($request->get('order')) : 'ASC',
+            $request->get('sort') ?: 'id'
+        );
 
-        $service  = $this->container->get('app.pagination');
-        $position = $service->getHrefPosition($page, $numberOfPages);
+        $products = $productRepository->findByCategory(
+            $category,
+            $pagination->getPage(),
+            $pagination->getTheNumberOnThePage(),
+            $pagination->getSort()
+        );
 
         return $this->render('product/index.html.twig', [
-            'products'              => $products,
-            'page'                  => $page,
-            'theNumberOnThePage'    => $theNumberOnThePage,
-            'quantityOfAllProducts' => $quantityOfAllProducts,
-            'position'              => $position,
-            'numberOfPages'         => $numberOfPages,
-            'nextOrder'             => $nextOrder,
-            'sort'                  => $sort,
-            'current_field'         => $field,
-            'current_order'         => $order,
+            'products'   => $products,
+            'pagination' => $pagination,
         ]);
     }
 
