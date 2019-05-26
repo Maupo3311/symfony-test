@@ -87,7 +87,9 @@ class BaseFixtures extends Fixture
             $shop = new Shop();
             $shop->setName('shop ' . rand(100, 100000))
                 ->setDescription(md5(rand(0, 100)))
-                ->setPhoneNumber('7' . rand(100000000, 999999999));
+                ->setPhoneNumber('7' . rand(100000000, 999999999))
+                ->setLon(rand(30, 55).'.'.rand(1000000, 9999999))
+                ->setLat(rand(30, 55).'.'.rand(1000000, 9999999));
 
             $manager->persist($shop);
             $shops[] = $shop;

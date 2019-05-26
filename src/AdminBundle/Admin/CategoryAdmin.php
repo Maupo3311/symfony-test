@@ -31,6 +31,10 @@ final class CategoryAdmin extends AbstractAdmin
     {
         $formMapper
             ->add('name', TextType::class)
+            ->add('shop', EntityType::class, [
+                'class'        => 'AppBundle\Entity\Shop',
+                'choice_label' => 'name',
+            ])
             ->add('active', BooleanType::class)
             ->add('products', CollectionType::class, [
                 'required' => false,

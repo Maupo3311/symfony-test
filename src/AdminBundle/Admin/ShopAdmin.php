@@ -22,7 +22,9 @@ final class ShopAdmin extends AbstractAdmin
     {
         $formMapper->add('name')
             ->add('description')
-            ->add('phoneNumber');
+            ->add('phoneNumber')
+            ->add('lon')
+            ->add('lat');
 
         $requestUri = $this->getRequest()->getRequestUri();
         $shopId  = basename(str_replace('/edit', '', $requestUri));

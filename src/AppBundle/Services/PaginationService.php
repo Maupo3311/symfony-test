@@ -44,20 +44,18 @@ class PaginationService
     protected $theNumberOnThePage;
 
     /**
+     * PaginationService constructor.
      * @param int $page
      * @param int $quantity
      * @param int $theNumberOnThePage
-     * @return $this
      */
-    public function setData(int $page, int $quantity, int $theNumberOnThePage = 10)
+    public function __construct(int $page, int $quantity, int $theNumberOnThePage = 10)
     {
         $this->page               = $page;
         $this->numberOfPages      = ceil($quantity / $theNumberOnThePage);
         $this->theNumberOnThePage = $theNumberOnThePage;
 
         $this->setHrefPosition($this->page, $this->numberOfPages);
-
-        return $this;
     }
 
     /**

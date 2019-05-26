@@ -32,9 +32,7 @@ class CategoryController extends Controller
             ->getRepository(Category::class);
 
         /** @var PaginationService $pagination */
-        $pagination = $this->container->get('app.pagination');
-
-        $pagination->setData(
+        $pagination = new PaginationService(
             $request->get('page') ?: 1,
             $categoryRepository->count([]),
             10

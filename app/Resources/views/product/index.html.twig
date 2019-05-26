@@ -10,6 +10,13 @@
 {% block crumbs %}
     <ol class = "breadcrumb">
         <li><a href = "{{ path('homepage') }}">Home</a></li>
+        {% if category is defined %}
+            <li>
+                <a href="{{ path('category_show') }}">
+                    {{ category.name }}
+                </a>
+            </li>
+        {% endif %}
         <li class = "active">Products</li>
         <li class = "active">
             Sort By

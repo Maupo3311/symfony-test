@@ -3,7 +3,9 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Shop;
+use AppBundle\Services\locationiqService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -21,8 +23,14 @@ class ShopController extends Controller
      */
     public function showAction(Shop $shop)
     {
+        $geocode = new locationiqService($this->getParameter('locationiq_geocode_api_key'));
+
+        $geocodeData = $geocode->getDataByCoords($shop->getLat(), $shop->getLon());
+
         return $this->render('/shop/show.html.twig', [
-           'shop' => $shop,
+            'shop'         => $shop,
+            'geocode'      => $geocode,
+            'geocode_data' => $geocodeData,
         ]);
     }
 }

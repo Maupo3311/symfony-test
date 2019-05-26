@@ -3,6 +3,7 @@
 namespace AppBundle\Repository;
 
 use AppBundle\Entity\Category;
+use AppBundle\Entity\Shop;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 
@@ -50,7 +51,6 @@ class ProductRepository extends EntityRepository
                 ->createQueryBuilder('p')
                 ->where('p.category = :category')
                 ->setParameter('category', $category)
-                ->setParameters(['category' => $category,])
                 ->orderBy("p.{$field}", $order)
                 ->setFirstResult($firstResult)
                 ->setMaxResults($theNumberOnThePage)

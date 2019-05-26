@@ -56,6 +56,26 @@ class Shop
     private $phoneNumber;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(
+     *     name="lat",
+     *     type="string",
+     * )
+     */
+    private $lat;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(
+     *     name="lon",
+     *     type="string",
+     * )
+     */
+    private $lon;
+
+    /**
      * @var ArrayCollection
      *
      * @ORM\OneToMany(
@@ -92,6 +112,44 @@ class Shop
     }
 
     /**
+     * @return string
+     */
+    public function getLat()
+    {
+        return $this->lat;
+    }
+
+    /**
+     * @param string $lat
+     * @return $this
+     */
+    public function setLat(string $lat)
+    {
+        $this->lat = $lat;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLon()
+    {
+        return $this->lon;
+    }
+
+    /**
+     * @param string $lon
+     * @return $this
+     */
+    public function setLon(string $lon)
+    {
+        $this->lon = $lon;
+
+        return $this;
+    }
+
+    /**
      * @return ArrayCollection
      */
     public function getImages()
@@ -106,6 +164,17 @@ class Shop
     public function setImages(ArrayCollection $images)
     {
         $this->images = $images;
+
+        return $this;
+    }
+
+    /**
+     * @param $image
+     * @return $this
+     */
+    public function addImage($image)
+    {
+        $this->images[] = $image;
 
         return $this;
     }

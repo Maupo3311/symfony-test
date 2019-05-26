@@ -26,7 +26,7 @@ parameters:
     github_secret: ~
     yandex_client_id: ~
     yandex_secret: ~
-    freegeoip_geokoding_api: ~
+    locationiq_geocode_api_key: ~
 
     upload_directory: '%kernel.project_dir%/web/uploads'
 

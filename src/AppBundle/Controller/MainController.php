@@ -72,11 +72,11 @@ class MainController extends Controller
 
 
         /** @var PaginationService $pagination */
-        $pagination  = $this->container->get('app.pagination');
-        $pagination->setData(
+        $pagination  = new PaginationService(
             ($request->get('page')) ? $request->get('page') : 1,
             $feedbackRepository->getTheQuantityOfAllFeedbacks(),
             5
+
         );
 
         $allFeedbacks           = $feedbackRepository->findByPage($pagination->getPage(), $pagination->getTheNumberOnThePage());

@@ -6,6 +6,7 @@ use AppBundle\Entity\Basket;
 use AppBundle\Entity\Category;
 use AppBundle\Entity\Comment;
 use AppBundle\Entity\Image\CommentImage;
+use AppBundle\Entity\Shop;
 use AppBundle\Entity\User;
 use AppBundle\Form\CommentType;
 use AppBundle\Repository\ProductRepository;
@@ -45,8 +46,7 @@ class ProductController extends Controller
             ->getRepository(Product::class);
 
         /** @var PaginationService $pagination */
-        $pagination = $this->container->get('app.pagination');
-        $pagination->setData(
+        $pagination = new PaginationService(
             ($request->get('page')) ? $request->get('page') : 1,
             $productsRepository->getTheQuantityOfAllProducts(),
             15
@@ -71,10 +71,7 @@ class ProductController extends Controller
      * @Route("/show/{id}", name="product_item", requirements={"id": "[0-9]+"})
      * @param Product $product
      * @param Request $request
-     * @return RedirectResponse|Response
-     *
-     * @throws ORMException
-     * @throws OptimisticLockException
+     * @return Response
      */
     public function showAction(Product $product, Request $request)
     {
@@ -105,11 +102,11 @@ class ProductController extends Controller
             ->getRepository(Product::class);
 
         /** @var PaginationService $pagination */
-        $pagination = $this->container->get('app.pagination');
-        $pagination->setData(
+        $pagination = new PaginationService(
             ($request->get('page')) ? $request->get('page') : 1,
             $productRepository->getTheQuantityOfAllProducts(['category' => $category->getId()]),
             15
+
         );
         $pagination->setSort(
             $request->get('order') ? trim($request->get('order')) : 'ASC',
@@ -126,6 +123,7 @@ class ProductController extends Controller
         return $this->render('product/index.html.twig', [
             'products'   => $products,
             'pagination' => $pagination,
+            'category'   => $category,
         ]);
     }
 

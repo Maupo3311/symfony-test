@@ -100,7 +100,7 @@ abstract class AbstractImage
     public function getImageWebPath()
     {
         if ($this->imagePath && is_file($this->getImageAbsolutePath())) {
-            return $this->getImageUploadDir() . '/' . $this->imagePath;
+            return '/' . $this->getImageUploadDir() . '/' . $this->imagePath;
         }
 
         return null;

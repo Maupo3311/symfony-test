@@ -47,7 +47,6 @@ function formChecker(page = 1, theNumberOnThePage = 5, userId = null) {
             url: '/ajax/feedback/delete',
             data: 'id=' + feedbackId,
             success: function(response) {
-                console.log(response);
 
                 loadFeedback(page, theNumberOnThePage, userId);
 
