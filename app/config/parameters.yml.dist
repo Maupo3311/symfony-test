@@ -27,6 +27,7 @@ parameters:
     yandex_client_id: ~
     yandex_secret: ~
     locationiq_geocode_api_key: ~
+    ipstack_api_key: ~
 
     upload_directory: '%kernel.project_dir%/web/uploads'
 

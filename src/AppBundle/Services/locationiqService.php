@@ -42,7 +42,7 @@ class locationiqService
      * @param string $lon
      * @return mixed|string
      */
-    public function getDataByCoords(string $lat, string $lon)
+    public function getDataByCoords(string $lon, string $lat)
     {
         $data = http_build_query([
             'key'    => $this->accessKey,

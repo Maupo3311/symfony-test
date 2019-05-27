@@ -279,4 +279,24 @@ class Shop
 
         return $finalCount;
     }
+
+    /**
+     * @return float|int
+     */
+    public function getRating()
+    {
+        $summRating       = 0;
+        $quantityProducts = 0;
+
+        /** @var Category $category */
+        foreach ($this->getCategories() as $category) {
+            /** @var Product $product */
+            foreach ($category->getProducts() as $product) {
+                $summRating += $product->getRating();
+                $quantityProducts++;
+            }
+        }
+
+        return round($summRating / $quantityProducts, 2);
+    }
 }

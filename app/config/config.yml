@@ -46,6 +46,8 @@ twig:
     strict_variables: '%kernel.debug%'
     form_themes:
         - 'bootstrap_4_layout.html.twig'
+    globals:
+        locationiq_geocode_api_key: "%locationiq_geocode_api_key%"
 
 # Doctrine Configuration
 doctrine:

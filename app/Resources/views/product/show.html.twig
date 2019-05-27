@@ -12,7 +12,8 @@
 {% block crumbs %}
      <ol class = "breadcrumb">
         <li><a href = "{{ path('homepage') }}">Home</a></li>
-        <li><a href="{{ path('product_show') }}">Products</a></li>
+        <li><a href="{{ path('show_shop_by_id', {'id': product.category.shop.id}) }}">{{ product.category.shop.name }}</a></li>
+        <li><a href="{{ path('category_show') }}">{{ product.category.name }}</a></li>
         <li class="active">{{ product.title|capitalize }}</li>
     </ol>
 {% endblock %}

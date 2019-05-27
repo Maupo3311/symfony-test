@@ -28,6 +28,15 @@ services:
         arguments: ["%stripe_secret_key%"]
         public: true
 
+    app.pagination:
+        class: AppBundle\Services\PaginationService
+        public: true
+
+    app.ipstack:
+        class: AppBundle\Services\IpstackService
+        arguments: ["@session","%ipstack_api_key%"]
+        public: true
+
     app.form.registration:
         class: AppBundle\Form\RegistrationType
         tags:

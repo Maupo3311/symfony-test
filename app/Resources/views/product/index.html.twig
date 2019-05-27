@@ -12,12 +12,20 @@
         <li><a href = "{{ path('homepage') }}">Home</a></li>
         {% if category is defined %}
             <li>
+                <a href="{{ path('show_shop_by_id', {'id': category.shop.id}) }}">
+                    {{ category.shop.name }}
+                </a>
+            </li>
+            <li>
                 <a href="{{ path('category_show') }}">
                     {{ category.name }}
                 </a>
             </li>
         {% endif %}
         <li class = "active">Products</li>
+        {% if search is defined %}
+            <li class = "active">{{ search }}</li>
+        {% endif %}
         <li class = "active">
             Sort By
             {% if pagination.currentField == 'id' %}
@@ -110,7 +118,32 @@
                     </a>
                 </li>
             </ul>
+            <form class="form-inline my-2 my-lg-0" method="GET" action="{{ path('show_products_by_search') }}">
+                <input value="{% if search is defined %}{{ search }}{% endif %}" class="form-control mr-sm-2" name="search" type="search" placeholder="Title Product" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                <input type="hidden" name="page" value="{{ pagination.page }}">
+                <input type="hidden" name="order" value="{{ pagination.currentOrder }}">
+                <input type="hidden" name="sort" value="{{ pagination.currentField }}">
+            </form>
         </div>
+    </nav>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <form class="form-inline my-2 my-lg-0" method="GET" action="{{ path('show_products_by_search') }}">
+           <p>
+               <span style="font-size: 20px; margin-right: 20px" class="head-nav">Filtration</span>
+               Field
+               <select name="field" class="form-control" id="exampleFormControlSelect1">
+                   <option>Rating</option>
+                   <option>Price</option>
+               </select>
+               Value from
+               <input name="from" class="form-control mr-sm-1">
+               To
+               <input name="to" class="form-control mr-sm-1">
+               <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+           </p>
+        </form>
     </nav>
 
         <div class="col-md-12 product-window">

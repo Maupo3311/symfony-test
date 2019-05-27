@@ -5,6 +5,7 @@
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('css/main/index.css') }}">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
 {% endblock %}
 
 {% block body %}
@@ -15,6 +16,7 @@
             <li><a href="#tabs-3">Shopping opportunities</a></li>
             <li><a href="#tabs-1">About</a></li>
             <li><a href="#tabs-2">Best products</a></li>
+            <li><a href="#tabs-4">Map with shops</a></li>
         </ul>
         <div id="tabs-1">
             <p class="center">The project was carried out on an internship in the company of sibers</p>
@@ -77,19 +79,62 @@
 
             </ul>
         </div>
+
+        <div id="tabs-4">
+            <ul class="list-group">
+                    <div id="map" style="height: 500px">
+
+                    </div>
+            </ul>
+        </div>
     </div>
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
+    <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+    <script src="https://tiles.unwiredmaps.com/js/leaflet-unwired.js"></script>
     <script src="{{ asset('/js/main/index.js') }}"></script>
     <script src="{{ asset('/js/ajax/main.js') }}"></script>
     <script>
         formChecker();
         $(document).ready(function() {
 
+            loadMap()
             $("#tabs").tabs();
 
         });
+
+        function loadMap()
+        {
+            var key = '{{ locationiq_geocode_api_key }}'
+
+            // Add layers that we need to the map
+            var streets = L.tileLayer.Unwired({key: key, scheme: "streets"});
+
+            // Initialize the map
+            var map = L.map('map', {
+                center: [{{ app.session.get('userLocation').latitude }}, {{ app.session.get('userLocation').longitude }}], //map loads with this location as center
+                zoom: 5,
+                layers: [streets] // Show 'streets' by default
+            });
+
+            // Add the 'scale' control
+            L.control.scale().addTo(map);
+
+            // Add the 'layers' control
+            L.control.layers({
+                "Streets": streets
+            }).addTo(map);
+
+            {% for shop in shops %}
+                var markerShop = L.marker([{{ shop.lon }}, {{ shop.lat }}]).addTo(map)
+                markerShop.bindPopup ("<p><b>{{ shop.name }}</b></p><p>{{ shop.lon }}, {{ shop.lat }}</p>"). openPopup ();
+            {% endfor %}
+
+            var marker = L.marker([{{ app.session.get('userLocation').latitude }}, {{ app.session.get('userLocation').longitude }}]).addTo(map)
+            marker.bindPopup ("<b>It's you</b>"). openPopup ();
+        }
+
     </script>
 {% endblock %}

@@ -22,8 +22,7 @@ class ProductRepository extends EntityRepository
      */
     public function findActive()
     {
-        return $this
-            ->createQueryBuilder('p')
+        return $this->createQueryBuilder('p')
             ->join('p.category', 'c')
             ->where('p.active = :active')
             ->andWhere('c.active = :active')
@@ -47,8 +46,7 @@ class ProductRepository extends EntityRepository
         $firstResult = $lastResult - $theNumberOnThePage;
 
         foreach ($sort as $field => $order) {
-            return $this
-                ->createQueryBuilder('p')
+            return $this->createQueryBuilder('p')
                 ->where('p.category = :category')
                 ->setParameter('category', $category)
                 ->orderBy("p.{$field}", $order)
@@ -69,8 +67,7 @@ class ProductRepository extends EntityRepository
         $lastResult  = $page * $theNumberOnThePage;
         $firstResult = $lastResult - $theNumberOnThePage;
 
-        return $this
-            ->createQueryBuilder('p')
+        return $this->createQueryBuilder('p')
             ->setFirstResult($firstResult)
             ->setMaxResults($theNumberOnThePage)
             ->getQuery()
@@ -87,15 +84,13 @@ class ProductRepository extends EntityRepository
     public function getTheQuantityOfAllProducts(array $where = null)
     {
         if ($where == null) {
-            return $this
-                ->createQueryBuilder('p')
+            return $this->createQueryBuilder('p')
                 ->select('count(p.id)')
                 ->getQuery()
                 ->getSingleScalarResult();
         } else {
             foreach ($where as $field => $item) {
-                return $this
-                    ->createQueryBuilder('p')
+                return $this->createQueryBuilder('p')
                     ->select('count(p.id)')
                     ->where('p.' . $field . ' = :item')
                     ->setParameter('item', $item)
@@ -108,14 +103,46 @@ class ProductRepository extends EntityRepository
     }
 
     /**
+     * @param array $where
+     * @return mixed
+     * @throws NonUniqueResultException
+     */
+    public function getTheQuantityOfAllProductsByLike(array $where)
+    {
+        foreach ($where as $field => $item) {
+            return $this->createQueryBuilder('p')
+                ->select('count(p.id)')
+                ->where('p.' . $field . ' LIKE :item')
+                ->setParameter('item', '%'.$item.'%')
+                ->getQuery()
+                ->getSingleScalarResult();
+        }
+    }
+
+    /**
+     * @param string $filtrationField
+     * @param        $from
+     * @param        $to
+     * @return mixed
+     * @throws NonUniqueResultException
+     */
+    public function getTheQuantityOfAllProductsByFiltration(string $filtrationField, $from, $to)
+    {
+        return $this->createQueryBuilder('p')
+            ->where($filtrationField . '>' . $from)
+            ->andWhere($filtrationField . '<' . $to)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    /**
      * Find product by rating
      *
      * @return mixed
      */
     public function findByRating()
     {
-        return $this
-            ->createQueryBuilder('p')
+        return $this->createQueryBuilder('p')
             ->orderBy('p.rating', 'DESC')
             ->getQuery()
             ->getResult();
@@ -126,8 +153,7 @@ class ProductRepository extends EntityRepository
      */
     public function findBestProducts()
     {
-        return $this
-            ->createQueryBuilder('p')
+        return $this->createQueryBuilder('p')
             ->setFirstResult(0)
             ->setMaxResults(10)
             ->orderBy('p.rating', 'DESC')
@@ -147,8 +173,58 @@ class ProductRepository extends EntityRepository
         $firstResult = $lastResult - $theNumberOnThePage;
 
         foreach ($sort as $field => $order) {
-            return $this
-                ->createQueryBuilder('p')
+            return $this->createQueryBuilder('p')
+                ->orderBy('p.' . lcfirst($field), $order)
+                ->setFirstResult($firstResult)
+                ->setMaxResults($theNumberOnThePage)
+                ->getQuery()
+                ->getResult();
+        }
+    }
+
+    /**
+     * @param string $search
+     * @param array  $sort
+     * @param int    $page
+     * @param int    $theNumberOnThePage
+     * @return mixed
+     */
+    public function findBySearchWithPaginationAndSort(string $search, array $sort, int $page, int $theNumberOnThePage)
+    {
+        $lastResult  = $page * $theNumberOnThePage;
+        $firstResult = $lastResult - $theNumberOnThePage;
+
+        foreach ($sort as $field => $order) {
+            return $this->createQueryBuilder('p')
+                ->where('p.title LIKE :search')
+                ->orderBy('p.' . lcfirst($field), $order)
+                ->setFirstResult($firstResult)
+                ->setMaxResults($theNumberOnThePage)
+                ->setParameter('search', '%'.$search.'%')
+                ->getQuery()
+                ->getResult();
+        }
+    }
+
+    /**
+     * @param string $filtrationField
+     * @param        $from
+     * @param        $to
+     * @param array  $sort
+     * @param int    $page
+     * @param int    $theNumberOnThePage
+     * @return mixed
+     */
+    public function findByFiltrationAndPagination(
+        string $filtrationField, $from, $to, array $sort, int $page, int $theNumberOnThePage)
+    {
+        $lastResult  = $page * $theNumberOnThePage;
+        $firstResult = $lastResult - $theNumberOnThePage;
+
+        foreach ($sort as $field => $order) {
+            return $this->createQueryBuilder('p')
+                ->where($filtrationField . '>' . $from)
+                ->andWhere($filtrationField . '<' . $to)
                 ->orderBy('p.' . lcfirst($field), $order)
                 ->setFirstResult($firstResult)
                 ->setMaxResults($theNumberOnThePage)

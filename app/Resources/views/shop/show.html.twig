@@ -22,16 +22,15 @@
                 <p>{{ shop.description }}</p>
                 <p>Phone Number: {{ shop.phoneNumber }}</p>
                 {% if geocode_data.address.city is defined %}
-                    <p>City: {{ geocode_data.address.city }}</p>
-                {% endif %}
-                {% if geocode_data.address.county is defined %}
                     <p>County: {{ geocode_data.address.county }}</p>
                 {% endif %}
+                {% if geocode_data.display_name is defined %}
+                    <p>Address: {{ geocode_data.display_name }}</p>
+                {% endif %}
+                <p>Rating: {{ shop.getRating() }}</p>
             </div>
 
-            <div id="map" style="height: 500px">
-
-            </div>
+            <div id="map" style="height: 500px"></div>
         </div>
 
         {% if shop.images is not empty %}

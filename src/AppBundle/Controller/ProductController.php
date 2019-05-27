@@ -47,7 +47,7 @@ class ProductController extends Controller
 
         /** @var PaginationService $pagination */
         $pagination = new PaginationService(
-            ($request->get('page')) ? $request->get('page') : 1,
+            $request->get('page') ?: 1,
             $productsRepository->getTheQuantityOfAllProducts(),
             15
         );
@@ -103,7 +103,7 @@ class ProductController extends Controller
 
         /** @var PaginationService $pagination */
         $pagination = new PaginationService(
-            ($request->get('page')) ? $request->get('page') : 1,
+            $request->get('page') ?: 1,
             $productRepository->getTheQuantityOfAllProducts(['category' => $category->getId()]),
             15
 
@@ -128,6 +128,61 @@ class ProductController extends Controller
     }
 
     /**
+     * @Route("/search", name="show_products_by_search")
+     * @param Request $request
+     * @return Response
+     * @throws NonUniqueResultException
+     */
+    public function showBySearchAction(Request $request)
+    {
+        if (!$search = $request->get('search')) {
+            return $this->redirectToRoute('product_show');
+        }
+
+        /** @var ProductRepository $productRepository */
+        $productRepository = $this->getDoctrine()
+            ->getRepository(Product::class);
+
+        /** @var PaginationService $pagination */
+        $pagination = new PaginationService(
+            $request->get('page') ?: 1,
+            $productRepository->getTheQuantityOfAllProductsByLike(['title' => $search]),
+            15
+
+        );
+        $pagination->setSort(
+            $request->get('order') ? trim($request->get('order')) : 'ASC',
+            $request->get('sort') ?: 'id'
+        );
+
+        $products = $productRepository->findBySearchWithPaginationAndSort(
+            $search,
+            $pagination->getSort(),
+            $pagination->getPage(),
+            $pagination->getTheNumberOnThePage()
+        );
+
+        return $this->render('product/index.html.twig', [
+            'products'   => $products,
+            'pagination' => $pagination,
+            'search'     => $search,
+        ]);
+    }
+
+    public function showByFiltrationAction(Request $request)
+    {
+        if (!$field = $request->get('field')) {
+            $this->addFlash('error', 'You have not specified a field');
+
+            return $this->redirectToRoute('product_show');
+        } else if (!$from = $request->get('from')) {
+            $this->addFlash('error', 'You have not specified a field');
+
+            return $this->redirectToRoute('product_show');
+        }
+    }
+
+    /**
      * Adds the product to the user's basket
      *
      * @Route("/add-to-basket/{id}", name="add_product_to_basket")
@@ -149,7 +204,8 @@ class ProductController extends Controller
             return $this->redirectToRoute('product_show');
         }
 
-        $number             = ($request->request->get('number')) ?: 1;
+        $number = ($request->request->get('number')) ?: 1;
+
         $existingBasketItem = null;
 
         if ($product->getNumber() < $number) {
@@ -185,8 +241,7 @@ class ProductController extends Controller
         } else {
             $basketItem = new Basket();
 
-            $basketItem
-                ->setBasketProduct($product)
+            $basketItem->setBasketProduct($product)
                 ->setUser($user)
                 ->setNumberOfProducts($number);
 

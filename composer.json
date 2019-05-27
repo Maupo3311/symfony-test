@@ -36,6 +36,7 @@
         "lexik/jwt-authentication-bundle": "^2.6",
         "nelmio/api-doc-bundle": "^3.4",
         "nelmio/cors-bundle": "^1.5",
+        "ok/ipstack-client": "^1.3",
         "php-http/guzzle6-adapter": "^1.1",
         "php-http/httplug-bundle": "^1.15",
         "php-http/message": "^1.7",

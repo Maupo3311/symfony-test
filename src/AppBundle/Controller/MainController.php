@@ -12,9 +12,11 @@ use AppBundle\Repository\FeedbackImageRepository;
 use AppBundle\Repository\ProductRepository;
 use AppBundle\Repository\ShopRepository;
 use AppBundle\Services\FileUploader;
+use AppBundle\Services\IpstackService;
 use AppBundle\Services\PaginationService;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\NonUniqueResultException;
+use OK\Ipstack\Exceptions\InvalidApiException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -22,6 +24,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use AppBundle\Repository\FeedbackRepository;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
  * Class MainController
@@ -34,9 +37,21 @@ class MainController extends Controller
      *
      * @Route("/", name="homepage")
      * @return Response
+     * @throws InvalidApiException
      */
     public function indexAction()
     {
+        $testIp = [
+            '94.251.80.158', // Новосибирск
+            '195.208.159.255', // Ставрополь
+            '178.219.186.12', // Москва
+        ];
+
+        /** @var IpstackService $ipstack */
+        $ipstack = $this->get('app.ipstack');
+
+        $ipstack->addInSession($testIp[rand(0, 2)]);
+
         /**@var ProductRepository $productRepository */
         $productRepository = $this
             ->getDoctrine()
@@ -70,17 +85,16 @@ class MainController extends Controller
             ->getDoctrine()
             ->getRepository(Feedback::class);
 
-
         /** @var PaginationService $pagination */
-        $pagination  = new PaginationService(
+        $pagination = new PaginationService(
             ($request->get('page')) ? $request->get('page') : 1,
             $feedbackRepository->getTheQuantityOfAllFeedbacks(),
             5
 
         );
 
-        $allFeedbacks           = $feedbackRepository->findByPage($pagination->getPage(), $pagination->getTheNumberOnThePage());
-        $pathForFiles           = $fileUploader->getTargetDirectory();
+        $allFeedbacks = $feedbackRepository->findByPage($pagination->getPage(), $pagination->getTheNumberOnThePage());
+        $pathForFiles = $fileUploader->getTargetDirectory();
 
         $form = $this->createForm(FeedbackType::class);
         $form->add('submit', SubmitType::class);
@@ -89,10 +103,10 @@ class MainController extends Controller
         $formView = $form->createView();
 
         return $this->render('main/feedback.html.twig', [
-            'formView'               => $formView,
-            'allFeedbacks'           => $allFeedbacks,
-            'pagination'             => $pagination,
-            'path_for_files'         => $pathForFiles,
+            'formView'       => $formView,
+            'allFeedbacks'   => $allFeedbacks,
+            'pagination'     => $pagination,
+            'path_for_files' => $pathForFiles,
         ]);
     }
 

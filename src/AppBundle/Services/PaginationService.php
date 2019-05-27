@@ -49,7 +49,7 @@ class PaginationService
      * @param int $quantity
      * @param int $theNumberOnThePage
      */
-    public function __construct(int $page, int $quantity, int $theNumberOnThePage = 10)
+    public function __construct(int $page = 1, int $quantity = 25, int $theNumberOnThePage = 10)
     {
         $this->page               = $page;
         $this->numberOfPages      = ceil($quantity / $theNumberOnThePage);
