@@ -128,7 +128,7 @@
             }).addTo(map);
 
             {% for shop in shops %}
-                var markerShop = L.marker([{{ shop.lon }}, {{ shop.lat }}]).addTo(map)
+                var markerShop = L.marker([{{ shop.lat }}, {{ shop.lon }}]).addTo(map)
                 markerShop.bindPopup ("<p><b>{{ shop.name }}</b></p><p>{{ shop.lon }}, {{ shop.lat }}</p>"). openPopup ();
             {% endfor %}
 

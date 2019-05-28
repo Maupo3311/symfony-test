@@ -11,6 +11,7 @@ use AppBundle\Form\FeedbackType;
 use AppBundle\Repository\FeedbackImageRepository;
 use AppBundle\Repository\ProductRepository;
 use AppBundle\Repository\ShopRepository;
+use AppBundle\Services\CoordinateService;
 use AppBundle\Services\FileUploader;
 use AppBundle\Services\IpstackService;
 use AppBundle\Services\PaginationService;

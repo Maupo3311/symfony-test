@@ -16,65 +16,6 @@ use Doctrine\ORM\NonUniqueResultException;
 class ProductRepository extends EntityRepository
 {
     /**
-     * Find all active products
-     *
-     * @return mixed
-     */
-    public function findActive()
-    {
-        return $this->createQueryBuilder('p')
-            ->join('p.category', 'c')
-            ->where('p.active = :active')
-            ->andWhere('c.active = :active')
-            ->setParameter('active', 1)
-            ->getQuery()
-            ->getResult();
-    }
-
-    /**
-     * Find product by category
-     *
-     * @param Category $category
-     * @param int      $page
-     * @param int      $theNumberOnThePage
-     * @param array    $sort
-     * @return mixed
-     */
-    public function findByCategory(Category $category, int $page = 1, int $theNumberOnThePage = 10, array $sort = ['id' => 'ASC'])
-    {
-        $lastResult  = $page * $theNumberOnThePage;
-        $firstResult = $lastResult - $theNumberOnThePage;
-
-        foreach ($sort as $field => $order) {
-            return $this->createQueryBuilder('p')
-                ->where('p.category = :category')
-                ->setParameter('category', $category)
-                ->orderBy("p.{$field}", $order)
-                ->setFirstResult($firstResult)
-                ->setMaxResults($theNumberOnThePage)
-                ->getQuery()
-                ->getResult();
-        }
-    }
-
-    /**
-     * @param int $page
-     * @param int $theNumberOnThePage
-     * @return mixed
-     */
-    public function findByPage(int $page, int $theNumberOnThePage)
-    {
-        $lastResult  = $page * $theNumberOnThePage;
-        $firstResult = $lastResult - $theNumberOnThePage;
-
-        return $this->createQueryBuilder('p')
-            ->setFirstResult($firstResult)
-            ->setMaxResults($theNumberOnThePage)
-            ->getQuery()
-            ->getResult();
-    }
-
-    /**
      * Quantity all products
      *
      * @param array $where
@@ -103,39 +44,6 @@ class ProductRepository extends EntityRepository
     }
 
     /**
-     * @param array $where
-     * @return mixed
-     * @throws NonUniqueResultException
-     */
-    public function getTheQuantityOfAllProductsByLike(array $where)
-    {
-        foreach ($where as $field => $item) {
-            return $this->createQueryBuilder('p')
-                ->select('count(p.id)')
-                ->where('p.' . $field . ' LIKE :item')
-                ->setParameter('item', '%'.$item.'%')
-                ->getQuery()
-                ->getSingleScalarResult();
-        }
-    }
-
-    /**
-     * @param string $filtrationField
-     * @param        $from
-     * @param        $to
-     * @return mixed
-     * @throws NonUniqueResultException
-     */
-    public function getTheQuantityOfAllProductsByFiltration(string $filtrationField, $from, $to)
-    {
-        return $this->createQueryBuilder('p')
-            ->where($filtrationField . '>' . $from)
-            ->andWhere($filtrationField . '<' . $to)
-            ->getQuery()
-            ->getSingleScalarResult();
-    }
-
-    /**
      * Find product by rating
      *
      * @return mixed
@@ -154,56 +62,12 @@ class ProductRepository extends EntityRepository
     public function findBestProducts()
     {
         return $this->createQueryBuilder('p')
+            ->where('p.active = 1')
             ->setFirstResult(0)
             ->setMaxResults(10)
             ->orderBy('p.rating', 'DESC')
             ->getQuery()
             ->getResult();
-    }
-
-    /**
-     * @param array $sort
-     * @param int   $page
-     * @param int   $theNumberOnThePage
-     * @return mixed
-     */
-    public function findBySortAndPage(array $sort, int $page, int $theNumberOnThePage)
-    {
-        $lastResult  = $page * $theNumberOnThePage;
-        $firstResult = $lastResult - $theNumberOnThePage;
-
-        foreach ($sort as $field => $order) {
-            return $this->createQueryBuilder('p')
-                ->orderBy('p.' . lcfirst($field), $order)
-                ->setFirstResult($firstResult)
-                ->setMaxResults($theNumberOnThePage)
-                ->getQuery()
-                ->getResult();
-        }
-    }
-
-    /**
-     * @param string $search
-     * @param array  $sort
-     * @param int    $page
-     * @param int    $theNumberOnThePage
-     * @return mixed
-     */
-    public function findBySearchWithPaginationAndSort(string $search, array $sort, int $page, int $theNumberOnThePage)
-    {
-        $lastResult  = $page * $theNumberOnThePage;
-        $firstResult = $lastResult - $theNumberOnThePage;
-
-        foreach ($sort as $field => $order) {
-            return $this->createQueryBuilder('p')
-                ->where('p.title LIKE :search')
-                ->orderBy('p.' . lcfirst($field), $order)
-                ->setFirstResult($firstResult)
-                ->setMaxResults($theNumberOnThePage)
-                ->setParameter('search', '%'.$search.'%')
-                ->getQuery()
-                ->getResult();
-        }
     }
 
     /**
@@ -223,13 +87,129 @@ class ProductRepository extends EntityRepository
 
         foreach ($sort as $field => $order) {
             return $this->createQueryBuilder('p')
-                ->where($filtrationField . '>' . $from)
-                ->andWhere($filtrationField . '<' . $to)
+                ->where('p.' . $filtrationField . '>' . $from)
+                ->andWhere('p.' . $filtrationField . '<' . $to)
                 ->orderBy('p.' . lcfirst($field), $order)
                 ->setFirstResult($firstResult)
                 ->setMaxResults($theNumberOnThePage)
                 ->getQuery()
                 ->getResult();
         }
+    }
+
+    /**
+     * @param array $parameters
+     * @param array $availableCategories
+     * @return mixed
+     */
+    public function findByParameters(array $parameters, array $availableCategories = [])
+    {
+        $lastResult  = $parameters['page'] * $parameters['theNumberOnThePage'];
+        $firstResult = $lastResult - $parameters['theNumberOnThePage'];
+
+        $query = $this->createQueryBuilder('p')
+            ->where("p.title LIKE :search")
+            ->andWhere('p.active = 1');
+
+        if (!empty($availableCategories)) {
+            $categoryWhere = '';
+
+            /** @var Category $category */
+            foreach ($availableCategories as $category) {
+                $categoryWhere .= 'p.category = ' . $category->getId() . ' OR ';
+            }
+
+            $categoryWhere = substr($categoryWhere, 0, -3);
+            $query->andWhere($categoryWhere);
+        }
+
+        $result = $query->andWhere("p.{$parameters['filtrationField']} > {$parameters['from']}")
+            ->andWhere("p.{$parameters['filtrationField']} < {$parameters['to']}")
+            ->orderBy('p.' . lcfirst($parameters['field']), $parameters['order'])
+            ->setFirstResult($firstResult)
+            ->setMaxResults($parameters['theNumberOnThePage'])
+            ->setParameter('search', "%{$parameters['search']}%")
+            ->getQuery()
+            ->getResult();
+
+        return $result;
+    }
+
+    /**
+     * @param array    $parameters
+     * @param Category $category
+     * @return mixed
+     */
+    public function findByParametersAndCategory(array $parameters, Category $category)
+    {
+        $lastResult  = $parameters['page'] * $parameters['theNumberOnThePage'];
+        $firstResult = $lastResult - $parameters['theNumberOnThePage'];
+
+        return $this->createQueryBuilder('p')
+            ->where("p.title LIKE :search")
+            ->andWhere('p.active = 1')
+            ->andWhere("p.category = {$category->getId()}")
+            ->andWhere("p.{$parameters['filtrationField']} > {$parameters['from']}")
+            ->andWhere("p.{$parameters['filtrationField']} < {$parameters['to']}")
+            ->orderBy('p.' . lcfirst($parameters['field']), $parameters['order'])
+            ->setFirstResult($firstResult)
+            ->setMaxResults($parameters['theNumberOnThePage'])
+            ->setParameter('search', "%{$parameters['search']}%")
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @param array $parameters
+     * @param array $availableCategories
+     * @return mixed
+     * @throws NonUniqueResultException
+     */
+    public function getQuantityByParameters(array $parameters, array $availableCategories = [])
+    {
+        $query = $this->createQueryBuilder('p')
+            ->select('count(p.id)')
+            ->where('p.title LIKE :search')
+            ->andWhere('p.active = 1');
+
+        if (!empty($availableCategories)) {
+            $categoryWhere = '';
+
+            /** @var Category $category */
+            foreach ($availableCategories as $category) {
+                $categoryWhere .= 'p.category = ' . $category->getId() . ' OR ';
+            }
+
+            $categoryWhere = substr($categoryWhere, 0, -3);
+            $query->andWhere($categoryWhere);
+        }
+
+        $result = $query->andWhere("p.{$parameters['filtrationField']} > {$parameters['from']}")
+            ->andWhere("p.{$parameters['filtrationField']} < {$parameters['to']}")
+            ->setParameter('search', "%{$parameters['search']}%")
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        return $result;
+    }
+
+    /**
+     * @param array    $parameters
+     * @param Category $category
+     * @return mixed
+     * @throws NonUniqueResultException
+     */
+    public function getQuantityByParametersAndCategory(array $parameters, Category $category)
+    {
+        return $this->createQueryBuilder('p')
+            ->select('count(p.id)')
+            ->where('p.title LIKE :search')
+            ->andWhere('p.active = 1')
+            ->andWhere("p.category = {$category->getId()}")
+            ->andWhere("p.{$parameters['filtrationField']} > {$parameters['from']}")
+            ->andWhere("p.{$parameters['filtrationField']} < {$parameters['to']}")
+            ->setParameter('search', "%{$parameters['search']}%")
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 }

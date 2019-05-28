@@ -49,3 +49,16 @@
     border: 2px solid black;
     margin-bottom: 3px;
 }
+
+.filtration-window {
+    background: #f8f9fa;
+    padding: 0 40px;
+}
+.filtration-buttons {
+    margin: 10px 0;
+}
+.filtration-form {
+    width: 50%;
+    padding: 0 40px;
+    margin: auto;
+}

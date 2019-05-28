@@ -94,7 +94,7 @@
 
             // Initialize the map
             var map = L.map('map', {
-                center: [{{ shop.lon }}, {{ shop.lat }}], //map loads with this location as center
+                center: [{{ shop.lat }}, {{ shop.lon }}], //map loads with this location as center
                 zoom: 12,
                 layers: [streets] // Show 'streets' by default
             });
@@ -107,7 +107,7 @@
                 "Streets": streets
             }).addTo(map);
 
-            var marker = L.marker([{{ shop.lon }}, {{ shop.lat }}]).addTo(map)
+            var marker = L.marker([{{ shop.lat }}, {{ shop.lon }}]).addTo(map)
         });
     </script>
 {% endblock %}
