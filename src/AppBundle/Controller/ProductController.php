@@ -4,14 +4,8 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Basket;
 use AppBundle\Entity\Category;
-use AppBundle\Entity\Comment;
-use AppBundle\Entity\Image\CommentImage;
-use AppBundle\Entity\Shop;
 use AppBundle\Entity\User;
 use AppBundle\Form\CommentType;
-use AppBundle\Repository\ProductRepository;
-use AppBundle\Services\CoordinateService;
-use AppBundle\Services\PaginationService;
 use AppBundle\Services\SortingService;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\NonUniqueResultException;
@@ -42,15 +36,12 @@ class ProductController extends Controller
      */
     public function indexAction(Request $request)
     {
-        /** @var EntityManager $em */
-        $em = $this->getDoctrine()->getManager();
+        /** @var SortingService $sortingService */
+        $sortingService = $this->get('app.sorting');
 
-        /** @var CoordinateService $coordinateService */
-        $coordinateService = $this->get('app.coordinate');
-
-        $sortingService = new SortingService($em, $request, $coordinateService);
-        $pagination     = $sortingService->getProductPagination(true);
-        $products       = $sortingService->getProducts();
+        $sortingService->setRequest($request);
+        $pagination = $sortingService->getProductPagination(true);
+        $products   = $sortingService->getProductsByRequest();
 
         return $this->render('product/index.html.twig', [
             'products'        => $products,
@@ -90,18 +81,18 @@ class ProductController extends Controller
      */
     public function showByCategoryAction(Category $category, Request $request)
     {
-        /** @var EntityManager $em */
-        $em = $this->getDoctrine()->getManager();
+        /** @var SortingService $sortingService */
+        $sortingService = $this->get('app.sorting');
 
-        $sortingService = new SortingService($em, $request);
-        $pagination     = $sortingService->getProductPaginationByCategory($category, true);
-        $products       = $sortingService->getProductsByCategory($category);
+        $sortingService->setRequest($request);
+        $pagination = $sortingService->getProductPaginationByCategory($category, true);
+        $products   = $sortingService->getProductsByRequestAndCategory($category);
 
         return $this->render('product/index.html.twig', [
             'products'        => $products,
             'pagination'      => $pagination,
             'sorting_service' => $sortingService,
-            'category'        => $category
+            'by_category'     => $category,
         ]);
     }
 

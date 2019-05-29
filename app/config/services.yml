@@ -36,9 +36,9 @@ services:
         class: AppBundle\Services\PaginationService
         public: true
 
-    app.coordinate:
-        class: AppBundle\Services\CoordinateService
-        arguments: ["@session"]
+    app.sorting:
+        class: AppBundle\Services\SortingService
+        arguments: ["@session", "@doctrine.orm.default_entity_manager"]
         public: true
 
     app.ipstack:

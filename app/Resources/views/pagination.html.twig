@@ -1,39 +1,45 @@
 {% if pagination.sort and sorting_service is defined %}
     {% if pagination.numberOfPages > 1 %}
         <div class="center-block center">
+            <form method="POST">
+                <input type="hidden" name="sort" value="{{ pagination.currentField }}">
+                <input type="hidden" name="order" value="{{ pagination.currentOrder }}">
+                <input type="hidden" name="search" value="{{ sorting_service.parameters['search'] }}">
+                <input type="hidden" name="priceFrom" value="{{ sorting_service.parameters['priceFrom'] }}">
+                <input type="hidden" name="priceTo" value="{{ sorting_service.parameters['priceTo'] }}">
+                <input type="hidden" name="ratingFrom" value="{{ sorting_service.parameters['ratingFrom'] }}">
+                <input type="hidden" name="ratingTo" value="{{ sorting_service.parameters['ratingTo'] }}">
+                <input type="hidden" name="range" value="{{ sorting_service.parameters['range'] }}">
             <nav aria-label="Page navigation example" style="display: inline-block">
                 <ul class="pagination">
                     <li class="page-item">
-                        <a class="page-link" href="?page=1&sort={{ pagination.currentField }}&order={{ pagination.currentOrder }}&search={{ sorting_service.parameters['search'] }}&from={{ sorting_service.parameters['from'] }}&to={{ sorting_service.parameters['to'] }}&range={{ sorting_service.parameters['range'] }}">
-                            <b> First </b>
-                        </a>
+                        <button class="pagination-button" type="submit" name="page" value="1" > First </button>
                     </li>
                     <li class="page-item">
-                        <a class="page-link" href="?page={% if pagination.page == 1 %}{{ 1 }}{% else %}{{ pagination.page - 1 }}{% endif %}&sort={{ pagination.currentField }}&order={{ pagination.currentOrder }}&search={{ sorting_service.parameters['search'] }}&from={{ sorting_service.parameters['from'] }}&to={{ sorting_service.parameters['to'] }}&range={{ sorting_service.parameters['range'] }}">
-                            <b> Previous </b>
-                        </a>
+                        <button class="pagination-button" type="submit" name="page" value="{% if pagination.page == 1 %}1{% else %}{{ pagination.page - 1 }}{% endif %}" >
+                            Previous
+                        </button>
                     </li>
                     {% for number in pagination.page - pagination.position[0]..pagination.page+pagination.position[1] if number <= pagination.numberOfPages %}
                     <li class="page-item">
-                        <a class="page-link {% if number == pagination.page %}{{ 'noneDecoration' }}{% endif %}" href="?page={{ number }}&sort={{ pagination.currentField }}&order={{ pagination.currentOrder }}&search={{ sorting_service.parameters['search'] }}&from={{ sorting_service.parameters['from'] }}&to={{ sorting_service.parameters['to'] }}&range={{ sorting_service.parameters['range'] }}">
-                            <span>
-                                {{ number }}
-                            </span>
-                        </a>
+                        <button class="pagination-button" {% if number == pagination.page %}class="noneDecoration"{% endif %} type="submit" name="page" value="{{ number }}" >
+                            {{ number }}
+                        </button>
                     </li>
                     {% endfor %}
                     <li class="page-item">
-                        <a class="page-link" href="?page={% if pagination.page >= pagination.numberOfPages %}{{ pagination.page }}{% else %}{{ pagination.page + 1 }}{% endif %}&sort={{ pagination.currentField }}&order={{ pagination.currentOrder }}&search={{ sorting_service.parameters['search'] }}&from={{ sorting_service.parameters['from'] }}&to={{ sorting_service.parameters['to'] }}&range={{ sorting_service.parameters['range'] }}">
-                            <b> Next </b>
-                        </a>
+                        <button class="pagination-button" type="submit" name="page" value="{% if pagination.page >= pagination.numberOfPages %}{{ pagination.page }}{% else %}{{ pagination.page + 1 }}{% endif %}" >
+                            Next
+                        </button>
                     </li>
                     <li class="page-item">
-                        <a class="page-link" href="?page= {{ pagination.numberOfPages }}&sort={{ pagination.currentField }}&order={{ pagination.currentOrder }}&search={{ sorting_service.parameters['search'] }}&from={{ sorting_service.parameters['from'] }}&to={{ sorting_service.parameters['to'] }}&range={{ sorting_service.parameters['range'] }}">
-                            <b> Last </b>
-                        </a>
+                        <button class="pagination-button" type="submit" name="page" value="{{ pagination.numberOfPages }}" >
+                            Last
+                        </button>
                     </li>
                 </ul>
             </nav>
+            </form>
         </div>
     {% endif %}
 {% else %}

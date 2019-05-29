@@ -10,6 +10,7 @@ use AppBundle\Repository\ShopRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
  * Class SortingService
@@ -28,42 +29,58 @@ class SortingService
     protected $request;
 
     /**
+     * @var Session
+     */
+    protected $session;
+
+    /**
      * @var EntityManager
      */
     protected $entityManager;
 
     /**
-     * @var CoordinateService
+     * SortingService constructor.
+     * @param Session       $session
+     * @param EntityManager $entityManager
      */
-    protected $coordinateService;
+    public function __construct(Session $session, EntityManager $entityManager)
+    {
+        $this->entityManager = $entityManager;
+        $this->session       = $session;
+    }
 
     /**
-     * SortingService constructor.
-     * @param EntityManager          $entityManager
-     * @param Request                $request
-     * @param CoordinateService|null $coordinateService
+     * @param Request $request
+     * @return $this
      */
-    public function __construct(EntityManager $entityManager, Request $request, CoordinateService $coordinateService = null)
+    public function setRequest(Request $request)
     {
-        $this->entityManager     = $entityManager;
-        $this->request           = $request;
-        $this->coordinateService = $coordinateService;
+        $this->request = $request;
 
-        $this->parameters['page']               = trim($this->request->get('page') ?: 1);
-        $this->parameters['order']              = trim($this->request->get('order') ?: 'ASC');
-        $this->parameters['field']              = trim($this->request->get('sort') ?: 'id');
-        $this->parameters['search']             = trim($this->request->get('search') ?: '');
-        $this->parameters['filtrationField']    = trim(mb_strtolower($this->request->get('filtrationField') ?: 'rating'));
-        $this->parameters['from']               = trim($this->request->get('from') ?: 0);
-        $this->parameters['to']                 = trim($this->request->get('to') ?: 99999);
-        $this->parameters['range']              = trim($this->request->get('range') ?: 0);
+        $this->parameters['page']               = trim($this->request->request->get('page') ?: 1);
+        $this->parameters['order']              = trim($this->request->request->get('order') ?: 'ASC');
+        $this->parameters['field']              = trim($this->request->request->get('sort') ?: 'id');
+        $this->parameters['search']             = trim($this->request->request->get('search') ?: '');
+        $this->parameters['priceFrom']          = trim($this->request->request->get('priceFrom'));
+        $this->parameters['priceTo']            = trim($this->request->request->get('priceTo'));
+        $this->parameters['ratingFrom']         = trim($this->request->request->get('ratingFrom'));
+        $this->parameters['ratingTo']           = trim($this->request->request->get('ratingTo'));
+        $this->parameters['range']              = trim($this->request->request->get('range'));
         $this->parameters['theNumberOnThePage'] = 15;
 
-        if ($this->parameters['from'] > $this->parameters['to']) {
-            $temporaryVariable        = $this->parameters['from'];
-            $this->parameters['from'] = $this->parameters['to'];
-            $this->parameters['to']   = $temporaryVariable;
+        if ($this->parameters['priceFrom'] > $this->parameters['priceTo']) {
+            $temporaryVariable             = $this->parameters['priceFrom'];
+            $this->parameters['priceFrom'] = $this->parameters['priceTo'];
+            $this->parameters['priceTo']   = $temporaryVariable;
         }
+
+        if ($this->parameters['ratingFrom'] > $this->parameters['ratingTo']) {
+            $temporaryVariable              = $this->parameters['ratingFrom'];
+            $this->parameters['ratingFrom'] = $this->parameters['ratingTo'];
+            $this->parameters['ratingTo']   = $temporaryVariable;
+        }
+
+        return $this;
     }
 
     /**
@@ -80,22 +97,27 @@ class SortingService
     /**
      * @return mixed
      */
-    public function getProducts()
+    public function getProductsByRequest()
     {
         /** @var ProductRepository $productRepository */
         $productRepository = $this->entityManager
             ->getRepository(Product::class);
 
-        if ($this->parameters['range'] != 0) {
+        if (!empty($this->parameters['range'])) {
+
             /** @var ShopRepository $shopRepository */
             $shopRepository = $this->entityManager
                 ->getRepository(Shop::class);
 
-            $allShops = $shopRepository->findAll();
+            $userLocation = $this->session->get('userLocation');
 
-            return $productRepository->findByParameters(
-                $this->parameters,
-                $this->coordinateService->GetSuitableShopCategories($allShops, $this->parameters['range']));
+            $availableShops = $shopRepository->findToASpecifiedRadius(
+                $userLocation->getLatitude(),
+                $userLocation->getLongitude(),
+                $this->parameters['range']
+            );
+
+            return $productRepository->findByParameters($this->parameters, $availableShops);
         } else {
             return $productRepository->findByParameters($this->parameters);
         }
@@ -105,7 +127,7 @@ class SortingService
      * @param Category $category
      * @return mixed
      */
-    public function getProductsByCategory(Category $category)
+    public function getProductsByRequestAndCategory(Category $category)
     {
         /** @var ProductRepository $productRepository */
         $productRepository = $this->entityManager
@@ -118,22 +140,26 @@ class SortingService
      * @return mixed
      * @throws NonUniqueResultException
      */
-    public function getQuantityProducts()
+    public function getQuantityProductsByRequest()
     {
         /** @var ProductRepository $productRepository */
         $productRepository = $this->entityManager
             ->getRepository(Product::class);
 
-        if ($this->parameters['range'] != 0) {
+        if (!empty($this->parameters['range'])) {
             /** @var ShopRepository $shopRepository */
             $shopRepository = $this->entityManager
                 ->getRepository(Shop::class);
 
-            $allShops = $shopRepository->findAll();
+            $userLocation = $this->session->get('userLocation');
 
-            return $productRepository->getQuantityByParameters(
-                $this->parameters,
-                $this->coordinateService->GetSuitableShopCategories($allShops, $this->parameters['range']));
+            $availableShops = $shopRepository->findToASpecifiedRadius(
+                $userLocation->getLatitude(),
+                $userLocation->getLongitude(),
+                $this->parameters['range']
+            );
+
+            return $productRepository->getQuantityByParameters($this->parameters, $availableShops);
         } else {
             return $productRepository->getQuantityByParameters($this->parameters);
         }
@@ -144,7 +170,7 @@ class SortingService
      * @return mixed
      * @throws NonUniqueResultException
      */
-    public function getQuantityProductsByCategory(Category $category)
+    public function getQuantityProductsByRequestAndCategory(Category $category)
     {
         /** @var ProductRepository $productRepository */
         $productRepository = $this->entityManager
@@ -163,7 +189,7 @@ class SortingService
         /** @var PaginationService $pagination */
         $pagination = new PaginationService(
             $this->parameters['page'],
-            $this->getQuantityProducts(),
+            $this->getQuantityProductsByRequest(),
             $this->parameters['theNumberOnThePage']
         );
 
@@ -182,14 +208,10 @@ class SortingService
      */
     public function getProductPaginationByCategory(Category $category, $withSorting = false)
     {
-        /** @var ProductRepository $productRepository */
-        $productRepository = $this->entityManager
-            ->getRepository(Product::class);
-
         /** @var PaginationService $pagination */
         $pagination = new PaginationService(
             $this->parameters['page'],
-            $productRepository->getQuantityByParametersAndCategory($this->parameters, $category),
+            $this->getQuantityProductsByRequestAndCategory($category),
             $this->parameters['theNumberOnThePage']
         );
 

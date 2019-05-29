@@ -1,0 +1,138 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <form method="POST">
+        <input type="hidden" name="page" value="{{ pagination.page }}">
+        <input type="hidden" name="order" value="{{ pagination.getNextOrder() }}">
+        <input type="hidden" name="search" value="{{ sorting_service.parameters['search'] }}">
+        <input type="hidden" name="priceFrom" value="{{ sorting_service.parameters['priceFrom'] }}">
+        <input type="hidden" name="priceTo" value="{{ sorting_service.parameters['priceTo'] }}">
+        <input type="hidden" name="ratingFrom" value="{{ sorting_service.parameters['ratingFrom'] }}">
+        <input type="hidden" name="ratingTo" value="{{ sorting_service.parameters['ratingTo'] }}">
+        <input type="hidden" name="range" value="{{ sorting_service.parameters['range'] }}">
+
+        <a class="navbar-brand" href="#">Sort By</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <button type="submit" name="sort" value="id" class="buttonSort">
+                        created
+                        {% if pagination.currentField == 'id' %}
+                            {% if pagination.currentOrder == 'ASC' %}
+                                <span class="arrowSort"><i class="fas fa-arrow-circle-up"></i></span>
+                            {% else %}
+                                <span class="arrowSort"><i class="fas fa-arrow-circle-down"></i></span>
+                            {% endif %}
+                        {% endif %}
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button type="submit" name="sort" value="price" class="buttonSort">
+                        Price
+                        {% if pagination.currentField == 'price' %}
+                            {% if pagination.currentOrder == 'ASC' %}
+                                <span class="arrowSort"><i class="fas fa-arrow-circle-up"></i></span>
+                            {% else %}
+                                <span class="arrowSort"><i class="fas fa-arrow-circle-down"></i></span>
+                            {% endif %}
+                        {% endif %}
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button type="submit" name="sort" value="rating" class="buttonSort">
+                        Rating
+                        {% if pagination.currentField == 'rating' %}
+                            {% if pagination.currentOrder == 'ASC' %}
+                                <span class="arrowSort"><i class="fas fa-arrow-circle-up"></i></span>
+                            {% else %}
+                                <span class="arrowSort"><i class="fas fa-arrow-circle-down"></i></span>
+                            {% endif %}
+                        {% endif %}
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button type="submit" name="sort" value="title" class="buttonSort">
+                        Title
+                        {% if pagination.currentField == 'title' %}
+                            {% if pagination.currentOrder == 'ASC' %}
+                                <span class="arrowSort"><i class="fas fa-arrow-circle-up"></i></span>
+                            {% else %}
+                                <span class="arrowSort"><i class="fas fa-arrow-circle-down"></i></span>
+                            {% endif %}
+                        {% endif %}
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button type="submit" name="sort" value="category" class="buttonSort">
+                        Category
+                        {% if pagination.currentField == 'category' %}
+                            {% if pagination.currentOrder == 'ASC' %}
+                                <span class="arrowSort"><i class="fas fa-arrow-circle-up"></i></span>
+                            {% else %}
+                                <span class="arrowSort"><i class="fas fa-arrow-circle-down"></i></span>
+                            {% endif %}
+                        {% endif %}
+                    </button>
+                </li>
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <div id="filtration-button" class="buttonSort" style="cursor: pointer">Filtration <i class="fas fa-arrows-alt-v"></i></div>
+                </li>
+            </ul>
+        </div>
+    </form>
+</nav>
+
+<nav class="filtration-window">
+    <form class="filtration-form" method="POST">
+        <div>
+            <div class="form-group">
+                <label for="exampleInputSearch">Title</label>
+                <input id="exampleInputSearch" value="{% if sorting_service.parameters['search'] != '' %}{{ sorting_service.parameters['search'] }}{% endif %}" class="form-control mr-sm-2" name="search" type="search" placeholder="Title Product" aria-label="Search">
+                <small id="searchHelp" class="form-text text-muted">Enter the whole or part of the product name .</small>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="exampleInputFrom">Price Value From</label>
+                    <input id="exampleInputFrom" value="{% if sorting_service.parameters['priceFrom'] != 0 %}{{ sorting_service.parameters['priceFrom'] }}{% endif %}" name="priceFrom" class="form-control mr-sm-1">
+                </div>
+                <div class="col-md-6">
+                    <label for="exampleInputTo">Price Value To</label>
+                    <input id="exampleInputTo" value="{% if sorting_service.parameters['priceTo'] != 99999 %}{{ sorting_service.parameters['priceTo'] }}{% endif %}" name="priceTo" class="form-control mr-sm-1">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="exampleInputFrom">Rating Value From</label>
+                    <input id="exampleInputFrom" value="{% if sorting_service.parameters['ratingFrom'] != 0 %}{{ sorting_service.parameters['ratingFrom'] }}{% endif %}" name="ratingFrom" class="form-control mr-sm-1">
+                </div>
+                <div class="col-md-6">
+                    <label for="exampleInputTo">Rating Value To</label>
+                    <input id="exampleInputTo" value="{% if sorting_service.parameters['ratingTo'] != 99999 %}{{ sorting_service.parameters['ratingTo'] }}{% endif %}" name="ratingTo" class="form-control mr-sm-1">
+                </div>
+            </div>
+
+            <div id="distance-range" class="input-group ">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" >Distance in kilometers</span>
+                </div>
+                <input type="text" class="form-control" name="input_text1" id="input_text1" max="5000" value="{{ sorting_service.parameters['range'] }}" onchange="rangeinput1.value = input_text1.value" />
+                <input name="range" type="range" oninput="input_text1.value = rangeinput1.value" class="form-control-range slider" type="range" min="0" max="5000" value="{{ sorting_service.parameters['range'] }}" id="rangeinput1" step="100" onchange="input_text1.value = rangeinput1.value" >
+            </div>
+
+            <div class="filtration-buttons">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                <a href="{% if category is defined %}{{ path('show_by_category', {'id': category.id}) }}{% else %}{{ path('product_show') }}{% endif %}">
+                    <div class="btn btn-success">Clear Filtration</div>
+                </a>
+            </div>
+
+            <input type="hidden" name="page" value="1">
+            <input type="hidden" name="order" value="{{ pagination.currentOrder }}">
+            <input type="hidden" name="sort" value="{{ pagination.currentField }}">
+        </div>
+    </form>
+</nav>

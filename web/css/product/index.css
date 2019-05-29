@@ -24,10 +24,9 @@
     color: dimgrey;
 }
 .buttonSort{
-    margin: 0 20px
-}
-.arrowSort{
-
+    margin: 0 20px;
+    background: #f8f9fa;
+    border: none;
 }
 .productImage{
     width: 49%;
@@ -62,3 +61,7 @@
     padding: 0 40px;
     margin: auto;
 }
+#distance-range {
+    margin: 30px 0;
+}
+

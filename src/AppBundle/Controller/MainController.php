@@ -51,7 +51,7 @@ class MainController extends Controller
         /** @var IpstackService $ipstack */
         $ipstack = $this->get('app.ipstack');
 
-        $ipstack->addInSession($testIp[rand(0, 2)]);
+        $ipstack->addInSession($testIp[0]);
 
         /**@var ProductRepository $productRepository */
         $productRepository = $this
