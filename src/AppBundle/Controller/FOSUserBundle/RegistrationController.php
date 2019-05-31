@@ -11,7 +11,7 @@
 
 namespace AppBundle\Controller\FOSUserBundle;
 
-use AppBundle\Entity\User;
+use EntityBundle\Entity\User;
 use AppBundle\Event\UserRegisteredEvent;
 use FOS\UserBundle\Event\FilterUserResponseEvent;
 use FOS\UserBundle\Event\FormEvent;

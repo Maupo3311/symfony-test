@@ -2,10 +2,10 @@
 
 namespace ApiBundle\Controller;
 
-use AppBundle\Entity\Comment;
-use AppBundle\Entity\Category;
-use AppBundle\Entity\Product;
-use AppBundle\Entity\User;
+use EntityBundle\Entity\Comment;
+use EntityBundle\Entity\Category;
+use EntityBundle\Entity\Product;
+use EntityBundle\Entity\User;
 use AppBundle\Repository\CategoryRepository;
 use AppBundle\Repository\ProductRepository;
 use Doctrine\Common\Collections\ArrayCollection;

@@ -2,7 +2,7 @@
 
 namespace ApiBundle\Controller;
 
-use AppBundle\Entity\User;
+use EntityBundle\Entity\User;
 use AppBundle\Repository\UserRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\OptimisticLockException;

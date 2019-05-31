@@ -2,8 +2,8 @@
 
 namespace ApiBundle\Controller;
 
-use AppBundle\Entity\Category;
-use AppBundle\Entity\User;
+use EntityBundle\Entity\Category;
+use EntityBundle\Entity\User;
 use AppBundle\Repository\CategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;

@@ -2,8 +2,8 @@
 
 namespace AdminBundle\Admin\Image;
 
-use AppBundle\Entity\Image\ShopImage;
-use AppBundle\Entity\Shop;
+use EntityBundle\Entity\Image\ShopImage;
+use EntityBundle\Entity\Shop;
 use AppBundle\Repository\ShopRepository;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Form\FormMapper;

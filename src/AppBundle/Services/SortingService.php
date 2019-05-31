@@ -2,9 +2,9 @@
 
 namespace AppBundle\Services;
 
-use AppBundle\Entity\Category;
-use AppBundle\Entity\Product;
-use AppBundle\Entity\Shop;
+use EntityBundle\Entity\Category;
+use EntityBundle\Entity\Product;
+use EntityBundle\Entity\Shop;
 use AppBundle\Repository\ProductRepository;
 use AppBundle\Repository\ShopRepository;
 use Doctrine\ORM\EntityManager;

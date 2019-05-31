@@ -2,8 +2,8 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\Comment;
-use AppBundle\Entity\Image\CommentImage;
+use EntityBundle\Entity\Comment;
+use EntityBundle\Entity\Image\CommentImage;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;

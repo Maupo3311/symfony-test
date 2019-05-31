@@ -2,6 +2,12 @@
     "name": "stager/new_project",
     "license": "proprietary",
     "type": "project",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/Maupo3311/NewProjectBundle.git"
+        }
+    ],
     "autoload": {
         "psr-4": {
             "AppBundle\\": "src/AppBundle",
@@ -35,6 +41,7 @@
         "incenteev/composer-parameter-handler": "^2.0",
         "jms/serializer-bundle": "^3.3",
         "lexik/jwt-authentication-bundle": "^2.6",
+        "my-vendor/entity-bundle": "dev-master",
         "nelmio/api-doc-bundle": "^3.4",
         "nelmio/cors-bundle": "^1.5",
         "ok/ipstack-client": "^1.3",
@@ -49,11 +56,12 @@
         "symfony/monolog-bundle": "^3.1.0",
         "symfony/polyfill-apcu": "^1.0",
         "symfony/swiftmailer-bundle": "^2.3.10",
-        "symfony/symfony": "3.4.*",
+        "symfony/symfony": "3.4.28",
         "twig/twig": "^1.0||^2.0",
         "tymon/jwt-auth": "^0.5.12",
         "willdurand/geocoder-bundle": "^5.0"
     },
+    "minimum-stability": "stable",
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.1",
         "escapestudios/symfony2-coding-standard": "3.x-dev",

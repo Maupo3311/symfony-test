@@ -2,7 +2,7 @@
 
 namespace AppBundle\Event;
 
-use AppBundle\Entity\User;
+use EntityBundle\Entity\User;
 use Symfony\Component\EventDispatcher\Event;
 use Swift_Mailer;
 

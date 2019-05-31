@@ -2,7 +2,7 @@
 
 namespace AdminBundle\Admin;
 
-use AppBundle\Entity\Product;
+use EntityBundle\Entity\Product;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -32,7 +32,7 @@ final class CategoryAdmin extends AbstractAdmin
         $formMapper
             ->add('name', TextType::class)
             ->add('shop', EntityType::class, [
-                'class'        => 'AppBundle\Entity\Shop',
+                'class'        => 'EntityBundle\Entity\Shop',
                 'choice_label' => 'name',
             ])
             ->add('active', BooleanType::class)

@@ -2,8 +2,8 @@
 
 namespace ApiBundle\Controller;
 
-use AppBundle\Entity\Feedback;
-use AppBundle\Entity\User;
+use EntityBundle\Entity\Feedback;
+use EntityBundle\Entity\User;
 use AppBundle\Repository\FeedbackRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\OptimisticLockException;

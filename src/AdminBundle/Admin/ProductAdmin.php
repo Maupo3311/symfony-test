@@ -2,8 +2,8 @@
 
 namespace AdminBundle\Admin;
 
-use AppBundle\Entity\Feedback;
-use AppBundle\Entity\Image\FeedbackImage;
+use EntityBundle\Entity\Feedback;
+use EntityBundle\Entity\Image\FeedbackImage;
 use Doctrine\DBAL\Types\DecimalType;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -28,7 +28,7 @@ final class ProductAdmin extends AbstractAdmin
     {
         $formMapper
             ->add('category', EntityType::class, [
-                'class'        => 'AppBundle\Entity\Category',
+                'class'        => 'EntityBundle\Entity\Category',
                 'choice_label' => 'name',
             ])
             ->add('title')
@@ -41,7 +41,7 @@ final class ProductAdmin extends AbstractAdmin
         $requestUri = $this->getRequest()->getRequestUri();
         $productId  = basename(str_replace('/edit', '', $requestUri));
 
-        if ($this->getRoot()->getClass() === 'AppBundle\Entity\Product' && $productId != 'create') {
+        if ($this->getRoot()->getClass() === 'EntityBundle\Entity\Product' && $productId != 'create') {
             $formMapper->
             add('images', CollectionType::class, [
                 'required' => false,

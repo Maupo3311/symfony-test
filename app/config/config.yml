@@ -67,9 +67,15 @@ doctrine:
         #path: '%database_path%'
 
     orm:
+        mappings:
+            EntityBundle:
+                is_bundle: true
+                type: annotation
+                alias: test
+
         auto_generate_proxy_classes: '%kernel.debug%'
         naming_strategy: doctrine.orm.naming_strategy.underscore
-        auto_mapping: true
+#        auto_mapping: true
         dql:
             numeric_functions:
                 acos: DoctrineExtensions\Query\Mysql\Acos
@@ -91,7 +97,7 @@ swiftmailer:
 fos_user:
     db_driver: orm # other valid values are 'mongodb' and 'couchdb'
     firewall_name: main
-    user_class: AppBundle\Entity\User
+    user_class: EntityBundle\Entity\User
     from_email:
         address: maupo3311@mail.ru
         sender_name: New_project

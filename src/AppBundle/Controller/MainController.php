@@ -2,11 +2,11 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\Feedback;
-use AppBundle\Entity\Image\FeedbackImage;
-use AppBundle\Entity\Product;
-use AppBundle\Entity\Shop;
-use AppBundle\Entity\User;
+use EntityBundle\Entity\Feedback;
+use EntityBundle\Entity\Image\FeedbackImage;
+use EntityBundle\Entity\Product;
+use EntityBundle\Entity\Shop;
+use EntityBundle\Entity\User;
 use AppBundle\Form\FeedbackType;
 use AppBundle\Repository\FeedbackImageRepository;
 use AppBundle\Repository\ProductRepository;

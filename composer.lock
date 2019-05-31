@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a847cf0148af787094054424418e616c",
+    "content-hash": "e3eb0a2fe284732cd190ef3496c45da5",
     "packages": [
         {
             "name": "beberlei/DoctrineExtensions",
@@ -3740,33 +3740,75 @@
             "time": "2017-12-24T16:32:39+00:00"
         },
         {
-            "name": "lcobucci/jwt",
-            "version": "3.2.5",
+            "name": "kylekatarnls/update-helper",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/lcobucci/jwt.git",
-                "reference": "82be04b4753f8b7693b62852b7eab30f97524f9b"
+                "url": "https://github.com/kylekatarnls/update-helper.git",
+                "reference": "fbfa94c0f196d4718ce3c1032e9c4b34140e69d3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lcobucci/jwt/zipball/82be04b4753f8b7693b62852b7eab30f97524f9b",
-                "reference": "82be04b4753f8b7693b62852b7eab30f97524f9b",
+                "url": "https://api.github.com/repos/kylekatarnls/update-helper/zipball/fbfa94c0f196d4718ce3c1032e9c4b34140e69d3",
+                "reference": "fbfa94c0f196d4718ce3c1032e9c4b34140e69d3",
                 "shasum": ""
             },
             "require": {
-                "ext-openssl": "*",
-                "php": ">=5.5"
+                "composer-plugin-api": "^1.1.0",
+                "php": ">=5.3.0"
             },
             "require-dev": {
-                "mdanter/ecc": "~0.3.1",
+                "codeclimate/php-test-reporter": "dev-master",
+                "composer/composer": "^2.0.x-dev",
+                "phpunit/phpunit": ">=4.8.35 <6.0"
+            },
+            "type": "composer-plugin",
+            "extra": {
+                "class": "UpdateHelper\\ComposerPlugin"
+            },
+            "autoload": {
+                "psr-0": {
+                    "UpdateHelper\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kyle",
+                    "email": "kylekatarnls@gmail.com"
+                }
+            ],
+            "description": "Update helper",
+            "time": "2019-05-30T21:26:08+00:00"
+        },
+        {
+            "name": "lcobucci/jwt",
+            "version": "3.3.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/lcobucci/jwt.git",
+                "reference": "a11ec5f4b4d75d1fcd04e133dede4c317aac9e18"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/lcobucci/jwt/zipball/a11ec5f4b4d75d1fcd04e133dede4c317aac9e18",
+                "reference": "a11ec5f4b4d75d1fcd04e133dede4c317aac9e18",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "ext-openssl": "*",
+                "php": "^5.6 || ^7.0"
+            },
+            "require-dev": {
                 "mikey179/vfsstream": "~1.5",
                 "phpmd/phpmd": "~2.2",
                 "phpunit/php-invoker": "~1.1",
-                "phpunit/phpunit": "~4.5",
+                "phpunit/phpunit": "^5.7 || ^7.3",
                 "squizlabs/php_codesniffer": "~2.3"
-            },
-            "suggest": {
-                "mdanter/ecc": "Required to use Elliptic Curves based algorithms."
             },
             "type": "library",
             "extra": {
@@ -3795,7 +3837,7 @@
                 "JWS",
                 "jwt"
             ],
-            "time": "2018-11-11T12:22:26+00:00"
+            "time": "2019-05-24T18:30:49+00:00"
         },
         {
             "name": "lexik/jwt-authentication-bundle",
@@ -3971,6 +4013,44 @@
                 "psr-3"
             ],
             "time": "2018-11-05T09:00:11+00:00"
+        },
+        {
+            "name": "my-vendor/entity-bundle",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Maupo3311/NewProjectBundle.git",
+                "reference": "fdfcab96bde11cb766680e52a4120602456b0685"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Maupo3311/NewProjectBundle/zipball/fdfcab96bde11cb766680e52a4120602456b0685",
+                "reference": "fdfcab96bde11cb766680e52a4120602456b0685",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/doctrine-bundle": "^1.6",
+                "doctrine/doctrine-migrations-bundle": "^2.0",
+                "doctrine/orm": "^2.5",
+                "friendsofsymfony/user-bundle": "~2.0@dev",
+                "php": ">=5.3.3",
+                "stripe/stripe-php": "^6.33"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "EntityBundle\\": "EntityBundle"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "New project bundle for working with database",
+            "support": {
+                "source": "https://github.com/Maupo3311/NewProjectBundle/tree/master",
+                "issues": "https://github.com/Maupo3311/NewProjectBundle/issues"
+            },
+            "time": "2019-05-31T07:48:18+00:00"
         },
         {
             "name": "namshi/jose",
@@ -4178,31 +4258,34 @@
         },
         {
             "name": "nesbot/carbon",
-            "version": "1.37.1",
+            "version": "1.38.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/briannesbitt/Carbon.git",
-                "reference": "5be4fdf97076a685b23efdedfc2b73ad0c5eab70"
+                "reference": "7621621f76c99f01318313f576baea22edd86367"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/5be4fdf97076a685b23efdedfc2b73ad0c5eab70",
-                "reference": "5be4fdf97076a685b23efdedfc2b73ad0c5eab70",
+                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/7621621f76c99f01318313f576baea22edd86367",
+                "reference": "7621621f76c99f01318313f576baea22edd86367",
                 "shasum": ""
             },
             "require": {
+                "kylekatarnls/update-helper": "^1.1",
                 "php": ">=5.3.9",
                 "symfony/translation": "~2.6 || ~3.0 || ~4.0"
             },
             "require-dev": {
+                "composer/composer": "^1.2",
+                "friendsofphp/php-cs-fixer": "~2",
                 "phpunit/phpunit": "^4.8.35 || ^5.7"
             },
-            "suggest": {
-                "friendsofphp/php-cs-fixer": "Needed for the `composer phpcs` command. Allow to automatically fix code style.",
-                "phpstan/phpstan": "Needed for the `composer phpstan` command. Allow to detect potential errors."
-            },
+            "bin": [
+                "bin/upgrade-carbon"
+            ],
             "type": "library",
             "extra": {
+                "update-helper": "Carbon\\Upgrade",
                 "laravel": {
                     "providers": [
                         "Carbon\\Laravel\\ServiceProvider"
@@ -4232,7 +4315,7 @@
                 "datetime",
                 "time"
             ],
-            "time": "2019-04-19T10:27:42+00:00"
+            "time": "2019-05-30T22:56:55+00:00"
         },
         {
             "name": "ocramius/package-versions",
@@ -5717,16 +5800,16 @@
         },
         {
             "name": "sonata-project/admin-bundle",
-            "version": "3.48.2",
+            "version": "3.48.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataAdminBundle.git",
-                "reference": "d83ce5aba749fb54d91ab1ca9c64f13f0fbc045a"
+                "reference": "f521289aa2b1a0937e167c057d309ef7646604b8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/d83ce5aba749fb54d91ab1ca9c64f13f0fbc045a",
-                "reference": "d83ce5aba749fb54d91ab1ca9c64f13f0fbc045a",
+                "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/f521289aa2b1a0937e167c057d309ef7646604b8",
+                "reference": "f521289aa2b1a0937e167c057d309ef7646604b8",
                 "shasum": ""
             },
             "require": {
@@ -5818,7 +5901,7 @@
                 "bootstrap",
                 "sonata"
             ],
-            "time": "2019-05-16T05:50:14+00:00"
+            "time": "2019-05-21T18:00:30+00:00"
         },
         {
             "name": "sonata-project/block-bundle",
@@ -6344,16 +6427,16 @@
         },
         {
             "name": "stripe/stripe-php",
-            "version": "v6.35.2",
+            "version": "v6.37.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stripe/stripe-php.git",
-                "reference": "f2fefccf3b56b453d65959f44f35b7fb9a8ae9bc"
+                "reference": "6915bed0b988ca837f3e15a1f31517a6172a663a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/f2fefccf3b56b453d65959f44f35b7fb9a8ae9bc",
-                "reference": "f2fefccf3b56b453d65959f44f35b7fb9a8ae9bc",
+                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/6915bed0b988ca837f3e15a1f31517a6172a663a",
+                "reference": "6915bed0b988ca837f3e15a1f31517a6172a663a",
                 "shasum": ""
             },
             "require": {
@@ -6396,7 +6479,7 @@
                 "payment processing",
                 "stripe"
             ],
-            "time": "2019-05-21T05:25:45+00:00"
+            "time": "2019-05-23T23:59:23+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -7035,16 +7118,16 @@
         },
         {
             "name": "symfony/symfony",
-            "version": "v3.4.27",
+            "version": "v3.4.28",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/symfony.git",
-                "reference": "a9bb1182151d81054800aa4fa2680d92a5928a6a"
+                "reference": "5e05ffeb1c2e538127e5a33b419edb8b2904b99e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/symfony/zipball/a9bb1182151d81054800aa4fa2680d92a5928a6a",
-                "reference": "a9bb1182151d81054800aa4fa2680d92a5928a6a",
+                "url": "https://api.github.com/repos/symfony/symfony/zipball/5e05ffeb1c2e538127e5a33b419edb8b2904b99e",
+                "reference": "5e05ffeb1c2e538127e5a33b419edb8b2904b99e",
                 "shasum": ""
             },
             "require": {
@@ -7186,7 +7269,7 @@
             "keywords": [
                 "framework"
             ],
-            "time": "2019-05-01T13:04:01+00:00"
+            "time": "2019-05-28T09:24:58+00:00"
         },
         {
             "name": "twig/extensions",
@@ -7245,16 +7328,16 @@
         },
         {
             "name": "twig/twig",
-            "version": "v2.10.0",
+            "version": "v2.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "5240e21982885b76629552d83b4ebb6d41ccde6b"
+                "reference": "c344879ae57dc1487b1df3e3d8325936125ba2cc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/5240e21982885b76629552d83b4ebb6d41ccde6b",
-                "reference": "5240e21982885b76629552d83b4ebb6d41ccde6b",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/c344879ae57dc1487b1df3e3d8325936125ba2cc",
+                "reference": "c344879ae57dc1487b1df3e3d8325936125ba2cc",
                 "shasum": ""
             },
             "require": {
@@ -7270,7 +7353,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.10-dev"
+                    "dev-master": "2.11-dev"
                 }
             },
             "autoload": {
@@ -7308,7 +7391,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2019-05-14T12:03:52+00:00"
+            "time": "2019-05-31T06:21:42+00:00"
         },
         {
             "name": "tymon/jwt-auth",
@@ -8118,7 +8201,7 @@
         },
         {
             "name": "symfony/phpunit-bridge",
-            "version": "v3.4.27",
+            "version": "v3.4.28",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/phpunit-bridge.git",
@@ -8186,6 +8269,7 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "friendsofsymfony/user-bundle": 20,
+        "my-vendor/entity-bundle": 20,
         "escapestudios/symfony2-coding-standard": 20
     },
     "prefer-stable": false,

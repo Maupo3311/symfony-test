@@ -4,61 +4,61 @@
 services:
     admin.category:
       class: AdminBundle\Admin\CategoryAdmin
-      arguments: [~, AppBundle\Entity\Category, ~]
+      arguments: [~, EntityBundle\Entity\Category, ~]
       tags:
         - { name: sonata.admin, manager_type: orm, group: 'Product', label: Category }
 
     admin.product:
       class: AdminBundle\Admin\ProductAdmin
-      arguments: [~, AppBundle\Entity\Product, ~]
+      arguments: [~, EntityBundle\Entity\Product, ~]
       tags:
         - { name: sonata.admin, manager_type: orm, group: 'Product', label: Product }
 
     admin.user:
       class: AdminBundle\Admin\UserAdmin
-      arguments: [~, AppBundle\Entity\User, ~]
+      arguments: [~, EntityBundle\Entity\User, ~]
       tags:
         - { name: sonata.admin, manager_type: orm, group: 'User', label: User }
 
     admin.feedback:
       class: AdminBundle\Admin\FeedbackAdmin
-      arguments: [~, AppBundle\Entity\Feedback, ~]
+      arguments: [~, EntityBundle\Entity\Feedback, ~]
       tags:
         - { name: sonata.admin, manager_type: orm, group: 'User', label: Feedback }
 
     admin.comment:
       class: AdminBundle\Admin\CommentAdmin
-      arguments: [~, AppBundle\Entity\Comment, ~]
+      arguments: [~, EntityBundle\Entity\Comment, ~]
       tags:
         - { name: sonata.admin, manager_type: orm, group: 'User', label: Comment }
 
     admin.shop:
       class: AdminBundle\Admin\ShopAdmin
-      arguments: [~, AppBundle\Entity\Shop, ~]
+      arguments: [~, EntityBundle\Entity\Shop, ~]
       tags:
         - { name: sonata.admin, manager_type: orm, group: 'Product', label: Shop }
 
     admin.feedback_image:
       class: AdminBundle\Admin\Image\FeedbackImageAdmin
-      arguments: [~, AppBundle\Entity\Image\FeedbackImage, ~]
+      arguments: [~, EntityBundle\Entity\Image\FeedbackImage, ~]
       tags:
         - { name: sonata.admin, manager_type: orm, show_in_dashboard: false }
 
     admin.product_image:
       class: AdminBundle\Admin\Image\ProductImageAdmin
-      arguments: [~, AppBundle\Entity\Image\ProductImage, ~]
+      arguments: [~, EntityBundle\Entity\Image\ProductImage, ~]
       tags:
         - { name: sonata.admin, manager_type: orm, show_in_dashboard: false }
 
     admin.comment_image:
       class: AdminBundle\Admin\Image\CommentImageAdmin
-      arguments: [~, AppBundle\Entity\Image\CommentImage, ~]
+      arguments: [~, EntityBundle\Entity\Image\CommentImage, ~]
       tags:
         - { name: sonata.admin, manager_type: orm, show_in_dashboard: false }
 
     admin.shop_image:
       class: AdminBundle\Admin\Image\ShopImageAdmin
-      arguments: [~, AppBundle\Entity\Image\ShopImage, ~]
+      arguments: [~, EntityBundle\Entity\Image\ShopImage, ~]
       tags:
         - { name: sonata.admin, manager_type: orm, show_in_dashboard: false }
 

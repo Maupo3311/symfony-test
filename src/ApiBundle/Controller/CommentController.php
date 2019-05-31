@@ -2,9 +2,9 @@
 
 namespace ApiBundle\Controller;
 
-use AppBundle\Entity\Comment;
-use AppBundle\Entity\Product;
-use AppBundle\Entity\User;
+use EntityBundle\Entity\Comment;
+use EntityBundle\Entity\Product;
+use EntityBundle\Entity\User;
 use AppBundle\Repository\CommentRepository;
 use AppBundle\Repository\ProductRepository;
 use Doctrine\ORM\EntityManager;

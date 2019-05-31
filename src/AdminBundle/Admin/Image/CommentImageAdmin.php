@@ -2,10 +2,10 @@
 
 namespace AdminBundle\Admin\Image;
 
-use AppBundle\Entity\Comment;
-use AppBundle\Entity\Image\CommentImage;
-use AppBundle\Entity\Image\ProductImage;
-use AppBundle\Entity\Product;
+use EntityBundle\Entity\Comment;
+use EntityBundle\Entity\Image\CommentImage;
+use EntityBundle\Entity\Image\ProductImage;
+use EntityBundle\Entity\Product;
 use AppBundle\Repository\CommentRepository;
 use AppBundle\Repository\ProductRepository;
 use Sonata\AdminBundle\Admin\AbstractAdmin;

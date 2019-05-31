@@ -23,10 +23,6 @@ services:
         arguments: ["@router"]
         public: true
 
-#    app.product_list:
-#        class: AppBundle\Services\ProductService
-#        arguments: ["@doctrine.orm.default_entity_manager"]
-
     app.stripe:
         class: AppBundle\Services\StripeService
         arguments: ["%stripe_secret_key%"]

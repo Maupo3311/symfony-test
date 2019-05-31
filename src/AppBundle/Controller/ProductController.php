@@ -2,9 +2,9 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\Basket;
-use AppBundle\Entity\Category;
-use AppBundle\Entity\User;
+use EntityBundle\Entity\Basket;
+use EntityBundle\Entity\Category;
+use EntityBundle\Entity\User;
 use AppBundle\Form\CommentType;
 use AppBundle\Services\SortingService;
 use Doctrine\ORM\EntityManager;
@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use AppBundle\Entity\Product;
+use EntityBundle\Entity\Product;
 
 /**
  * Class ProductController

@@ -2,7 +2,7 @@
 
 namespace AppBundle\EventListener;
 
-use AppBundle\Entity\User;
+use EntityBundle\Entity\User;
 use Swift_Message;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;

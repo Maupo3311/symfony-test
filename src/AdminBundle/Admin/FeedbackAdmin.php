@@ -2,9 +2,9 @@
 
 namespace AdminBundle\Admin;
 
-use AppBundle\Entity\Feedback;
-use AppBundle\Entity\Image\FeedbackImage;
-use AppBundle\Entity\User;
+use EntityBundle\Entity\Feedback;
+use EntityBundle\Entity\Image\FeedbackImage;
+use EntityBundle\Entity\User;
 use AppBundle\Repository\FeedbackRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\OptimisticLockException;

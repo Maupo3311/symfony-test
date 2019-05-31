@@ -2,7 +2,7 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\User;
+use \User;
 use AppBundle\Services\StripeService;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\OptimisticLockException;

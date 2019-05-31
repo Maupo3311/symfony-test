@@ -2,13 +2,13 @@
 
 namespace AppBundle\DataFixtures;
 
-use AppBundle\Entity\Category;
-use AppBundle\Entity\Comment;
-use AppBundle\Entity\Image\FeedbackImage;
-use AppBundle\Entity\Product;
-use AppBundle\Entity\Feedback;
-use AppBundle\Entity\Shop;
-use AppBundle\Entity\User;
+use EntityBundle\Entity\Category;
+use EntityBundle\Entity\Comment;
+use EntityBundle\Entity\Image\FeedbackImage;
+use EntityBundle\Entity\Product;
+use EntityBundle\Entity\Feedback;
+use EntityBundle\Entity\Shop;
+use EntityBundle\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\File\UploadedFile;

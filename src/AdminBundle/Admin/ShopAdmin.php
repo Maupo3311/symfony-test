@@ -29,7 +29,7 @@ final class ShopAdmin extends AbstractAdmin
         $requestUri = $this->getRequest()->getRequestUri();
         $shopId  = basename(str_replace('/edit', '', $requestUri));
 
-        if ($this->getRoot()->getClass() === 'AppBundle\Entity\Shop' && $shopId != 'create') {
+        if ($this->getRoot()->getClass() === 'EntityBundle\Entity\Shop' && $shopId != 'create') {
             $formMapper->add('images', CollectionType::class, [
                 'required' => false,
             ], [

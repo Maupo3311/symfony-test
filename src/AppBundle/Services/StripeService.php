@@ -2,7 +2,7 @@
 
 namespace AppBundle\Services;
 
-use AppBundle\Entity\Basket;
+use EntityBundle\Entity\Basket;
 use Stripe\ApiResource;
 use Stripe\Charge;
 use Stripe\Collection;

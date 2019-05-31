@@ -2,7 +2,7 @@
 
 namespace AppBundle\Security\Core;
 
-use AppBundle\Entity\User;
+use EntityBundle\Entity\User;
 use FOS\UserBundle\Model\UserManagerInterface;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\User\FOSUBUserProvider as BaseFOSUBProvider;

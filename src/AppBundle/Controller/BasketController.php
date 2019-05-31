@@ -2,8 +2,8 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\Basket;
-use AppBundle\Entity\User;
+use EntityBundle\Entity\Basket;
+use EntityBundle\Entity\User;
 use AppBundle\Services\StripeService;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\OptimisticLockException;
