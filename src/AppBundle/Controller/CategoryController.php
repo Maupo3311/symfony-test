@@ -7,7 +7,7 @@ use AppBundle\Services\PaginationService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use AppBundle\Repository\CategoryRepository;
+use EntityBundle\Repository\CategoryRepository;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

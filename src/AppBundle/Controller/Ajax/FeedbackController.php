@@ -4,7 +4,7 @@ namespace AppBundle\Controller\Ajax;
 
 use EntityBundle\Entity\Feedback;
 use EntityBundle\Entity\Image\FeedbackImage;
-use AppBundle\Repository\FeedbackRepository;
+use EntityBundle\Repository\FeedbackRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;

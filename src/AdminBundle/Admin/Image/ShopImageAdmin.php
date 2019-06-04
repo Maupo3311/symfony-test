@@ -4,7 +4,7 @@ namespace AdminBundle\Admin\Image;
 
 use EntityBundle\Entity\Image\ShopImage;
 use EntityBundle\Entity\Shop;
-use AppBundle\Repository\ShopRepository;
+use EntityBundle\Repository\ShopRepository;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelHiddenType;

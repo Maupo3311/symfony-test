@@ -185,3 +185,26 @@ hwi_oauth:
             type:            yandex
             client_id:       "%yandex_client_id%"
             client_secret:   "%yandex_secret%"
+
+old_sound_rabbit_mq:
+    connections:
+        default:
+            host:     "%rabbit_host%"
+            port:     "%rabbit_port%"
+            user:     "%rabbit_user%"
+            password: "%rabbit_password%"
+            vhost:    "%rabbit_vhost%"
+            lazy:     false
+            connection_timeout: 3
+            read_write_timeout: 3
+    producers:
+        test:
+            connection:       default
+            exchange_options: {name: 'test', type: direct}
+#            service_alias:    app.create_entities
+    consumers:
+        test:
+            connection:       default
+            exchange_options: {name: 'test', type: direct}
+            queue_options:    {name: 'test'}
+            callback:         app.my_consumer

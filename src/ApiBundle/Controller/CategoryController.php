@@ -4,7 +4,7 @@ namespace ApiBundle\Controller;
 
 use EntityBundle\Entity\Category;
 use EntityBundle\Entity\User;
-use AppBundle\Repository\CategoryRepository;
+use EntityBundle\Repository\CategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\OptimisticLockException;

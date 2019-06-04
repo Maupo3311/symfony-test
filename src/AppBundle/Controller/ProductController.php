@@ -92,7 +92,7 @@ class ProductController extends Controller
             'products'        => $products,
             'pagination'      => $pagination,
             'sorting_service' => $sortingService,
-            'by_category'     => $category,
+            'category'     => $category,
         ]);
     }
 

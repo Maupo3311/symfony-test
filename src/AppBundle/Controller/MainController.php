@@ -8,15 +8,12 @@ use EntityBundle\Entity\Product;
 use EntityBundle\Entity\Shop;
 use EntityBundle\Entity\User;
 use AppBundle\Form\FeedbackType;
-use AppBundle\Repository\FeedbackImageRepository;
-use AppBundle\Repository\ProductRepository;
-use AppBundle\Repository\ShopRepository;
-use AppBundle\Services\CoordinateService;
+use EntityBundle\Repository\FeedbackImageRepository;
+use EntityBundle\Repository\ProductRepository;
+use EntityBundle\Repository\ShopRepository;
 use AppBundle\Services\FileUploader;
 use AppBundle\Services\IpstackService;
 use AppBundle\Services\PaginationService;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\NonUniqueResultException;
 use OK\Ipstack\Exceptions\InvalidApiException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -24,8 +21,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use AppBundle\Repository\FeedbackRepository;
-use Symfony\Component\HttpFoundation\Session\Session;
+use EntityBundle\Repository\FeedbackRepository;
 
 /**
  * Class MainController
@@ -33,6 +29,18 @@ use Symfony\Component\HttpFoundation\Session\Session;
  */
 class MainController extends Controller
 {
+    /**
+     * @Route("/test")
+     */
+    public function test()
+    {
+        $producer = $this->get('old_sound_rabbit_mq.test_producer');
+
+        $producer->publish('message');
+
+        die('return');
+    }
+
     /**
      * Shows the home page of the site
      *

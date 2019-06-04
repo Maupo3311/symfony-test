@@ -34,6 +34,7 @@ class AppKernel extends Kernel
             new Http\HttplugBundle\HttplugBundle(),
             new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
             new EntityBundle\EntityBundle(),
+            new OldSound\RabbitMqBundle\OldSoundRabbitMqBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

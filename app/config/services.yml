@@ -18,6 +18,22 @@ services:
         # if you need to do this, you can override this setting on individual services
         public: false
 
+    app.create_entities:
+        class: AppBundle\Command\CreatingEntitiesCommand
+        public: true
+
+    app.test_command:
+        class: AppBundle\Command\TestCommand
+        public: true
+
+    app.my_producer:
+        class: AppBundle\Rabbit\Producers\MyProducer
+        public: true
+
+    app.my_consumer:
+        class: AppBundle\Rabbit\Consumers\MyConsumer
+        public: true
+
     api_key_authenticator:
         class: AppBundle\Security\TokenAuthenticator
         arguments: ["@router"]

@@ -5,7 +5,7 @@ namespace AppBundle\Controller\Ajax;
 use EntityBundle\Entity\Comment;
 use EntityBundle\Entity\Image\CommentImage;
 use EntityBundle\Entity\Product;
-use AppBundle\Repository\CommentRepository;
+use EntityBundle\Repository\CommentRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
