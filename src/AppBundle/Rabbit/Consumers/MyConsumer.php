@@ -17,8 +17,6 @@ class MyConsumer implements ConsumerInterface
      */
     public function execute(AMQPMessage $msg)
     {
-        $message = json_decode($msg->body, true);
-
-        echo 'My message : ' . $msg->body;
+        echo $msg->body;
     }
 }

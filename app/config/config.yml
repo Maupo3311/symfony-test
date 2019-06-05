@@ -1,210 +1,208 @@
 imports:
-    - { resource: parameters.yml }
-    - { resource: security.yml }
-    - { resource: services.yml }
-    - { resource: "@AdminBundle/Resources/config/services.yml" }
-    - { resource: "@ApiBundle/Resources/config/services.yml" }
+  - { resource: parameters.yml }
+  - { resource: security.yml }
+  - { resource: services.yml }
+  - { resource: "@AdminBundle/Resources/config/services.yml" }
+  - { resource: "@ApiBundle/Resources/config/services.yml" }
 
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
-    locale: en
-    payment:
-        currency: GBP
-        decimal: true
-        premium_amount: 1
+  locale: en
+  payment:
+    currency: GBP
+    decimal: true
+    premium_amount: 1
 
 framework:
-    #esi: ~
-    #translator: { fallbacks: ['%locale%'] }
-    secret: '%secret%'
-    router:
-        resource: '%kernel.project_dir%/app/config/routing.yml'
-        strict_requirements: ~
-    form: ~
-    csrf_protection: ~
-    validation: { enable_annotations: true }
-    #serializer: { enable_annotations: true }
-    templating:
-        engines: ['twig']
-    default_locale: '%locale%'
-    trusted_hosts: ~
-    session:
-        # https://symfony.com/doc/current/reference/configuration/framework.html#handler-id
-        handler_id: session.handler.native_file
-        save_path: '%kernel.project_dir%/var/sessions/%kernel.environment%'
-    fragments: ~
-    http_method_override: true
-    assets: ~
-    php_errors:
-        log: true
-    translator: { fallbacks: ['%locale%'] }
+  #esi: ~
+  #translator: { fallbacks: ['%locale%'] }
+  secret: '%secret%'
+  router:
+    resource: '%kernel.project_dir%/app/config/routing.yml'
+    strict_requirements: ~
+  form: ~
+  csrf_protection: ~
+  validation: { enable_annotations: true }
+  #serializer: { enable_annotations: true }
+  templating:
+    engines: ['twig']
+  default_locale: '%locale%'
+  trusted_hosts: ~
+  session:
+    # https://symfony.com/doc/current/reference/configuration/framework.html#handler-id
+    handler_id: session.handler.native_file
+    save_path: '%kernel.project_dir%/var/sessions/%kernel.environment%'
+  fragments: ~
+  http_method_override: true
+  assets: ~
+  php_errors:
+    log: true
+  translator: { fallbacks: ['%locale%'] }
 
 # Twig Configuration
 twig:
-    debug: '%kernel.debug%'
-    strict_variables: '%kernel.debug%'
-    form_themes:
-        - 'bootstrap_4_layout.html.twig'
-    globals:
-        locationiq_geocode_api_key: "%locationiq_geocode_api_key%"
+  debug: '%kernel.debug%'
+  strict_variables: '%kernel.debug%'
+  form_themes:
+    - 'bootstrap_4_layout.html.twig'
+  globals:
+    locationiq_geocode_api_key: "%locationiq_geocode_api_key%"
 
 # Doctrine Configuration
 doctrine:
-    dbal:
-        driver: pdo_mysql
-        host: '%database_host%'
-        port: '%database_port%'
-        dbname: '%database_name%'
-        user: '%database_user%'
-        password: '%database_password%'
-        charset: UTF8
-        # if using pdo_sqlite as your database driver:
-        #   1. add the path in parameters.yml
-        #     e.g. database_path: '%kernel.project_dir%/var/data/data.sqlite'
-        #   2. Uncomment database_path in parameters.yml.dist
-        #   3. Uncomment next line:
-        #path: '%database_path%'
+  dbal:
+    driver: pdo_mysql
+    host: '%database_host%'
+    port: '%database_port%'
+    dbname: '%database_name%'
+    user: '%database_user%'
+    password: '%database_password%'
+    charset: UTF8
+    # if using pdo_sqlite as your database driver:
+    #   1. add the path in parameters.yml
+    #     e.g. database_path: '%kernel.project_dir%/var/data/data.sqlite'
+    #   2. Uncomment database_path in parameters.yml.dist
+    #   3. Uncomment next line:
+    #path: '%database_path%'
 
-    orm:
-        mappings:
-            EntityBundle:
-                is_bundle: true
-                type: annotation
-                alias: test
+  orm:
+    mappings:
+      EntityBundle:
+        is_bundle: true
+        type: annotation
+        alias: test
 
-        auto_generate_proxy_classes: '%kernel.debug%'
-        naming_strategy: doctrine.orm.naming_strategy.underscore
-#        auto_mapping: true
-        dql:
-            numeric_functions:
-                acos: DoctrineExtensions\Query\Mysql\Acos
-                cos: DoctrineExtensions\Query\Mysql\Cos
-                radians: DoctrineExtensions\Query\Mysql\Radians
-                sin: DoctrineExtensions\Query\Mysql\Sin
+    auto_generate_proxy_classes: '%kernel.debug%'
+    naming_strategy: doctrine.orm.naming_strategy.underscore
+    #        auto_mapping: true
+    dql:
+      numeric_functions:
+        acos: DoctrineExtensions\Query\Mysql\Acos
+        cos: DoctrineExtensions\Query\Mysql\Cos
+        radians: DoctrineExtensions\Query\Mysql\Radians
+        sin: DoctrineExtensions\Query\Mysql\Sin
 
 # Swiftmailer Configuration
 swiftmailer:
-    transport: "%mailer_transport%"
-    encryption: "%mailer_encryption%"
-    host:      "%mailer_host%"
-    username:  "%mailer_user%"
-    password:  "%mailer_password%"
-    auth_mode: "%mailer_auth_mode%"
-    port:       "%mailer_port%"
-    spool:     { type: memory }
+  transport: "%mailer_transport%"
+  encryption: "%mailer_encryption%"
+  host:      "%mailer_host%"
+  username:  "%mailer_user%"
+  password:  "%mailer_password%"
+  auth_mode: "%mailer_auth_mode%"
+  port:       "%mailer_port%"
+  spool:     { type: memory }
 
 fos_user:
-    db_driver: orm # other valid values are 'mongodb' and 'couchdb'
-    firewall_name: main
-    user_class: EntityBundle\Entity\User
-    from_email:
-        address: maupo3311@mail.ru
-        sender_name: New_project
-    registration:
-        form:
-            type: AppBundle\Form\RegistrationType
-        confirmation:
-            enabled: true
+  db_driver: orm # other valid values are 'mongodb' and 'couchdb'
+  firewall_name: main
+  user_class: EntityBundle\Entity\User
+  from_email:
+    address: maupo3311@mail.ru
+    sender_name: New_project
+  registration:
+    form:
+      type: AppBundle\Form\RegistrationType
+    confirmation:
+      enabled: true
 
-    profile:
-        form:
-            type: AppBundle\Form\ProfileFormType
+  profile:
+    form:
+      type: AppBundle\Form\ProfileFormType
 
 sonata_block:
-    blocks:
-        # enable the SonataAdminBundle block
-        sonata.admin.block.admin_list:
-            contexts: [admin]
+  blocks:
+    # enable the SonataAdminBundle block
+    sonata.admin.block.admin_list:
+      contexts: [admin]
 
 sonata_admin:
-    templates:
-        layout: '%kernel.project_dir%/app/Resources/SonataAdmin/standard_layout.html.twig'
+  templates:
+    layout: '%kernel.project_dir%/app/Resources/SonataAdmin/standard_layout.html.twig'
 
 nelmio_api_doc:
-    areas:
-        path_patterns: # an array of regexps
-            - ^/api(?!/doc$)
-    documentation:
-        host: 127.0.0.1:8000
-        schemes: [http, https]
-        info:
-            title: New Project
-            description: This api documentation new project
-            version: 2.0.0
-        securityDefinitions:
-            Bearer:
-                type: apiKey
-                description: 'Your token'
-                name: Authorization
-                in: header
-        security:
-            - Bearer: []
+  areas:
+    path_patterns: # an array of regexps
+      - ^/api(?!/doc$)
+  documentation:
+    host: 127.0.0.1:8000
+    schemes: [http, https]
+    info:
+      title: New Project
+      description: This api documentation new project
+      version: 2.0.0
+    securityDefinitions:
+      Bearer:
+        type: apiKey
+        description: 'Your token'
+        name: Authorization
+        in: header
+    security:
+      - Bearer: []
 
-
-# FOSRest Configuration
 fos_rest:
-    body_listener: true
-    format_listener:
-        rules:
-            - { path: '^/', priorities: ['json'], fallback_format: json, prefer_extension: false }
-    param_fetcher_listener: true
-    view:
-        view_response_listener: 'force'
-        formats:
-            json: true
-    zone:
-        - { path: ^/api/* }
+  body_listener: true
+  format_listener:
+    rules:
+      - { path: '^/', priorities: ['json'], fallback_format: json, prefer_extension: false }
+  param_fetcher_listener: true
+  view:
+    view_response_listener: 'force'
+    formats:
+      json: true
+  zone:
+    - { path: ^/api/* }
 
-lexik_jwt_authentication :
-    secret_key :        "%kernel.project_dir%/app/config/jwt/private.pem"
-    public_key :        "%kernel.project_dir%/app/config/jwt/public.pem"
-    pass_phrase :       '123456'
-    token_ttl :         3600
+lexik_jwt_authentication:
+  secret_key:        "%kernel.project_dir%/app/config/jwt/private.pem"
+  public_key:        "%kernel.project_dir%/app/config/jwt/public.pem"
+  pass_phrase:       '123456'
+  token_ttl:         3600
 
 hwi_oauth:
-    connect:
-        account_connector: my.custom.user_provider
-    firewall_names: [main]
-    fosub:
-        username_iterations: 30
-        properties:
-            vkontakte: vkontakte_id
-            github: github_id
-    resource_owners:
-        vkontakte:
-            type:           vkontakte
-            client_id:      "%vkontakte_client_id%"
-            client_secret:  "%vkontakte_secret%"
-        github:
-            type:           github
-            client_id:      "%github_client_id%"
-            client_secret:  "%github_secret%"
-            scope: 'user:email,public_repo'
-        yandex:
-            type:            yandex
-            client_id:       "%yandex_client_id%"
-            client_secret:   "%yandex_secret%"
+  connect:
+    account_connector: my.custom.user_provider
+  firewall_names: [main]
+  fosub:
+    username_iterations: 30
+    properties:
+      vkontakte: vkontakte_id
+      github: github_id
+  resource_owners:
+    vkontakte:
+      type:           vkontakte
+      client_id:      "%vkontakte_client_id%"
+      client_secret:  "%vkontakte_secret%"
+    github:
+      type:           github
+      client_id:      "%github_client_id%"
+      client_secret:  "%github_secret%"
+      scope:          'user:email,public_repo'
+    yandex:
+      type:            yandex
+      client_id:       "%yandex_client_id%"
+      client_secret:   "%yandex_secret%"
 
 old_sound_rabbit_mq:
-    connections:
-        default:
-            host:     "%rabbit_host%"
-            port:     "%rabbit_port%"
-            user:     "%rabbit_user%"
-            password: "%rabbit_password%"
-            vhost:    "%rabbit_vhost%"
-            lazy:     false
-            connection_timeout: 3
-            read_write_timeout: 3
-    producers:
-        test:
-            connection:       default
-            exchange_options: {name: 'test', type: direct}
-#            service_alias:    app.create_entities
-    consumers:
-        test:
-            connection:       default
-            exchange_options: {name: 'test', type: direct}
-            queue_options:    {name: 'test'}
-            callback:         app.my_consumer
+  connections:
+    default:
+      host:     "%rabbit_host%"
+      port:     "%rabbit_port%"
+      user:     "%rabbit_user%"
+      password: "%rabbit_password%"
+      vhost:    "%rabbit_vhost%"
+      lazy:     false
+      connection_timeout: 3
+      read_write_timeout: 3
+  producers:
+    test:
+      connection:       default
+      exchange_options: {name: 'test', type: direct}
+  #            service_alias:    app.create_entities
+  consumers:
+    test:
+      connection:       default
+      exchange_options: {name: 'test', type: direct}
+      queue_options:    {name: 'test'}
+      callback:         app.my_consumer

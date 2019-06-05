@@ -8,6 +8,8 @@ use EntityBundle\Entity\Shop;
 use EntityBundle\Entity\User;
 use EntityBundle\Repository\CategoryRepository;
 use EntityBundle\Repository\ShopRepository;
+use OldSound\RabbitMqBundle\RabbitMq\ProducerInterface;
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -17,7 +19,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Class CreatingEntitiesCommand
  * @package App\Command
  */
-class CreatingEntitiesCommand extends Command
+class CreatingEntitiesCommand extends ContainerAwareCommand
 {
     /**
      * @var string
@@ -25,11 +27,18 @@ class CreatingEntitiesCommand extends Command
     protected static $defaultName = 'app:create-entities';
 
     /**
+     * @var ProducerInterface
+     */
+    protected $producer;
+
+    /**
      * @var array
      */
     protected $curlHeaders;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $token;
 
     /**
@@ -57,14 +66,16 @@ class CreatingEntitiesCommand extends Command
         $response = $this->sendRequest($url, $userData);
 
         if (isset($response->token)) {
-            $token               = $response->token;
-            $this->curlHeaders[] = 'Authorization: Bearer ' . $token;
-            $this->token         = $token;
+            $this->curlHeaders[] = 'Authorization: Bearer ' . $response->token;
+            $this->token         = $response->token;
         }
 
         parent::__construct();
     }
 
+    /**
+     * Configuration command
+     */
     protected function configure()
     {
         $this->setDescription('Creating entities through the api')
@@ -79,40 +90,34 @@ class CreatingEntitiesCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $types = $input->getArgument('entities-type') ?: $this->defaultTypes;
+        $this->producer = $this->getContainer()->get('old_sound_rabbit_mq.test_producer');
+        $types          = $input->getArgument('entities-type') ?: $this->defaultTypes;
 
         if (empty($this->token)) {
             $output->writeln("\r\n Token is not received");
+
             return;
         }
 
-        if (in_array('shop', $types)) {
-            $response = $this->createShop();
+        $responses = [];
 
-            if (isset($response->id)) {
-                $output->writeln("\r\n Shop with id {$response->id} successful created");
-            } else {
-                $output->writeln("\r\n Shop error - " . $response->detail);
-            }
+        if (in_array('shop', $types)) {
+            $responses['shop'] = $this->createShop();
         }
 
         if (in_array('feedback', $types)) {
-            $response = $this->createFeedback();
-
-            if (isset($response->id)) {
-                $output->writeln("\r\n Feedback with id {$response->id} successful created");
-            } else {
-                $output->writeln("\r\n Feedback error - " . $response->detail);
-            }
+            $responses['feedback'] = $this->createFeedback();
         }
 
         if (in_array('product', $types)) {
-            $response = $this->createProduct();
+            $responses['product'] = $this->createProduct();
+        }
 
+        foreach ($responses as $entity => $response) {
             if (isset($response->id)) {
-                $output->writeln("\r\n Product with id {$response->id} successful created");
+                $this->producer->publish("\r\n {$entity} with id {$response->id} successful created");
             } else {
-                $output->writeln("\r\n Product error - " . $response->detail);
+                $this->producer->publish("\r\n {$entity} error - " . $response->detail);
             }
         }
     }
