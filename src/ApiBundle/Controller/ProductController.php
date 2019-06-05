@@ -2,6 +2,7 @@
 
 namespace ApiBundle\Controller;
 
+use AppBundle\Services\SortingService;
 use EntityBundle\Entity\Comment;
 use EntityBundle\Entity\Category;
 use EntityBundle\Entity\Product;
@@ -54,13 +55,10 @@ class ProductController extends BaseController
     public function getAllAction(Request $request)
     {
         try {
-            $page  = $request->get('page') ?: 1;
-            $limit = $request->get('limit') ?: 10;
-
-            /** @var ProductRepository $productRepository */
-            $productRepository = $this->getDoctrine()->getRepository(Product::class);
-
-            $restresult = $productRepository->findByPage($page, $limit);
+            /** @var SortingService $sortingService */
+            $sortingService = $this->get('app.sorting');
+            $sortingService->setRequest($request);
+            $restresult = $sortingService->getProductsByRequest();
 
             if ($restresult === null) {
                 return $this->errorResponse("products not found", 404);

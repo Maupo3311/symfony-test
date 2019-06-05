@@ -58,7 +58,7 @@ class BaseFixtures extends Fixture
      */
     private function getRandom(array $array)
     {
-        return $array[rand(0, count($array))];
+        return $array[rand(0, count($array) - 1)];
     }
 
     /**
@@ -194,8 +194,8 @@ class BaseFixtures extends Fixture
                 $category->setName('Category -' . mt_rand(1, 30000) . mt_rand(1, 500))
                     ->setShop($shop);
 
-                $categories[] = $category;
                 $this->manager->persist($category);
+                $categories[] = $category;
             }
         }
 
@@ -212,43 +212,66 @@ class BaseFixtures extends Fixture
     {
         $comments = [];
 
-        foreach ($products as $product) {
-            while (2) {
-                $comment = new Comment();
+        for($i = 0; $i < 1; ++$i) {
+            $comment = new Comment();
 
-                $comment->setProduct($product)
-                    ->setMessage(md5(rand(0, 55555)))
-                    ->setUser($this->getRandom($users));
+            $comment->setUser($this->getRandom($users))
+                ->setMessage('message' . md5(rand(0, 55555)))
+                ->setProduct($this->getRandom($products));
 
-                $comments[] = $comment;
-
-                $this->manager->persist($comment);
-            }
+            $this->manager->persist($comment);
+            $comments[] = $comment;
         }
+
+//        foreach ($products as $product) {
+//            for($i = 0; $i < 2; ++$i) {
+//                $comment = new Comment();
+//
+//                $comment->setUser($this->getRandom($users))
+//                    ->setMessage('message' . $product->getTitle() . md5(rand(0, 55555)))
+//                    ->setProduct($product);
+//
+//                $this->manager->persist($comment);
+//                $comments[] = $comment;
+//            }
+//        }
 
         return $comments;
     }
 
-    private function generateEntityImages(array $feedbacks, array $products, array $comments)
+    /**
+     * @param array $feedbacks
+     * @return array
+     * @throws \Exception
+     */
+    private function generateFeedbackImages(array $feedbacks)
     {
-        $t = 't';
+        $feedbackImages = [];
 
         foreach ($feedbacks as $feedback) {
             $file = $this->getRandomFile();
+            $type = array_pop(explode(".", $file));
+            $copyPath = $this::IMAGES_CONSUMABLES_PATH . '/processedImage.' . $type;
+            copy($this::IMAGES_CONSUMABLES_PATH . '/' . $file, $copyPath);
 
-            $newFile = copy(
-                $this::IMAGES_CONSUMABLES_PATH . '/' . $file,
-                $this::IMAGES_CONSUMABLES_PATH . '/');
+            $uploadImage = new UploadedFile($copyPath, md5(rand(0, 99999999)) . '.' . $type);
 
             $feedbackImage = new FeedbackImage();
 
             $feedbackImage->setFeedback($feedback)
-                ->setFile();
+                ->setFile($uploadImage);
+
+            $feedbackImages[] = $feedbackImage;
+
+            $this->manager->persist($feedbackImage);
         }
+
+        return $feedbackImages;
     }
 
     /**
-     * {@inheritDoc}
+     * @param ObjectManager $manager
+     * @throws \Exception
      */
     public function load(ObjectManager $manager)
     {
@@ -260,7 +283,6 @@ class BaseFixtures extends Fixture
         $categories = $this->generateCategories($shops);
         $products   = $this->generateProducts($categories);
         $comments   = $this->generateComments($users, $products);
-
 //
 //        $feedbackImages = [];
 //
@@ -277,6 +299,6 @@ class BaseFixtures extends Fixture
 //            $feedbackImages[] = $feedbackImage;
 //        }
 
-        $manager->flush();
+        $this->manager->flush();
     }
 }
