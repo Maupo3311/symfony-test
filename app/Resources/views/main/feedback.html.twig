@@ -13,11 +13,10 @@
     {% if allFeedbacks != null %}
         <div id="feedback-window">
         </div>
+        {% include 'pagination.html.twig' %}
     {% else %}
         <p>No feedbacks found</p>
     {% endif %}
-
-   {% include 'pagination.html.twig' %}
 
     {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
         {{ form_start(formView, {'attr': {'action': path('ajax_submit_feedback'), 'class': 'ajaxForm', 'method': 'POST'}}) }}

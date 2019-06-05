@@ -29,6 +29,12 @@ parameters:
     locationiq_geocode_api_key: ~
     ipstack_api_key: ~
 
+    rabbit_host:     localhost
+    rabbit_port:     5672
+    rabbit_user:     ~
+    rabbit_password: ~
+    rabbit_vhost:    ~
+
     upload_directory: '%kernel.project_dir%/web/uploads'
 
     # A secret key that's used to generate certain security-related tokens

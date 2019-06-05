@@ -68,13 +68,17 @@ class SortingService
         $this->parameters['range']              = trim($this->request->request->get('range'));
         $this->parameters['theNumberOnThePage'] = 15;
 
-        if ($this->parameters['priceFrom'] > $this->parameters['priceTo']) {
+        if (!empty($this->parameters['priceFrom']) &&
+            !empty($this->parameters['priceTo']) &&
+            $this->parameters['priceFrom'] > $this->parameters['priceTo']) {
             $temporaryVariable             = $this->parameters['priceFrom'];
             $this->parameters['priceFrom'] = $this->parameters['priceTo'];
             $this->parameters['priceTo']   = $temporaryVariable;
         }
 
-        if ($this->parameters['ratingFrom'] > $this->parameters['ratingTo']) {
+        if (!empty($this->parameters['ratingFrom']) &&
+            !empty($this->parameters['ratingTo']) &&
+            $this->parameters['ratingFrom'] > $this->parameters['ratingTo']) {
             $temporaryVariable              = $this->parameters['ratingFrom'];
             $this->parameters['ratingFrom'] = $this->parameters['ratingTo'];
             $this->parameters['ratingTo']   = $temporaryVariable;

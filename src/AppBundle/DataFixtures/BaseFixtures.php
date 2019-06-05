@@ -56,9 +56,7 @@ class BaseFixtures extends Fixture
         foreach ($users as $user) {
             for ($i = 0; $i < 2; $i++) {
                 $feedback = new Feedback();
-                $feedback->setName('name' . mt_rand(1, 50000))
-                    ->setEmail('email' . mt_rand(1, 50000) . '@mail.ru')
-                    ->setMessage(md5($i))
+                $feedback->setMessage(md5($i))
                     ->setUser($user);
                 $feedbacks[] = $feedback;
                 $manager->persist($feedback);

@@ -37,9 +37,9 @@ class CreatingEntitiesCommand extends ContainerAwareCommand
     protected $curlHeaders;
 
     /**
-     * @var string
+     * @var mixed
      */
-    protected $token;
+    protected $user;
 
     /**
      * @var array
@@ -57,18 +57,8 @@ class CreatingEntitiesCommand extends ContainerAwareCommand
             'Content-Type: application/json',
         ];
 
-        /**
-         * Get the JWT token and attach it to the headers
-         */
-        $url      = 'http://127.0.0.1:8001/authentication_token';
-        $userData = ['email' => 'admin', 'password' => 'password1234'];
-
-        $response = $this->sendRequest($url, $userData);
-
-        if (isset($response->token)) {
-            $this->curlHeaders[] = 'Authorization: Bearer ' . $response->token;
-            $this->token         = $response->token;
-        }
+        $this->attachTheToken('admin', 'password1234');
+        $this->user = $this->getMe();
 
         parent::__construct();
     }
@@ -93,32 +83,36 @@ class CreatingEntitiesCommand extends ContainerAwareCommand
         $this->producer = $this->getContainer()->get('old_sound_rabbit_mq.test_producer');
         $types          = $input->getArgument('entities-type') ?: $this->defaultTypes;
 
-        if (empty($this->token)) {
-            $output->writeln("\r\n Token is not received");
+        if (!$this->user) {
+            $this->producer->publish("\r\n Token is not received");
 
             return;
         }
 
         $responses = [];
 
-        if (in_array('shop', $types)) {
-            $responses['shop'] = $this->createShop();
-        }
-
-        if (in_array('feedback', $types)) {
-            $responses['feedback'] = $this->createFeedback();
-        }
-
-        if (in_array('product', $types)) {
-            $responses['product'] = $this->createProduct();
-        }
-
-        foreach ($responses as $entity => $response) {
-            if (isset($response->id)) {
-                $this->producer->publish("\r\n {$entity} with id {$response->id} successful created");
-            } else {
-                $this->producer->publish("\r\n {$entity} error - " . $response->detail);
+        try {
+            if (in_array('shop', $types)) {
+                $responses['shop'] = $this->createShop();
             }
+
+            if (in_array('feedback', $types)) {
+                $responses['feedback'] = $this->createFeedback();
+            }
+
+            if (in_array('product', $types)) {
+                $responses['product'] = $this->createProduct();
+            }
+
+            foreach ($responses as $entity => $response) {
+                if (isset($response->id)) {
+                    $this->producer->publish("\r\n {$entity} with id {$response->id} successful created");
+                } else {
+                    $this->producer->publish("\r\n {$entity} error - " . $response->detail);
+                }
+            }
+        } catch (\Exception $exception) {
+            $this->producer->publish("\r\n error - " . $exception->getMessage());
         }
     }
 
@@ -145,11 +139,10 @@ class CreatingEntitiesCommand extends ContainerAwareCommand
      */
     public function createFeedback()
     {
-        $user = $this->getMe();
         $url  = 'http://127.0.0.1:8001/api/feedback';
 
         $feedbackData = [
-            'user'    => "/api/users/{$user->id}",
+            'user'    => "/api/users/{$this->user->id}",
             'message' => md5(rand(2, 166)),
         ];
 
@@ -164,7 +157,7 @@ class CreatingEntitiesCommand extends ContainerAwareCommand
         $url = 'http://127.0.0.1:8001/api/products';
 
         $productData = [
-            'category'    => '/api/categories/51',
+            'category'    => '/api/categories/77',
             'title'       => 'product' . mt_rand(1, 3000) . mt_rand(1, 5000),
             'price'       => mt_rand(1, 250),
             'rating'      => mt_rand(0, 9) . '.' . mt_rand(1, 99),
@@ -175,6 +168,9 @@ class CreatingEntitiesCommand extends ContainerAwareCommand
         return $this->sendRequest($url, $productData);
     }
 
+    /**
+     * @return mixed
+     */
     public function getMe()
     {
         $url = 'http://127.0.0.1:8001/api/me';
@@ -183,12 +179,38 @@ class CreatingEntitiesCommand extends ContainerAwareCommand
     }
 
     /**
+     * @param string $username
+     * @param string $password
+     * @return mixed
+     */
+    public function getToken(string $username, string $password)
+    {
+        $url      = 'http://127.0.0.1:8001/authentication_token';
+        $userData = ['email' => $username, 'password' => $password];
+
+        return $this->sendRequest($url, $userData);
+    }
+
+    /**
+     * @param string $username
+     * @param string $password
+     */
+    public function attachTheToken(string $username, string $password)
+    {
+        $response = $this->getToken($username, $password);
+
+        if (isset($response->token)) {
+            $this->curlHeaders[] = 'Authorization: Bearer ' . $response->token;
+        }
+    }
+
+    /**
      * @param string $url
      * @param array  $data
      * @param string $method
      * @return mixed
      */
-    public function sendRequest(string $url, array $data, string $method = 'POST')
+    public function sendRequest(string $url, array $data = [], string $method = 'POST')
     {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);

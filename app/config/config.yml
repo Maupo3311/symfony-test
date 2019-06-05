@@ -71,7 +71,6 @@ doctrine:
       EntityBundle:
         is_bundle: true
         type: annotation
-        alias: test
 
     auto_generate_proxy_classes: '%kernel.debug%'
     naming_strategy: doctrine.orm.naming_strategy.underscore
@@ -199,10 +198,12 @@ old_sound_rabbit_mq:
     test:
       connection:       default
       exchange_options: {name: 'test', type: direct}
-  #            service_alias:    app.create_entities
   consumers:
     test:
       connection:       default
       exchange_options: {name: 'test', type: direct}
       queue_options:    {name: 'test'}
       callback:         app.my_consumer
+
+doctrine_migrations:
+  dir_name: '%kernel.project_dir%/vendor/my-vendor/entity-bundle/EntityBundle/Migrations'
