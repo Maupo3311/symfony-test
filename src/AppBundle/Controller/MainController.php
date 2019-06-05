@@ -30,18 +30,6 @@ use EntityBundle\Repository\FeedbackRepository;
 class MainController extends Controller
 {
     /**
-     * @Route("/test")
-     */
-    public function test()
-    {
-        $producer = $this->get('old_sound_rabbit_mq.test_producer');
-
-        $producer->publish('message');
-
-        die('return');
-    }
-
-    /**
      * Shows the home page of the site
      *
      * @Route("/", name="homepage")

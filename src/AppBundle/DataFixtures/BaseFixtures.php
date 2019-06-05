@@ -20,117 +20,261 @@ use DateTime;
  */
 class BaseFixtures extends Fixture
 {
+    const IMAGES_CONSUMABLES_PATH = __DIR__ . '/../../../src/AppBundle/DataFixtures/images';
+
+    const IMAGES_VALID_PATH = __DIR__ . '/../../../web/uploads/images';
+
     /**
-     * {@inheritDoc}
+     * @var ObjectManager
      */
-    public function load(ObjectManager $manager)
+    private $manager;
+
+    /**
+     * @var array
+     */
+    private $files;
+
+    /**
+     * BaseFixtures constructor.
+     */
+    public function __construct()
+    {
+        $this->files = $this->getFiles();
+    }
+
+    /**
+     * @return array
+     */
+    private function getFiles()
+    {
+        $files = (file_exists($this::IMAGES_CONSUMABLES_PATH)) ? array_slice(scandir($this::IMAGES_CONSUMABLES_PATH ), 2) : [];
+
+        return $files;
+    }
+
+    /**
+     * @param array $array
+     * @return mixed
+     */
+    private function getRandom(array $array)
+    {
+        return $array[rand(0, count($array))];
+    }
+
+    /**
+     * @return mixed
+     */
+    private function getRandomFile()
+    {
+        return $this->files[rand(0, count($this->files))];
+    }
+
+    /**
+     * @return array
+     */
+    private function generateUsers()
     {
         $users = [];
 
         $user = new User();
-        $user->setFirstName('Admin');
-        $user->setLastName('Admin');
-        $user->setUsername('Admin');
-        $user->addRole('ROLE_ADMIN');
-        $user->setEmail('maupo3311@mail.ru');
-        $user->setPassword(password_hash("password1234", PASSWORD_DEFAULT));
-        $user->setEnabled(true);
+
+        $user->setFirstName('Admin')
+            ->setLastName('Admin')
+            ->setUsername('Admin')
+            ->addRole('ROLE_ADMIN')
+            ->setEmail('maupo3311@mail.ru')
+            ->setPassword(password_hash("password1234", PASSWORD_DEFAULT))
+            ->setEnabled(true);
         $users[] = $user;
-        $manager->persist($user);
+        $this->manager->persist($user);
 
         for ($i = 0; $i < 20; $i++) {
-            $username = rand(1, 100000);
-            $user     = new User();
-            $user->setFirstName('name' . mt_rand(1, 99));
-            $user->setLastName('surname' . mt_rand(1, 99));
-            $user->setUsername($username);
-            $user->addRole('ROLE_USER');
-            $user->setEmail(rand(10000, 600000) . '@mail.ru');
-            $user->setPassword(md5($i));
-            $user->setEnabled(true);
+            $user = new User();
+
+            $user->setFirstName('name' . mt_rand(1, 99))
+                ->setLastName('surname' . mt_rand(1, 99))
+                ->setUsername(rand(1, 100000))
+                ->addRole('ROLE_USER')
+                ->setEmail(rand(10000, 600000) . '@mail.ru')
+                ->setPassword(md5($i))
+                ->setEnabled(true);
+
             $users[] = $user;
-            $manager->persist($user);
+            $this->manager->persist($user);
         }
 
+        return $users;
+    }
+
+    /**
+     * @param array $users
+     * @return array
+     * @throws \Exception
+     */
+    private function generateFeedbacks(array $users)
+    {
         $feedbacks = [];
+
         foreach ($users as $user) {
             for ($i = 0; $i < 2; $i++) {
                 $feedback = new Feedback();
+
                 $feedback->setMessage(md5($i))
                     ->setUser($user);
+
                 $feedbacks[] = $feedback;
-                $manager->persist($feedback);
+                $this->manager->persist($feedback);
             }
         }
 
-        $path           = __DIR__ . '/../../../web/test';
-        $files          = (file_exists($path)) ? array_slice(scandir($path), 2) : [];
-        $feedbackImages = [];
+        return $feedbacks;
+    }
 
-        for ($i = 0; $i < count($files); $i++) {
-            $file          = $files[$i];
-            $object        = new UploadedFile($path . '/' . $file, rand(0, 50000) . '.jpeg', 'image/jpeg', null, null, true);
-            $feedbackImage = new FeedbackImage();
-            $feedbackImage
-                ->setFile($object)
-                ->setFilePath($path . '/' . $file)
-                ->setCreatedAt(new DateTime())
-                ->setFeedback($feedbacks[0]);
-            $manager->persist($feedbackImage);
-            $feedbackImages[] = $feedbackImage;
-        }
-
+    /**
+     * @return array
+     */
+    private function generateShops()
+    {
         $shops = [];
         for ($i = 0; $i < 5; ++$i) {
             $shop = new Shop();
+
             $shop->setName('shop ' . rand(100, 100000))
                 ->setDescription(md5(rand(0, 100)))
                 ->setPhoneNumber('7' . rand(100000000, 999999999))
-                ->setLon(rand(30, 55).'.'.rand(1000000, 9999999))
-                ->setLat(rand(30, 55).'.'.rand(1000000, 9999999));
+                ->setLon(rand(30, 55) . '.' . rand(1000000, 9999999))
+                ->setLat(rand(30, 55) . '.' . rand(1000000, 9999999));
 
-            $manager->persist($shop);
+            $this->manager->persist($shop);
             $shops[] = $shop;
         }
 
+        return $shops;
+    }
+
+    /**
+     * @param array $categories
+     * @return array
+     */
+    private function generateProducts(array $categories)
+    {
+        $products = [];
+
+        foreach ($categories as $category) {
+            for ($i = 0; $i < 3; $i++) {
+                $product = new Product();
+
+                $product->setTitle('product' . mt_rand(1, 3000) . mt_rand(1, 5000))
+                    ->setPrice(mt_rand(1, 250))
+                    ->setCategory($category)
+                    ->setRating(floatval(mt_rand(0, 9) . '.' . mt_rand(1, 99)))
+                    ->setDescription(md5($i))
+                    ->setNumber(rand(1, 32));
+
+                $this->manager->persist($product);
+                $products[] = $product;
+            }
+        }
+
+        return $products;
+    }
+
+    /**
+     * @param array $shops
+     * @return array
+     */
+    private function generateCategories(array $shops)
+    {
         $categories = [];
 
         foreach ($shops as $shop) {
             for ($i = 0; $i < 5; $i++) {
                 $category = new Category();
-                $category
-                    ->setName('Category -' . mt_rand(1, 30000) . mt_rand(1, 500))
+
+                $category->setName('Category -' . mt_rand(1, 30000) . mt_rand(1, 500))
                     ->setShop($shop);
 
                 $categories[] = $category;
-                $manager->persist($category);
+                $this->manager->persist($category);
             }
         }
 
-        $products = [];
-        foreach ($categories as $category) {
-            for ($i = 0; $i < 3; $i++) {
-                $product = new Product();
-                $product->setTitle('product' . mt_rand(1, 3000) . mt_rand(1, 5000));
-                $product->setPrice(mt_rand(1, 250));
-                $product->setCategory($category);
-                $product->setRating(floatval(mt_rand(0, 9) . '.' . mt_rand(1, 99)));
-                $product->setDescription(md5($i));
-                $product->setNumber(rand(1, 32));
-                $manager->persist($product);
-                $products[] = $product;
+        return $categories;
+    }
+
+    /**
+     * @param array $users
+     * @param array $products
+     * @return array
+     * @throws \Exception
+     */
+    private function generateComments(array $users, array $products)
+    {
+        $comments = [];
+
+        foreach ($products as $product) {
+            while (2) {
+                $comment = new Comment();
+
+                $comment->setProduct($product)
+                    ->setMessage(md5(rand(0, 55555)))
+                    ->setUser($this->getRandom($users));
+
+                $comments[] = $comment;
+
+                $this->manager->persist($comment);
             }
         }
 
-//        foreach ($products as $product){
-//            $user = $users[rand(0, count($users - 1))];
-//            $comment = new Comment();
-//            $comment
-//                ->setProduct($product)
-//                ->setMessage(md5(rand(0, 1000)))
-//                ->setUser($user);
+        return $comments;
+    }
+
+    private function generateEntityImages(array $feedbacks, array $products, array $comments)
+    {
+        $t = 't';
+
+        foreach ($feedbacks as $feedback) {
+            $file = $this->getRandomFile();
+
+            $newFile = copy(
+                $this::IMAGES_CONSUMABLES_PATH . '/' . $file,
+                $this::IMAGES_CONSUMABLES_PATH . '/');
+
+            $feedbackImage = new FeedbackImage();
+
+            $feedbackImage->setFeedback($feedback)
+                ->setFile();
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function load(ObjectManager $manager)
+    {
+        $this->manager = $manager;
+
+        $users      = $this->generateUsers();
+        $feedbacks  = $this->generateFeedbacks($users);
+        $shops      = $this->generateShops();
+        $categories = $this->generateCategories($shops);
+        $products   = $this->generateProducts($categories);
+        $comments   = $this->generateComments($users, $products);
+
 //
-//            $manager->persist($comment);
+//        $feedbackImages = [];
+//
+//        for ($i = 0; $i < count($files); $i++) {
+//            $file          = $files[$i];
+//            $object        = new UploadedFile($path . '/' . $file, rand(0, 50000) . '.jpeg', 'image/jpeg', null, null, true);
+//            $feedbackImage = new FeedbackImage();
+//            $feedbackImage
+//                ->setFile($object)
+//                ->setFilePath($path . '/' . $file)
+//                ->setCreatedAt(new DateTime())
+//                ->setFeedback($feedbacks[0]);
+//            $manager->persist($feedbackImage);
+//            $feedbackImages[] = $feedbackImage;
 //        }
 
         $manager->flush();
