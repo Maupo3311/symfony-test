@@ -2,14 +2,16 @@
 
 namespace ApiBundle\Controller;
 
+use EntityBundle\Entity\Comment;
 use FOS\RestBundle\Controller\FOSRestController;
+use JMS\Serializer\SerializationContext;
 use Symfony\Component\BrowserKit\Response;
 
 /**
  * Class BaseController
  * @package ApiBundle\Controller
  */
-class BaseController extends FOSRestController
+abstract class BaseController extends FOSRestController
 {
     /**
      * Is called for a successful conclusion
@@ -17,7 +19,7 @@ class BaseController extends FOSRestController
      * @param $message
      * @return Response
      */
-    public function successResponse($message)
+    protected function successResponse($message)
     {
         return new Response($message, 200);
     }
@@ -29,8 +31,24 @@ class BaseController extends FOSRestController
      * @param int $code
      * @return Response
      */
-    public function errorResponse($error, int $code = 500)
+    protected function errorResponse($error, int $code = 500)
     {
         return new Response($error, $code);
+    }
+
+    /**
+     * @param        $data
+     * @param string $format
+     * @return mixed
+     */
+    protected function serialize($data, $format = 'json')
+    {
+        $context = new SerializationContext();
+        $context->setSerializeNull(true)
+            ->setGroups(['Default']);
+
+        $serializer = $this->container->get('jms_serializer');
+
+        return $serializer->serialize($data, $format, $context);
     }
 }

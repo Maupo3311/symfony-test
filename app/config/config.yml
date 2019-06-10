@@ -15,6 +15,7 @@ parameters:
     premium_amount: 1
 
 framework:
+  serializer: { enable_annotations: true }
   #esi: ~
   #translator: { fallbacks: ['%locale%'] }
   secret: '%secret%'

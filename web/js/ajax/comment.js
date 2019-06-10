@@ -75,11 +75,11 @@ function formChecker(userId, prodcutId) {
     });
 }
 
-function loadComments(userId, prodcutId) {
+function loadComments(userId, productId) {
 
     $.ajax({
         type: 'GET',
-        url: '/api/product/' + prodcutId + '/comments',
+        url: '/api/product/' + productId + '/comments',
         success: function (comments) {
             var html = '';
 

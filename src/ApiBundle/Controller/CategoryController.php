@@ -44,7 +44,9 @@ class CategoryController extends BaseController
      *     type="integer",
      *     description="Number of categories per page"
      * )
+     *
      * @SWG\Tag(name="category")
+     * @Rest\View(serializerGroups={"Default"})
      * @param Request $request
      * @return View|mixed
      */
@@ -77,6 +79,7 @@ class CategoryController extends BaseController
      *     @Model(type=Category::class)
      * )
      * @SWG\Tag(name="category")
+     * @Rest\View(serializerGroups={"Default", "details"})
      * @param int $id
      * @return View|object[]
      */
@@ -227,6 +230,7 @@ class CategoryController extends BaseController
      *     @Model(type=Category::class)
      * )
      * @SWG\Tag(name="category")
+     * @Rest\View(serializerGroups={"Default"})
      * @param int $id
      * @return ArrayCollection|Response
      */

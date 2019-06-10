@@ -4,7 +4,9 @@ namespace AppBundle\DataFixtures;
 
 use EntityBundle\Entity\Category;
 use EntityBundle\Entity\Comment;
+use EntityBundle\Entity\Image\CommentImage;
 use EntityBundle\Entity\Image\FeedbackImage;
+use EntityBundle\Entity\Image\ShopImage;
 use EntityBundle\Entity\Product;
 use EntityBundle\Entity\Feedback;
 use EntityBundle\Entity\Shop;
@@ -47,7 +49,7 @@ class BaseFixtures extends Fixture
      */
     private function getFiles()
     {
-        $files = (file_exists($this::IMAGES_CONSUMABLES_PATH)) ? array_slice(scandir($this::IMAGES_CONSUMABLES_PATH ), 2) : [];
+        $files = (file_exists($this::IMAGES_CONSUMABLES_PATH)) ? array_slice(scandir($this::IMAGES_CONSUMABLES_PATH), 2) : [];
 
         return $files;
     }
@@ -66,7 +68,7 @@ class BaseFixtures extends Fixture
      */
     private function getRandomFile()
     {
-        return $this->files[rand(0, count($this->files))];
+        return $this->files[rand(0, count($this->files) - 1)];
     }
 
     /**
@@ -212,31 +214,35 @@ class BaseFixtures extends Fixture
     {
         $comments = [];
 
-        for($i = 0; $i < 1; ++$i) {
-            $comment = new Comment();
+        foreach ($products as $product) {
+            for ($i = 0; $i < 2; ++$i) {
+                $comment = new Comment();
 
-            $comment->setUser($this->getRandom($users))
-                ->setMessage('message' . md5(rand(0, 55555)))
-                ->setProduct($this->getRandom($products));
+                $comment->setUser($this->getRandom($users))
+                    ->setMessage('message' . $product->getTitle() . md5(rand(0, 55555)))
+                    ->setProduct($product);
 
-            $this->manager->persist($comment);
-            $comments[] = $comment;
+                $this->manager->persist($comment);
+                $comments[] = $comment;
+            }
         }
 
-//        foreach ($products as $product) {
-//            for($i = 0; $i < 2; ++$i) {
-//                $comment = new Comment();
-//
-//                $comment->setUser($this->getRandom($users))
-//                    ->setMessage('message' . $product->getTitle() . md5(rand(0, 55555)))
-//                    ->setProduct($product);
-//
-//                $this->manager->persist($comment);
-//                $comments[] = $comment;
-//            }
-//        }
-
         return $comments;
+    }
+
+    /**
+     * @return UploadedFile
+     */
+    private function generateUploadFile()
+    {
+        $file         = $this->getRandomFile();
+        $arrayFile    = explode(".", $file);
+        $type         = array_pop($arrayFile);
+        $newImageName = md5(rand(0, 999999)) . '.' . $type;
+        $copyPath     = $this::IMAGES_CONSUMABLES_PATH . '/' . $newImageName;
+        copy($this::IMAGES_CONSUMABLES_PATH . '/' . $file, $copyPath);
+
+        return new UploadedFile($copyPath, $newImageName, 'image/jpeg', null, null, true);
     }
 
     /**
@@ -249,17 +255,12 @@ class BaseFixtures extends Fixture
         $feedbackImages = [];
 
         foreach ($feedbacks as $feedback) {
-            $file = $this->getRandomFile();
-            $type = array_pop(explode(".", $file));
-            $copyPath = $this::IMAGES_CONSUMABLES_PATH . '/processedImage.' . $type;
-            copy($this::IMAGES_CONSUMABLES_PATH . '/' . $file, $copyPath);
-
-            $uploadImage = new UploadedFile($copyPath, md5(rand(0, 99999999)) . '.' . $type);
 
             $feedbackImage = new FeedbackImage();
 
             $feedbackImage->setFeedback($feedback)
-                ->setFile($uploadImage);
+                ->setFile($this->generateUploadFile())
+                ->uploadImage();
 
             $feedbackImages[] = $feedbackImage;
 
@@ -270,6 +271,56 @@ class BaseFixtures extends Fixture
     }
 
     /**
+     * @param array $comments
+     * @return array
+     * @throws \Exception
+     */
+    private function generateCommentImages(array $comments)
+    {
+        $commentImages = [];
+
+        foreach ($comments as $comment) {
+            $commentImage = new CommentImage();
+
+            $commentImage->setComment($comment)
+                ->setFile($this->generateUploadFile())
+                ->uploadImage();
+
+            $commentImages[] = $commentImage;
+
+            $this->manager->persist($commentImage);
+        }
+
+        return $commentImages;
+    }
+
+    /**
+     * @param array $shops
+     * @return array
+     * @throws \Exception
+     */
+    private function generateShopImages(array $shops)
+    {
+        $shopImages = [];
+
+        foreach ($shops as $shop) {
+            for ($i = 0; $i < 3; ++$i) {
+                $shopImage = new ShopImage();
+
+                $shopImage->setShop($shop)
+                    ->setFile($this->generateUploadFile())
+                    ->uploadImage();
+
+                $shopImages[] = $shopImage;
+
+                $this->manager->persist($shopImage);
+            }
+        }
+
+        return $shopImages;
+    }
+
+    /**
      * @param ObjectManager $manager
      * @throws \Exception
      */
@@ -277,27 +328,15 @@ class BaseFixtures extends Fixture
     {
         $this->manager = $manager;
 
-        $users      = $this->generateUsers();
-        $feedbacks  = $this->generateFeedbacks($users);
-        $shops      = $this->generateShops();
-        $categories = $this->generateCategories($shops);
-        $products   = $this->generateProducts($categories);
-        $comments   = $this->generateComments($users, $products);
-//
-//        $feedbackImages = [];
-//
-//        for ($i = 0; $i < count($files); $i++) {
-//            $file          = $files[$i];
-//            $object        = new UploadedFile($path . '/' . $file, rand(0, 50000) . '.jpeg', 'image/jpeg', null, null, true);
-//            $feedbackImage = new FeedbackImage();
-//            $feedbackImage
-//                ->setFile($object)
-//                ->setFilePath($path . '/' . $file)
-//                ->setCreatedAt(new DateTime())
-//                ->setFeedback($feedbacks[0]);
-//            $manager->persist($feedbackImage);
-//            $feedbackImages[] = $feedbackImage;
-//        }
+        $users          = $this->generateUsers();
+        $feedbacks      = $this->generateFeedbacks($users);
+        $shops          = $this->generateShops();
+        $categories     = $this->generateCategories($shops);
+        $products       = $this->generateProducts($categories);
+        $comments       = $this->generateComments($users, $products);
+        $feedbackImages = $this->generateFeedbackImages($feedbacks);
+        $commentImages  = $this->generateCommentImages($comments);
+        $shopImages     = $this->generateShopImages($shops);
 
         $this->manager->flush();
     }

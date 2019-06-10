@@ -18,6 +18,7 @@ use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\View\View;
 use Swagger\Annotations as SWG;
 
+
 /**
  * Class CommentController
  * @Route("/api")
@@ -46,6 +47,7 @@ class CommentController extends BaseController
      *     description="Number of comments per page"
      * )
      * @SWG\Tag(name="comment")
+     * @Rest\View(serializerGroups={"Default"})
      * @param Request $request
      * @return View|mixed
      */
@@ -61,6 +63,15 @@ class CommentController extends BaseController
             if (!$restresult = $commentRepository->findByPage($page, $limit)) {
                 return $this->errorResponse("comment not found", 404);
             }
+
+
+//            $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
+//            $normalizer = new PropertyNormalizer($classMetadataFactory);
+//            $serializer = new Serializer([$normalizer]);
+//
+//            foreach ($restresult as $item) {
+//                $restresult = $serializer->normalize($item, null, ['groups' => ['detalus']]);
+//            }
         } catch (\Exception $exception) {
             return $this->errorResponse($exception->getMessage(), $exception->getCode());
         }
@@ -76,6 +87,7 @@ class CommentController extends BaseController
      *     @Model(type=Comment::class)
      * )
      * @SWG\Tag(name="comment")
+     * @Rest\View(serializerGroups={"Default", "details"})
      * @param int $id
      * @return View|object[]
      */

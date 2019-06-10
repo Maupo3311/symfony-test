@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Ajax;
 
+use AppBundle\Services\SerializerService;
 use EntityBundle\Entity\Comment;
 use EntityBundle\Entity\Image\CommentImage;
 use EntityBundle\Entity\Product;
@@ -10,6 +11,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -21,6 +23,25 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class CommentController extends BaseController
 {
+    /**
+     * @Route("/comment/get-by-product/{id}", name="ajax_get_comments_by_product")
+     * @param Product $product
+     * @return string
+     */
+    public function getCommentsAction(Product $product)
+    {
+        /** @var CommentRepository $commentRepository */
+        $commentRepository = $this->getDoctrine()->getRepository(Comment::class);
+
+        /** @var SerializerService $serializeService */
+        $serializeService = $this->getSerializerService();
+
+        $serializeComments = $serializeService
+            ->serializeComments($commentRepository->findByProduct($product));
+
+        return $this->jsonResponse($serializeComments);
+    }
+
     /**
      * @Route("/comment/submit", name="ajax_submit_comment")
      * @param Request $request

@@ -49,6 +49,7 @@ class ProductController extends BaseController
      *     description="Number of products per page"
      * )
      * @SWG\Tag(name="product")
+     * @Rest\View(serializerGroups={"Default"})
      * @param Request $request
      * @return View|mixed
      */
@@ -78,6 +79,7 @@ class ProductController extends BaseController
      *     @Model(type=Product::class)
      * )
      * @SWG\Tag(name="product")
+     * @Rest\View(serializerGroups={"Default", "details"})
      * @param int $id
      * @return View|object[]
      */
@@ -333,6 +335,7 @@ class ProductController extends BaseController
      *     @Model(type=Category::class)
      * )
      * @SWG\Tag(name="product")
+     * @Rest\View(serializerGroups={"Default", "details"})
      * @param int $id
      * @return Category|Response
      */
@@ -357,6 +360,7 @@ class ProductController extends BaseController
      *     @Model(type=Comment::class)
      * )
      * @SWG\Tag(name="product")
+     * @Rest\View(serializerGroups={"Default"})
      * @param int $id
      * @return ArrayCollection|Response
      */

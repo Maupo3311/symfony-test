@@ -44,6 +44,7 @@ class FeedbackController extends BaseController
      *     description="Number of feddbacks per page"
      * )
      * @SWG\Tag(name="feedback")
+     * @Rest\View(serializerGroups={"Default"})
      * @param Request $request
      * @return View|mixed
      */
@@ -76,6 +77,7 @@ class FeedbackController extends BaseController
      *     @Model(type=Feedback::class)
      * )
      * @SWG\Tag(name="feedback")
+     * @Rest\View(serializerGroups={"Default", "details"})
      * @param int $id
      * @return View|object[]
      */
@@ -231,6 +233,7 @@ class FeedbackController extends BaseController
      *     @Model(type=User::class)
      * )
      * @SWG\Tag(name="feedback")
+     * @Rest\View(serializerGroups={"Default", "details"})
      * @param int $id
      * @return User|Response
      */

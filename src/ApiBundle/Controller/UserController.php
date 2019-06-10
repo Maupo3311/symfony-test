@@ -44,6 +44,7 @@ class UserController extends BaseController
      *     description="Number of users per page"
      * )
      * @SWG\Tag(name="user")
+     * @Rest\View(serializerGroups={"Default"})
      * @param Request $request
      * @return View|mixed
      */
@@ -76,6 +77,7 @@ class UserController extends BaseController
      *     @Model(type=User::class)
      * )
      * @SWG\Tag(name="user")
+     * @Rest\View(serializerGroups={"Default", "details"})
      * @param int $id
      * @return View|object[]
      */
@@ -298,6 +300,7 @@ class UserController extends BaseController
      *     description="Return your entity user"
      * )
      * @SWG\Tag(name="user")
+     * @Rest\View(serializerGroups={"Default", "details"})
      * @return Response
      */
     public function getMeAction()
@@ -312,6 +315,7 @@ class UserController extends BaseController
      *     description="Returns everything that is in the user's cart"
      * )
      * @SWG\Tag(name="user")
+     * @Rest\View(serializerGroups={"Default"})
      * @return mixed
      */
     public function getBasketItems()
