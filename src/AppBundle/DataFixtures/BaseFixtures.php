@@ -6,6 +6,7 @@ use EntityBundle\Entity\Category;
 use EntityBundle\Entity\Comment;
 use EntityBundle\Entity\Image\CommentImage;
 use EntityBundle\Entity\Image\FeedbackImage;
+use EntityBundle\Entity\Image\ProductImage;
 use EntityBundle\Entity\Image\ShopImage;
 use EntityBundle\Entity\Product;
 use EntityBundle\Entity\Feedback;
@@ -14,7 +15,6 @@ use EntityBundle\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use DateTime;
 
 /**
  * Class BaseFixtures
@@ -42,6 +42,30 @@ class BaseFixtures extends Fixture
     public function __construct()
     {
         $this->files = $this->getFiles();
+    }
+
+    /**
+     * @param ObjectManager $manager
+     * @throws \Exception
+     */
+    public function load(ObjectManager $manager)
+    {
+        $this->manager = $manager;
+        $this->clearValidImages();
+
+        $users      = $this->generateUsers();
+        $feedbacks  = $this->generateFeedbacks($users);
+        $shops      = $this->generateShops();
+        $categories = $this->generateCategories($shops);
+        $products   = $this->generateProducts($categories);
+        $comments   = $this->generateComments($users, $products);
+
+        $this->generateFeedbackImages($feedbacks);
+        $this->generateCommentImages($comments);
+        $this->generateShopImages($shops);
+        $this->generateProductImages($products);
+
+        $this->manager->flush();
     }
 
     /**
@@ -256,15 +280,17 @@ class BaseFixtures extends Fixture
 
         foreach ($feedbacks as $feedback) {
 
-            $feedbackImage = new FeedbackImage();
+            for($i = 0; $i < 2; ++$i) {
+                $feedbackImage = new FeedbackImage();
 
-            $feedbackImage->setFeedback($feedback)
-                ->setFile($this->generateUploadFile())
-                ->uploadImage();
+                $feedbackImage->setFeedback($feedback)
+                    ->setFile($this->generateUploadFile())
+                    ->uploadImage();
 
-            $feedbackImages[] = $feedbackImage;
+                $feedbackImages[] = $feedbackImage;
 
-            $this->manager->persist($feedbackImage);
+                $this->manager->persist($feedbackImage);
+            }
         }
 
         return $feedbackImages;
@@ -321,23 +347,37 @@ class BaseFixtures extends Fixture
     }
 
     /**
-     * @param ObjectManager $manager
+     * @param array $products
+     * @return array
      * @throws \Exception
      */
-    public function load(ObjectManager $manager)
+    public function generateProductImages(array $products)
     {
-        $this->manager = $manager;
+        $productImages = [];
 
-        $users          = $this->generateUsers();
-        $feedbacks      = $this->generateFeedbacks($users);
-        $shops          = $this->generateShops();
-        $categories     = $this->generateCategories($shops);
-        $products       = $this->generateProducts($categories);
-        $comments       = $this->generateComments($users, $products);
-        $feedbackImages = $this->generateFeedbackImages($feedbacks);
-        $commentImages  = $this->generateCommentImages($comments);
-        $shopImages     = $this->generateShopImages($shops);
+        foreach ($products as $product) {
+            $productImage = new ProductImage();
 
-        $this->manager->flush();
+            $productImage->setProduct($product)
+                ->setFile($this->generateUploadFile())
+                ->uploadImage();
+
+            $productImages[] = $productImage;
+
+            $this->manager->persist($productImage);
+        }
+
+        return $productImages;
+    }
+
+    private function clearValidImages()
+    {
+        if (file_exists($this::IMAGES_VALID_PATH)) {
+            $files = array_slice(scandir($this::IMAGES_VALID_PATH), 2);
+
+            foreach ($files as $file) {
+                unlink($this::IMAGES_VALID_PATH . '/' . $file);
+            }
+        }
     }
 }

@@ -63,15 +63,6 @@ class CommentController extends BaseController
             if (!$restresult = $commentRepository->findByPage($page, $limit)) {
                 return $this->errorResponse("comment not found", 404);
             }
-
-
-//            $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
-//            $normalizer = new PropertyNormalizer($classMetadataFactory);
-//            $serializer = new Serializer([$normalizer]);
-//
-//            foreach ($restresult as $item) {
-//                $restresult = $serializer->normalize($item, null, ['groups' => ['detalus']]);
-//            }
         } catch (\Exception $exception) {
             return $this->errorResponse($exception->getMessage(), $exception->getCode());
         }
